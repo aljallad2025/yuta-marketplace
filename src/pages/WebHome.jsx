@@ -1,170 +1,162 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, MapPin, Star, Clock, ArrowRight, ChevronLeft, ChevronRight, Zap, ShoppingBag, Car, Package } from 'lucide-react'
+import { Search, MapPin, Star, Clock, ArrowRight, ChevronLeft, ChevronRight, Bell, Zap } from 'lucide-react'
 import SumuLogo from '../components/SumuLogo'
+import { useLang } from '../i18n/LangContext'
+import { useCategories } from '../store/categoriesStore'
 
 const slides = [
-  { id: 1, title: 'Free Delivery on First Order', subtitle: 'Use code SUMU10 at checkout', bg: 'from-[#0F2A47] to-[#1a3a5c]', badge: 'New Users' },
-  { id: 2, title: 'Ramadan Special Offers', subtitle: 'Up to 40% off on selected stores', bg: 'from-[#8B6914] to-[#C8A951]', badge: 'Limited Time' },
-  { id: 3, title: 'Taxi Rides from 3 AED', subtitle: 'Book your premium ride now', bg: 'from-[#1a3a5c] to-[#0F2A47]', badge: 'Best Price' },
-]
-
-const services = [
-  { icon: ShoppingBag, label: 'Marketplace', desc: 'Shop from local stores', href: '/web/marketplace', color: '#0F2A47' },
-  { icon: Package, label: 'Delivery', desc: 'Fast food & grocery delivery', href: '/web/delivery', color: '#C8A951' },
-  { icon: Car, label: 'Taxi', desc: 'Book premium rides', href: '/web/taxi', color: '#0F2A47' },
-]
-
-const categories = [
-  { emoji: '🍔', label: 'Restaurants' },
-  { emoji: '🛒', label: 'Supermarket' },
-  { emoji: '💊', label: 'Pharmacies' },
-  { emoji: '💄', label: 'Beauty' },
-  { emoji: '📱', label: 'Electronics' },
-  { emoji: '🏪', label: 'General Stores' },
+  { key: 'exclusiveOffers', key2: 'browseNow', bg: 'from-[#8B6914] via-[#C8A951] to-[#a88b3a]', badge: '✨' },
+  { key: 'freeDelivery', key2: 'freeDeliverySub', bg: 'from-[#0F2A47] to-[#1a3a5c]', badge: '🚚' },
+  { key: 'ramadanOffers', key2: 'ramadanSub', bg: 'from-[#7B3F00] to-[#C8A951]', badge: '🌙' },
+  { key: 'taxiFrom', key2: 'taxiSub', bg: 'from-[#1a3a5c] to-[#0F2A47]', badge: '🚗' },
 ]
 
 const featuredStores = [
-  { name: 'Baharat Restaurant', category: 'Restaurants', rating: 4.9, time: '20 min', tag: 'Popular', color: '#FFF3E0' },
-  { name: 'Burgetino', category: 'Fast Food', rating: 4.9, time: '40 min', tag: 'New', color: '#E8F5E9' },
-  { name: 'Al Shifa Pharmacy', category: 'Pharmacy', rating: 4.9, time: '15 min', tag: 'Open 24h', color: '#E3F2FD' },
-  { name: 'Fresh Mart', category: 'Supermarket', rating: 4.7, time: '30 min', tag: 'Free Del.', color: '#F3E5F5' },
+  { id: 1, nameAr: 'مطعم بهارات', nameEn: 'Baharat Restaurant', cat: 'restaurants', rating: 4.9, time: '20 min', timeAr: '٢٠ دقيقة', bg: '#FFF3E0', emoji: '🍽️', tag: 'popular' },
+  { id: 2, nameAr: 'برجتينو', nameEn: 'Burgetino', cat: 'restaurants', rating: 4.9, time: '40 min', timeAr: '٤٠ دقيقة', bg: '#E8F5E9', emoji: '🍔', tag: 'new' },
+  { id: 3, nameAr: 'صيدلية الشفاء', nameEn: 'Alshifa Pharmacy', cat: 'pharmacies', rating: 4.9, time: '15 min', timeAr: '١٥ دقيقة', bg: '#E3F2FD', emoji: '💊', tag: 'open' },
 ]
 
 export default function WebHome() {
   const [slide, setSlide] = useState(0)
   const [search, setSearch] = useState('')
+  const { t, isAr } = useLang()
+  const { categories } = useCategories()
+  const activeCategories = categories.filter(c => c.active)
 
   const prev = () => setSlide((slide - 1 + slides.length) % slides.length)
   const next = () => setSlide((slide + 1) % slides.length)
 
   return (
-    <div className="min-h-screen bg-[#F8F6F1]">
-      {/* Hero Slider */}
-      <div className={`relative bg-gradient-to-r ${slides[slide].bg} text-white overflow-hidden`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="text-center relative z-10">
-            {/* Small SUMU logo in hero */}
-            <div className="flex justify-center mb-6">
-              <SumuLogo size={52} variant="full" />
-            </div>
-            <span className="inline-block px-3 py-1 bg-[#C8A951]/20 border border-[#C8A951]/40 text-[#C8A951] text-xs font-semibold rounded-full mb-3">
-              {slides[slide].badge}
-            </span>
-            <h1 className="text-3xl md:text-5xl font-bold mb-3 text-white">
-              {slides[slide].title}
-            </h1>
-            <p className="text-white/70 text-lg mb-8">{slides[slide].subtitle}</p>
+    <div className="min-h-screen bg-[#FBF8F2]">
+      {/* Top bar below navbar — location + notification */}
+      <div className="bg-[#0F2A47] px-4 py-2 flex items-center justify-between">
+        <div className="flex items-center gap-1.5 text-white/70 text-xs">
+          <MapPin size={12} className="text-[#C8A951]" />
+          <span>{isAr ? 'دبي مارينا، دبي' : 'Dubai Marina, Dubai'}</span>
+        </div>
+        <button className="relative p-1.5 text-white/70 hover:text-white">
+          <Bell size={15} />
+          <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-[#C8A951] rounded-full"></span>
+        </button>
+      </div>
 
-            {/* Search bar */}
-            <div className="max-w-xl mx-auto flex gap-2">
-              <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-3 gap-2 shadow-lg">
-                <Search size={18} className="text-[#666]" />
-                <input
-                  type="text"
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder="Search stores, products, rides..."
-                  className="flex-1 outline-none text-[#222] text-sm bg-transparent"
-                />
-                <MapPin size={18} className="text-[#C8A951]" />
-              </div>
-              <button className="bg-[#C8A951] hover:bg-[#b8942f] text-[#0F2A47] font-semibold px-5 py-3 rounded-xl shadow-lg">
-                Search
-              </button>
+      {/* Hero Banner */}
+      <div className={`relative bg-gradient-to-br ${slides[slide].bg} overflow-hidden`} style={{ minHeight: 220 }}>
+        {/* Decorative circles */}
+        <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/5 rounded-full"></div>
+        <div className="absolute -bottom-10 -left-6 w-40 h-40 bg-white/5 rounded-full"></div>
+
+        <div className="relative z-10 px-4 pt-6 pb-8 max-w-2xl mx-auto text-center">
+          {/* Logo centered */}
+          <div className="flex justify-center mb-3">
+            <SumuLogo size={64} variant="stacked" />
+          </div>
+          <h1 className="text-xl font-black text-white mb-1">{t('welcomeTo')}</h1>
+          <p className="text-white/70 text-sm mb-4">{t('appTagline')}</p>
+
+          {/* Search */}
+          <div className="flex gap-2 max-w-md mx-auto">
+            <div className="flex-1 flex items-center bg-white rounded-xl px-3 py-3 gap-2 shadow-md">
+              <Search size={15} className="text-[#999] flex-shrink-0" />
+              <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+                placeholder={t('searchPlaceholder')}
+                className="flex-1 outline-none text-sm text-[#222] bg-transparent min-w-0"
+                dir={isAr ? 'rtl' : 'ltr'} />
             </div>
+            <button className="bg-[#C8A951] hover:bg-[#b8942f] text-[#0F2A47] font-bold px-4 py-3 rounded-xl shadow-md text-sm">
+              {t('search')}
+            </button>
           </div>
         </div>
 
         {/* Slide controls */}
-        <button onClick={prev} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm">
-          <ChevronLeft size={20} className="text-white" />
+        <button onClick={prev} className="absolute left-3 top-1/2 -translate-y-1/2 p-1.5 bg-black/20 hover:bg-black/30 rounded-full">
+          <ChevronLeft size={16} className="text-white" />
         </button>
-        <button onClick={next} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-sm">
-          <ChevronRight size={20} className="text-white" />
+        <button onClick={next} className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 bg-black/20 hover:bg-black/30 rounded-full">
+          <ChevronRight size={16} className="text-white" />
         </button>
 
         {/* Dots */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
           {slides.map((_, i) => (
             <button key={i} onClick={() => setSlide(i)}
-              className={`rounded-full transition-all ${i === slide ? 'w-6 h-2 bg-[#C8A951]' : 'w-2 h-2 bg-white/40'}`}
-            />
+              className={`rounded-full transition-all ${i === slide ? 'w-5 h-1.5 bg-[#C8A951]' : 'w-1.5 h-1.5 bg-white/40'}`} />
           ))}
         </div>
       </div>
 
-      {/* Services Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {services.map(s => (
-            <Link key={s.label} to={s.href}
-              className="group bg-white rounded-2xl p-6 shadow-sm border border-[#E8E6E1] hover:shadow-md hover:border-[#C8A951]/40 flex items-center gap-4">
-              <div className="p-4 rounded-xl" style={{ backgroundColor: s.color + '15' }}>
-                <s.icon size={26} style={{ color: s.color }} />
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-[#222]">{s.label}</p>
-                <p className="text-sm text-[#666]">{s.desc}</p>
-              </div>
-              <ArrowRight size={18} className="text-[#C8A951] group-hover:translate-x-1 transition-transform" />
-            </Link>
-          ))}
+      {/* Gold Exclusive Offers Banner */}
+      <div className="mx-4 mt-4">
+        <div className="gold-gradient rounded-2xl p-4 flex items-center justify-between shadow-lg relative overflow-hidden">
+          <div className="absolute right-0 top-0 w-24 h-full opacity-10">
+            <img src="/sumu-logo.png" alt="" className="w-full h-full object-cover" />
+          </div>
+          <div>
+            <p className="font-black text-[#0F2A47] text-base">{t('exclusiveOffers')}</p>
+            <p className="text-[#0F2A47]/70 text-xs mt-0.5">{isAr ? 'عروض حصرية لأعضاء سمو' : 'Exclusive deals for SUMU members'}</p>
+          </div>
+          <Link to="/web/marketplace" className="bg-[#0F2A47] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md whitespace-nowrap">
+            {t('browseNow')} →
+          </Link>
         </div>
       </div>
 
       {/* Categories */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-[#0F2A47]">Browse Categories</h2>
-          <Link to="/web/marketplace" className="text-sm text-[#C8A951] hover:text-[#a88b3a] font-medium flex items-center gap-1">
-            View all <ArrowRight size={14} />
+      <div className="px-4 mt-5">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-black text-[#0F2A47] text-base">{t('browseCategories')}</h2>
+          <Link to="/web/marketplace" className="text-xs text-[#C8A951] font-bold flex items-center gap-1">
+            {t('viewAll')} <ArrowRight size={12} />
           </Link>
         </div>
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-          {categories.map(c => (
-            <Link key={c.label} to="/web/marketplace"
-              className="bg-white rounded-xl p-4 text-center shadow-sm border border-[#E8E6E1] hover:border-[#C8A951]/40 hover:shadow-md cursor-pointer">
-              <div className="text-3xl mb-2">{c.emoji}</div>
-              <p className="text-xs font-medium text-[#444]">{c.label}</p>
+        <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+          {activeCategories.map(cat => (
+            <Link key={cat.id} to={`/web/marketplace?cat=${cat.id}`}
+              className="bg-white rounded-2xl p-3 text-center shadow-sm border border-[#E8E4DC] hover:border-[#C8A951]/50 hover:shadow-md transition-all cursor-pointer hover-lift">
+              <div className="text-2xl sm:text-3xl mb-1.5">{cat.emoji}</div>
+              <p className="text-xs font-bold text-[#0F2A47] leading-tight">
+                {isAr ? cat.labelAr : cat.labelEn}
+              </p>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* Featured Stores */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-[#0F2A47]">Featured Stores</h2>
-          <Link to="/web/marketplace" className="text-sm text-[#C8A951] hover:text-[#a88b3a] font-medium flex items-center gap-1">
-            View all <ArrowRight size={14} />
+      {/* Featured Stores — matching reference design */}
+      <div className="px-4 mt-5 pb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="font-black text-[#0F2A47] text-base">{t('featuredStores')} <span className="text-[#C8A951]">+</span></h2>
+          <Link to="/web/marketplace" className="text-xs text-[#C8A951] font-bold flex items-center gap-1">
+            {t('viewAll')} <ArrowRight size={12} />
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {featuredStores.map(store => (
-            <Link key={store.name} to="/web/store"
-              className="bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E8E6E1] hover:shadow-md hover:border-[#C8A951]/30 group">
-              {/* Store banner */}
-              <div className="h-36 flex items-center justify-center relative" style={{ backgroundColor: store.color }}>
-                <span className="text-4xl">
-                  {store.category === 'Restaurants' || store.category === 'Fast Food' ? '🍽️' :
-                   store.category === 'Pharmacy' ? '💊' : '🛒'}
-                </span>
-                <span className="absolute top-3 left-3 px-2 py-0.5 bg-[#0F2A47] text-white text-xs rounded-full font-medium">
-                  {store.tag}
-                </span>
+            <Link key={store.id} to="/web/store"
+              className="bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E8E4DC] hover:shadow-md hover:border-[#C8A951]/30 transition-all hover-lift">
+              {/* Store image area */}
+              <div className="relative h-28 flex items-center justify-center overflow-hidden" style={{ background: `radial-gradient(circle at center, ${store.bg} 60%, #E8E4DC 100%)` }}>
+                <span className="text-5xl drop-shadow-md">{store.emoji}</span>
+                <div className="absolute top-2 left-2 px-2 py-0.5 bg-[#0F2A47] text-white text-[10px] font-bold rounded-full uppercase tracking-wide">
+                  {store.tag === 'popular' ? (isAr ? 'الأكثر طلباً' : 'Popular') :
+                   store.tag === 'new' ? (isAr ? 'جديد' : 'New') : (isAr ? 'مفتوح' : 'Open 24h')}
+                </div>
               </div>
-              <div className="p-4">
-                <p className="font-semibold text-[#222] text-sm">{store.name}</p>
-                <p className="text-xs text-[#666] mt-0.5">{store.category}</p>
-                <div className="flex items-center justify-between mt-3">
-                  <div className="flex items-center gap-1 text-xs text-[#444]">
-                    <Star size={12} className="fill-[#C8A951] text-[#C8A951]" />
-                    <span className="font-medium">{store.rating}</span>
+              <div className="p-3">
+                <p className="font-black text-[#0F2A47] text-sm leading-tight">
+                  {isAr ? store.nameAr : store.nameEn}
+                </p>
+                <div className="flex items-center justify-between mt-2">
+                  <div className="flex items-center gap-1">
+                    <Star size={11} className="fill-[#C8A951] text-[#C8A951]" />
+                    <span className="text-xs font-bold text-[#444]">{store.rating}</span>
                   </div>
                   <div className="flex items-center gap-1 text-xs text-[#666]">
-                    <Clock size={12} />
-                    <span>{store.time}</span>
+                    <Clock size={11} />
+                    <span>{isAr ? store.timeAr : store.time}</span>
                   </div>
                 </div>
               </div>
@@ -173,29 +165,20 @@ export default function WebHome() {
         </div>
       </div>
 
-      {/* Active Order Tracking Banner */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="bg-[#0F2A47] rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-[#C8A951]/20 rounded-xl">
-              <Zap size={24} className="text-[#C8A951]" />
+      {/* Active Order Banner */}
+      <div className="px-4 pb-8">
+        <div className="bg-[#0F2A47] rounded-2xl p-4 flex items-center justify-between gap-4 shadow-lg">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-[#C8A951]/20 rounded-xl">
+              <Zap size={20} className="text-[#C8A951]" />
             </div>
             <div>
-              <p className="font-semibold text-white">Order #SUW-2841 is on the way!</p>
-              <p className="text-white/60 text-sm mt-0.5">Estimated arrival: 12 minutes</p>
+              <p className="font-bold text-white text-sm">{t('activeOrder')}</p>
+              <p className="text-white/50 text-xs mt-0.5">{isAr ? '~١٢ دقيقة · #SUW-2841' : '~12 min · #SUW-2841'}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            {['Accepted', 'Preparing', 'On the way', 'Delivered'].map((step, i) => (
-              <div key={step} className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${i <= 2 ? 'bg-[#C8A951]' : 'bg-white/20'}`}></div>
-                <span className={`text-xs hidden md:block ${i <= 2 ? 'text-[#C8A951] font-medium' : 'text-white/40'}`}>{step}</span>
-                {i < 3 && <div className={`h-px w-6 hidden md:block ${i < 2 ? 'bg-[#C8A951]' : 'bg-white/20'}`}></div>}
-              </div>
-            ))}
-          </div>
-          <Link to="/web/orders" className="px-5 py-2.5 bg-[#C8A951] hover:bg-[#b8942f] text-[#0F2A47] font-semibold text-sm rounded-xl whitespace-nowrap">
-            Track Order
+          <Link to="/web/orders" className="px-4 py-2 bg-[#C8A951] text-[#0F2A47] font-bold text-xs rounded-xl whitespace-nowrap">
+            {t('trackOrder')}
           </Link>
         </div>
       </div>

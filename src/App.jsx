@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { LangProvider } from './i18n/LangContext'
+import { CategoriesProvider } from './store/categoriesStore'
 
 // Home
 import HomePage from './pages/HomePage'
@@ -30,6 +32,8 @@ import AdminSettings from './pages/admin/AdminSettings'
 
 export default function App() {
   return (
+    <LangProvider>
+    <CategoriesProvider>
     <BrowserRouter>
       <Routes>
         {/* Landing */}
@@ -68,5 +72,7 @@ export default function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
+    </CategoriesProvider>
+    </LangProvider>
   )
 }
