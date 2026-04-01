@@ -1,121 +1,72 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
-function App() {
-  const [count, setCount] = useState(0)
+// Home
+import HomePage from './pages/HomePage'
 
+// Web Platform
+import WebLayout from './pages/WebLayout'
+import WebHome from './pages/WebHome'
+import WebMarketplace from './pages/WebMarketplace'
+import WebStore from './pages/WebStore'
+import WebCheckout from './pages/WebCheckout'
+import WebTaxi from './pages/WebTaxi'
+import WebOrders from './pages/WebOrders'
+import WebAccount from './pages/WebAccount'
+
+// Mobile App
+import MobileApp from './pages/MobileApp'
+
+// Admin
+import AdminLayout from './pages/admin/AdminLayout'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminUsers from './pages/admin/AdminUsers'
+import AdminStores from './pages/admin/AdminStores'
+import AdminDrivers from './pages/admin/AdminDrivers'
+import AdminOrders from './pages/admin/AdminOrders'
+import AdminTaxi from './pages/admin/AdminTaxi'
+import AdminLiveMap from './pages/admin/AdminLiveMap'
+import AdminFinancial from './pages/admin/AdminFinancial'
+import AdminSettings from './pages/admin/AdminSettings'
+
+export default function App() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <BrowserRouter>
+      <Routes>
+        {/* Landing */}
+        <Route path="/" element={<HomePage />} />
 
-      <div className="ticks"></div>
+        {/* Web Platform */}
+        <Route path="/web" element={<WebLayout />}>
+          <Route index element={<WebHome />} />
+          <Route path="marketplace" element={<WebMarketplace />} />
+          <Route path="store" element={<WebStore />} />
+          <Route path="checkout" element={<WebCheckout />} />
+          <Route path="taxi" element={<WebTaxi />} />
+          <Route path="orders" element={<WebOrders />} />
+          <Route path="account" element={<WebAccount />} />
+        </Route>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* Mobile App Preview */}
+        <Route path="/mobile" element={<MobileApp />} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        {/* Admin Dashboard */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="stores" element={<AdminStores />} />
+          <Route path="drivers" element={<AdminDrivers />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="taxi" element={<AdminTaxi />} />
+          <Route path="map" element={<AdminLiveMap />} />
+          <Route path="financial" element={<AdminFinancial />} />
+          <Route path="wallets" element={<AdminFinancial />} />
+          <Route path="analytics" element={<AdminDashboard />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
-
-export default App
