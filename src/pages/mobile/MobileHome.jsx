@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Search, Bell, MapPin, Star, Clock, ChevronLeft, ChevronRight, Zap } from 'lucide-react'
+import { Search, Bell, MapPin, Star, Clock } from 'lucide-react'
 import { useLang } from '../../i18n/LangContext'
-import { useCategories } from '../../store/categoriesStore'
+import { useCategories } from '../../store/categoriesStore.jsx'
+import { useStores } from '../../store/storesStore.jsx'
 
 const slides = [
   { key: 'exclusiveOffers', bg: 'from-[#8B6914] to-[#C8A951]' },
@@ -9,17 +10,13 @@ const slides = [
   { key: 'taxiFrom', bg: 'from-[#1a3a5c] to-[#0F2A47]' },
 ]
 
-const stores = [
-  { nameAr: 'مطعم بهارات', nameEn: 'Baharat', rating: 4.9, time: '20', timeAr: '٢٠', bg: '#FFF3E0', emoji: '🍽️' },
-  { nameAr: 'برجتينو', nameEn: 'Burgetino', rating: 4.8, time: '40', timeAr: '٤٠', bg: '#E8F5E9', emoji: '🍔' },
-  { nameAr: 'صيدلية الشفاء', nameEn: 'Alshifa', rating: 4.9, time: '15', timeAr: '١٥', bg: '#E3F2FD', emoji: '💊' },
-]
-
 export default function MobileHome() {
   const [slide, setSlide] = useState(0)
   const { t, isAr } = useLang()
   const { categories } = useCategories()
+  const { stores } = useStores()
   const activeCategories = categories.filter(c => c.active).slice(0, 6)
+  const featuredStores = stores.filter(s => s.active && s.rating >= 4.5).slice(0, 3)
 
   return (
     <div className="bg-[#FBF8F2]" dir={isAr ? 'rtl' : 'ltr'}>
@@ -95,9 +92,9 @@ export default function MobileHome() {
           <span className="text-xs text-[#C8A951] font-bold">{t('viewAll')}</span>
         </div>
         <div className="space-y-2">
-          {stores.map(store => (
-            <div key={store.nameEn} className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#E8E4DC] flex">
-              <div className="w-16 flex items-center justify-center text-2xl flex-shrink-0" style={{ backgroundColor: store.bg }}>
+          {featuredStores.map(store => (
+            <div key={store.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#E8E4DC] flex">
+              <div className="w-16 flex items-center justify-center text-2xl flex-shrink-0" style={{ backgroundColor: store.bg || '#FBF8F2' }}>
                 {store.emoji}
               </div>
               <div className="flex-1 p-3">

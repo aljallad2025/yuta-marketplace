@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation, Outlet } from 'react-router-dom'
-import {
-  LayoutDashboard, Users, Store, Car, Package, Navigation, Map, DollarSign,
-  Settings, Bell, Search, Menu, Wallet, BarChart3, LogOut, Shield
+import { LayoutDashboard, Users, Store, Car, Package, Navigation, Map, DollarSign,
+  Tag, Settings, Bell, Search, Menu, Wallet, BarChart3, LogOut, Shield
 } from 'lucide-react'
 import SumuLogo from '../../components/SumuLogo'
 import LangToggle from '../../components/LangToggle'
@@ -28,6 +27,7 @@ export default function AdminLayout() {
         { icon: Store, label: isAr ? 'المتاجر' : 'Stores', href: '/admin/stores' },
         { icon: Car, label: isAr ? 'السائقون' : 'Drivers', href: '/admin/drivers' },
         { icon: Package, label: isAr ? 'الطلبات' : 'Orders', href: '/admin/orders' },
+        { icon: Tag, label: isAr ? 'الأقسام' : 'Categories', href: '/admin/categories' },
       ]
     },
     {

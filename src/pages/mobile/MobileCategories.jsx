@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Search } from 'lucide-react'
 import { useLang } from '../../i18n/LangContext'
-import { useCategories } from '../../store/categoriesStore'
+import { useCategories } from '../../store/categoriesStore.jsx'
 
 export default function MobileCategories() {
   const [search, setSearch] = useState('')

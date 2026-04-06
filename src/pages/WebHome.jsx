@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Search, MapPin, Star, Clock, ArrowRight, ChevronLeft, ChevronRight, Bell, Zap } from 'lucide-react'
 import SumuLogo from '../components/SumuLogo'
 import { useLang } from '../i18n/LangContext'
-import { useCategories } from '../store/categoriesStore'
+import { useCategories } from '../store/categoriesStore.jsx'
 
 const slides = [
   { key: 'exclusiveOffers', key2: 'browseNow', bg: 'from-[#8B6914] via-[#C8A951] to-[#a88b3a]', badge: '✨' },

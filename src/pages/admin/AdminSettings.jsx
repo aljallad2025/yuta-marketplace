@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Save, Plus, X, Image, Tag, Trash2, Edit2, Check } from 'lucide-react'
-import { useCategories } from '../../store/categoriesStore'
+import { useCategories } from '../../store/categoriesStore.jsx'
 import { useLang } from '../../i18n/LangContext'
 
 const promoCodes = [

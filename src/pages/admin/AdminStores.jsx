@@ -1,29 +1,27 @@
 import { useState } from 'react'
-import { Search, CheckCircle, XCircle, Eye, Edit2, Star } from 'lucide-react'
+import { Search, CheckCircle, XCircle, Eye, Edit2, Trash2, Plus, Star, X, Check } from 'lucide-react'
 import Badge from '../../components/Badge'
 import { useLang } from '../../i18n/LangContext'
+import { useStores } from '../../store/storesStore.jsx'
+import { useCategories } from '../../store/categoriesStore.jsx'
 
-const stores = [
-  { id: 'STR-001', nameEn: 'Baharat Restaurant', nameAr: 'مطعم بهارات', catEn: 'Restaurants', catAr: 'المطاعم', ownerEn: 'Khalid Al Nasser', ownerAr: 'خالد الناصر', status: 'active', rating: 4.9, orders: 1240, commission: 12, revenue: 48600 },
-  { id: 'STR-002', nameEn: 'Fresh Mart', nameAr: 'فريش مارت', catEn: 'Supermarket', catAr: 'سوبرماركت', ownerEn: 'Ahmed Saeed', ownerAr: 'أحمد سعيد', status: 'active', rating: 4.7, orders: 890, commission: 10, revenue: 38200 },
-  { id: 'STR-003', nameEn: 'Al Shifa Pharmacy', nameAr: 'صيدلية الشفاء', catEn: 'Pharmacy', catAr: 'صيدلية', ownerEn: 'Dr. Fatima Hassan', ownerAr: 'د. فاطمة حسن', status: 'active', rating: 4.9, orders: 640, commission: 8, revenue: 22800 },
-  { id: 'STR-004', nameEn: 'Glamour Beauty', nameAr: 'غلامور بيوتي', catEn: 'Beauty', catAr: 'مستحضرات التجميل', ownerEn: 'Sara Mohammed', ownerAr: 'سارة محمد', status: 'active', rating: 4.6, orders: 320, commission: 15, revenue: 18400 },
-  { id: 'STR-005', nameEn: 'TechZone Electronics', nameAr: 'تك زون', catEn: 'Electronics', catAr: 'إلكترونيات', ownerEn: 'Omar Al Rashidi', ownerAr: 'عمر الراشدي', status: 'inactive', rating: 4.5, orders: 145, commission: 8, revenue: 28900 },
-  { id: 'STR-006', nameEn: 'Desert Sweets', nameAr: 'حلويات الصحراء', catEn: 'Restaurants', catAr: 'المطاعم', ownerEn: 'Ibrahim Yusuf', ownerAr: 'إبراهيم يوسف', status: 'pending', rating: 0, orders: 0, commission: 12, revenue: 0 },
-]
-
-const catEmoji = { Restaurants: '🍽️', Supermarket: '🛒', Pharmacy: '💊', Beauty: '💄', Electronics: '📱' }
+const EMOJIS = ['🍽️','🍔','🌯','🛒','💊','💄','🧹','🏪','🍞','📱','☕','🍕','🎂','🍜','🥗','🧴','💐','🍣','🎮','🏋️']
 
 export default function AdminStores() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
+  const [showAdd, setShowAdd] = useState(false)
+  const [editingId, setEditingId] = useState(null)
+  const [editDraft, setEditDraft] = useState({})
+  const [newStore, setNewStore] = useState({ nameEn: '', nameAr: '', catId: 1, emoji: '🏪', deliveryFee: 0, minOrder: 0, commission: 10, ownerEn: '', ownerAr: '', phone: '' })
   const { t, isAr } = useLang()
+  const { stores, addStore, updateStore, deleteStore, toggleStore, approveStore } = useStores()
+  const { categories } = useCategories()
 
   const filterLabels = {
     all: isAr ? 'الكل' : 'All',
     active: isAr ? 'نشط' : 'Active',
     inactive: isAr ? 'غير نشط' : 'Inactive',
-    pending: isAr ? 'بانتظار الموافقة' : 'Pending',
   }
 
   const headers = isAr
@@ -33,38 +31,109 @@ export default function AdminStores() {
   const filtered = stores.filter(s => {
     const name = isAr ? s.nameAr : s.nameEn
     const matchSearch = name.toLowerCase().includes(search.toLowerCase())
-    const matchFilter = filter === 'all' || s.status === filter
+    const matchFilter = filter === 'all' || (filter === 'active' ? s.active : !s.active)
     return matchSearch && matchFilter
   })
+
+  const handleAdd = () => {
+    if (!newStore.nameEn && !newStore.nameAr) return
+    const cat = categories.find(c => c.id === newStore.catId)
+    addStore({ ...newStore, bg: '#FBF8F2', tag: null, time: '30–45', timeAr: '٣٠–٤٥ دق', active: true, open: true })
+    setNewStore({ nameEn: '', nameAr: '', catId: 1, emoji: '🏪', deliveryFee: 0, minOrder: 0, commission: 10, ownerEn: '', ownerAr: '', phone: '' })
+    setShowAdd(false)
+  }
+
+  const startEdit = (store) => {
+    setEditingId(store.id)
+    setEditDraft({ nameEn: store.nameEn, nameAr: store.nameAr, emoji: store.emoji, catId: store.catId, deliveryFee: store.deliveryFee, minOrder: store.minOrder, commission: store.commission })
+  }
+
+  const confirmEdit = (id) => { updateStore(id, editDraft); setEditingId(null) }
+
+  const getCatLabel = (catId) => {
+    const cat = categories.find(c => c.id === catId)
+    if (!cat) return ''
+    return isAr ? cat.labelAr : cat.labelEn
+  }
 
   return (
     <div className="p-6 space-y-5" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-black text-[#0F2A47]">{t('storeManagement')}</h1>
-          <p className="text-sm text-[#666]">{isAr ? '٢٨٤ متجر نشط على المنصة' : '284 active stores on platform'}</p>
+          <p className="text-sm text-[#666]">
+            {isAr ? `${stores.filter(s=>s.active).length} متجر نشط — يظهر في الموقع والتطبيق` : `${stores.filter(s=>s.active).length} active stores — visible on website & app`}
+          </p>
         </div>
-        <button className="px-4 py-2.5 bg-[#0F2A47] text-white text-sm font-black rounded-xl">
-          {isAr ? '+ إضافة متجر' : '+ Add Store'}
+        <button onClick={() => setShowAdd(true)} className="flex items-center gap-2 px-4 py-2.5 bg-[#0F2A47] text-white text-sm font-black rounded-xl">
+          <Plus size={14} /> {isAr ? 'إضافة متجر' : 'Add Store'}
         </button>
       </div>
 
+      {/* Live sync banner */}
+      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex items-center gap-2 text-sm text-emerald-700">
+        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse flex-shrink-0"></div>
+        <span className="font-black">{isAr ? 'مزامنة فورية:' : 'Live Sync:'}</span>
+        <span>{isAr ? 'المتاجر النشطة تظهر مباشرةً في الموقع والتطبيق' : 'Active stores appear instantly on website & mobile app'}</span>
+      </div>
+
+      {/* Add form */}
+      {showAdd && (
+        <div className="bg-white rounded-2xl border-2 border-[#C8A951] p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-black text-[#0F2A47]">{isAr ? 'متجر جديد' : 'New Store'}</h3>
+            <button onClick={() => setShowAdd(false)} className="p-1 rounded-lg hover:bg-[#FBF8F2] text-[#999]"><X size={16} /></button>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {EMOJIS.map(e => (
+              <button key={e} onClick={() => setNewStore(s => ({ ...s, emoji: e }))}
+                className={`w-9 h-9 rounded-xl text-xl flex items-center justify-center border-2 transition-all ${newStore.emoji === e ? 'border-[#C8A951] bg-[#C8A951]/10 scale-110' : 'border-[#E8E4DC]'}`}>{e}</button>
+            ))}
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'اسم المتجر (إنجليزي)' : 'Store Name (EN)'}</label>
+              <input value={newStore.nameEn} onChange={e => setNewStore(s => ({ ...s, nameEn: e.target.value }))} placeholder="e.g. Baharat Restaurant" className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" dir="ltr" /></div>
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'اسم المتجر (عربي)' : 'Store Name (AR)'}</label>
+              <input value={newStore.nameAr} onChange={e => setNewStore(s => ({ ...s, nameAr: e.target.value }))} placeholder="مثال: مطعم بهارات" className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" dir="rtl" /></div>
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'القسم' : 'Category'}</label>
+              <select value={newStore.catId} onChange={e => setNewStore(s => ({ ...s, catId: +e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951] bg-white">
+                {categories.filter(c => c.active).map(c => <option key={c.id} value={c.id}>{c.emoji} {isAr ? c.labelAr : c.labelEn}</option>)}
+              </select></div>
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'العمولة %' : 'Commission %'}</label>
+              <input type="number" value={newStore.commission} onChange={e => setNewStore(s => ({ ...s, commission: +e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" /></div>
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'اسم المالك (إنجليزي)' : 'Owner Name (EN)'}</label>
+              <input value={newStore.ownerEn} onChange={e => setNewStore(s => ({ ...s, ownerEn: e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" dir="ltr" /></div>
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'اسم المالك (عربي)' : 'Owner Name (AR)'}</label>
+              <input value={newStore.ownerAr} onChange={e => setNewStore(s => ({ ...s, ownerAr: e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" dir="rtl" /></div>
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'رسوم التوصيل (درهم)' : 'Delivery Fee (AED)'}</label>
+              <input type="number" value={newStore.deliveryFee} onChange={e => setNewStore(s => ({ ...s, deliveryFee: +e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" /></div>
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'الحد الأدنى للطلب' : 'Min. Order (AED)'}</label>
+              <input type="number" value={newStore.minOrder} onChange={e => setNewStore(s => ({ ...s, minOrder: +e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" /></div>
+          </div>
+          <div className="flex gap-2 justify-end pt-2">
+            <button onClick={() => setShowAdd(false)} className="px-4 py-2 text-sm text-[#666] border border-[#E8E4DC] rounded-xl font-black">{isAr ? 'إلغاء' : 'Cancel'}</button>
+            <button onClick={handleAdd} className="px-5 py-2 bg-[#C8A951] text-[#0F2A47] text-sm font-black rounded-xl">{isAr ? 'إضافة المتجر' : 'Add Store'}</button>
+          </div>
+        </div>
+      )}
+
+      {/* Filters */}
       <div className="flex gap-3">
         <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-2.5 gap-2 shadow-sm border border-[#E8E4DC]">
           <Search size={16} className="text-[#999]" />
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder={isAr ? 'ابحث عن المتاجر...' : 'Search stores...'}
-            className="flex-1 outline-none text-sm bg-transparent text-[#222]"
-            dir={isAr ? 'rtl' : 'ltr'} />
+            className="flex-1 outline-none text-sm bg-transparent text-[#222]" dir={isAr ? 'rtl' : 'ltr'} />
         </div>
         {Object.keys(filterLabels).map(f => (
           <button key={f} onClick={() => setFilter(f)}
-            className={`px-4 py-2.5 rounded-xl text-sm font-black ${
-              filter === f ? 'bg-[#0F2A47] text-white' : 'bg-white text-[#444] border border-[#E8E4DC]'
-            }`}>{filterLabels[f]}</button>
+            className={`px-4 py-2.5 rounded-xl text-sm font-black ${filter === f ? 'bg-[#0F2A47] text-white' : 'bg-white text-[#444] border border-[#E8E4DC]'}`}>
+            {filterLabels[f]}
+          </button>
         ))}
       </div>
 
+      {/* Table */}
       <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -77,50 +146,59 @@ export default function AdminStores() {
             </thead>
             <tbody>
               {filtered.map((store, i) => (
-                <tr key={store.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#FBF8F2]`}>
-                  <td className="px-4 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-[#C8A951]/20 rounded-xl flex items-center justify-center text-lg">
-                        {catEmoji[store.catEn] || '🏪'}
+                <tr key={store.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#FBF8F2] ${!store.active ? 'opacity-60' : ''}`}>
+                  {editingId === store.id ? (
+                    <td colSpan={9} className="px-4 py-4">
+                      <div className="grid grid-cols-4 gap-3">
+                        <input value={editDraft.nameEn} onChange={e => setEditDraft(d => ({ ...d, nameEn: e.target.value }))} placeholder="Name EN" className="border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none" dir="ltr" />
+                        <input value={editDraft.nameAr} onChange={e => setEditDraft(d => ({ ...d, nameAr: e.target.value }))} placeholder="الاسم عربي" className="border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none" dir="rtl" />
+                        <select value={editDraft.catId} onChange={e => setEditDraft(d => ({ ...d, catId: +e.target.value }))} className="border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none bg-white">
+                          {categories.map(c => <option key={c.id} value={c.id}>{c.emoji} {isAr ? c.labelAr : c.labelEn}</option>)}
+                        </select>
+                        <input type="number" value={editDraft.commission} onChange={e => setEditDraft(d => ({ ...d, commission: +e.target.value }))} placeholder="Commission %" className="border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none" />
+                        <div className="flex gap-2 col-span-4">
+                          <button onClick={() => confirmEdit(store.id)} className="flex items-center gap-1.5 px-4 py-2 bg-emerald-500 text-white text-xs font-black rounded-xl"><Check size={13} /> {isAr ? 'حفظ' : 'Save'}</button>
+                          <button onClick={() => setEditingId(null)} className="flex items-center gap-1.5 px-4 py-2 border border-[#E8E4DC] text-[#666] text-xs font-black rounded-xl"><X size={13} /> {isAr ? 'إلغاء' : 'Cancel'}</button>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-black text-sm text-[#222]">{isAr ? store.nameAr : store.nameEn}</p>
-                        <p className="text-xs text-[#999] font-mono">{store.id}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-4 text-xs text-[#666]">{isAr ? store.catAr : store.catEn}</td>
-                  <td className="px-4 py-4 text-sm text-[#444]">{isAr ? store.ownerAr : store.ownerEn}</td>
-                  <td className="px-4 py-4">
-                    <Badge status={store.status} label={
-                      isAr ? (store.status === 'active' ? 'نشط' : store.status === 'inactive' ? 'غير نشط' : 'بانتظار الموافقة') : undefined
-                    } />
-                  </td>
-                  <td className="px-4 py-4">
-                    {store.rating > 0 ? (
-                      <div className="flex items-center gap-1">
-                        <Star size={12} className="fill-[#C8A951] text-[#C8A951]" />
-                        <span className="text-sm font-black text-[#222]">{store.rating}</span>
-                      </div>
-                    ) : <span className="text-xs text-[#999]">{isAr ? 'جديد' : 'New'}</span>}
-                  </td>
-                  <td className="px-4 py-4 text-sm font-black text-[#222]">{store.orders.toLocaleString()}</td>
-                  <td className="px-4 py-4">
-                    <span className="text-sm font-black text-[#C8A951]">{store.commission}%</span>
-                  </td>
-                  <td className="px-4 py-4 text-sm font-black text-[#0F2A47]">{store.revenue.toLocaleString()} {isAr ? 'د' : 'AED'}</td>
-                  <td className="px-4 py-4">
-                    <div className="flex items-center gap-1">
-                      <button className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Eye size={13} /></button>
-                      <button className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Edit2 size={13} /></button>
-                      {store.status === 'pending' && (
-                        <>
-                          <button className="p-1.5 hover:bg-green-50 rounded-lg text-green-600"><CheckCircle size={13} /></button>
-                          <button className="p-1.5 hover:bg-red-50 rounded-lg text-red-500"><XCircle size={13} /></button>
-                        </>
-                      )}
-                    </div>
-                  </td>
+                    </td>
+                  ) : (
+                    <>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 bg-[#C8A951]/20 rounded-xl flex items-center justify-center text-xl">{store.emoji}</div>
+                          <div>
+                            <p className="font-black text-sm text-[#222]">{isAr ? store.nameAr : store.nameEn}</p>
+                            <p className="text-xs text-[#999] font-mono">#{store.id}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 text-xs text-[#666]">{getCatLabel(store.catId)}</td>
+                      <td className="px-4 py-4 text-sm text-[#444]">{isAr ? (store.ownerAr || '-') : (store.ownerEn || '-')}</td>
+                      <td className="px-4 py-4">
+                        <span className={`text-xs px-2 py-1 rounded-full font-black ${store.active ? 'bg-emerald-100 text-emerald-700' : 'bg-[#F0ECE4] text-[#999]'}`}>
+                          {store.active ? (isAr ? '● نشط' : '● Active') : (isAr ? '○ معطّل' : '○ Disabled')}
+                        </span>
+                      </td>
+                      <td className="px-4 py-4">
+                        {store.rating > 0 ? (
+                          <div className="flex items-center gap-1"><Star size={12} className="fill-[#C8A951] text-[#C8A951]" /><span className="text-sm font-black text-[#222]">{store.rating}</span></div>
+                        ) : <span className="text-xs text-[#999]">{isAr ? 'جديد' : 'New'}</span>}
+                      </td>
+                      <td className="px-4 py-4 text-sm font-black text-[#222]">{(store.orders||0).toLocaleString()}</td>
+                      <td className="px-4 py-4"><span className="text-sm font-black text-[#C8A951]">{store.commission||0}%</span></td>
+                      <td className="px-4 py-4 text-sm font-black text-[#0F2A47]">{(store.revenue||0).toLocaleString()} {isAr ? 'د' : 'AED'}</td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => startEdit(store)} className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Edit2 size={13} /></button>
+                          <button onClick={() => toggleStore(store.id)} className={`p-1.5 rounded-lg text-xs font-black ${store.active ? 'hover:bg-red-50 text-red-400' : 'hover:bg-emerald-50 text-emerald-600'}`}>
+                            {store.active ? <XCircle size={13} /> : <CheckCircle size={13} />}
+                          </button>
+                          <button onClick={() => deleteStore(store.id)} className="p-1.5 hover:bg-red-50 rounded-lg text-red-400"><Trash2 size={13} /></button>
+                        </div>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

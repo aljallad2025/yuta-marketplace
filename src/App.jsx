@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LangProvider } from './i18n/LangContext'
-import { CategoriesProvider } from './store/categoriesStore'
+import { CategoriesProvider } from './store/categoriesStore.jsx'
+import { StoresProvider } from './store/storesStore.jsx'
 
 // Home
 import HomePage from './pages/HomePage'
+import DriverPortal from './pages/DriverPortal'
 
 // Web Platform
 import WebLayout from './pages/WebLayout'
@@ -29,11 +31,13 @@ import AdminTaxi from './pages/admin/AdminTaxi'
 import AdminLiveMap from './pages/admin/AdminLiveMap'
 import AdminFinancial from './pages/admin/AdminFinancial'
 import AdminSettings from './pages/admin/AdminSettings'
+import AdminCategories from './pages/admin/AdminCategories'
 
 export default function App() {
   return (
     <LangProvider>
     <CategoriesProvider>
+    <StoresProvider>
     <BrowserRouter>
       <Routes>
         {/* Landing */}
@@ -65,13 +69,18 @@ export default function App() {
           <Route path="financial" element={<AdminFinancial />} />
           <Route path="wallets" element={<AdminFinancial />} />
           <Route path="analytics" element={<AdminDashboard />} />
+          <Route path="categories" element={<AdminCategories />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
+
+        {/* Driver Portal */}
+        <Route path="/driver" element={<DriverPortal />} />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
+    </StoresProvider>
     </CategoriesProvider>
     </LangProvider>
   )

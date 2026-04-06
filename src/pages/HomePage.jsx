@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Smartphone, Monitor, Settings, ArrowRight, Star, Shield, Zap } from 'lucide-react'
+import { Smartphone, Monitor, Settings, ArrowRight, Star, Shield, Zap, Truck } from 'lucide-react'
 import { useLang } from '../i18n/LangContext'
 import LangToggle from '../components/LangToggle'
 
@@ -37,8 +37,19 @@ export default function HomePage() {
       descAr: 'لوحة تحكم كاملة لإدارة المنصة بأكملها',
       href: '/admin',
       color: '#3498DB',
-      featuresEn: ['Analytics', 'Users & Stores', 'Drivers', 'Orders', 'Live Map', 'Financial'],
-      featuresAr: ['التحليلات', 'المستخدمون والمتاجر', 'السائقون', 'الطلبات', 'الخريطة المباشرة', 'الإدارة المالية'],
+      featuresEn: ['Analytics', 'Users & Stores', 'Categories', 'Orders', 'Live Map', 'Financial'],
+      featuresAr: ['التحليلات', 'المستخدمون والمتاجر', 'الأقسام', 'الطلبات', 'الخريطة المباشرة', 'الإدارة المالية'],
+    },
+    {
+      icon: Truck,
+      labelEn: 'Driver Portal',
+      labelAr: 'بوابة موظف التوصيل',
+      descEn: 'Delivery driver dashboard — orders, map, earnings & history',
+      descAr: 'واجهة موظف التوصيل — الطلبات والخريطة والأرباح والسجل',
+      href: '/driver',
+      color: '#E74C3C',
+      featuresEn: ['New Orders', 'Accept / Decline', 'Live Navigation', 'Earnings', 'History'],
+      featuresAr: ['طلبات جديدة', 'قبول / رفض', 'ملاحة مباشرة', 'الأرباح', 'السجل'],
     },
   ]
 
@@ -65,7 +76,7 @@ export default function HomePage() {
       </div>
 
       {/* Platform cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl mb-10">
         {platforms.map(platform => (
           <Link key={platform.labelEn} to={platform.href}
             className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#C8A951]/50 rounded-2xl p-6 transition-all">
