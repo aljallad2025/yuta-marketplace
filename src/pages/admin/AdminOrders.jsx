@@ -2,15 +2,8 @@ import { useState } from 'react'
 import { Search, Eye, Edit2, X } from 'lucide-react'
 import Badge from '../../components/Badge'
 import { useLang } from '../../i18n/LangContext'
-
-const allOrders = [
-  { id: 'SUW-2841', customerEn: 'Ahmed Al Mansouri', customerAr: 'أحمد المنصوري', storeEn: 'Baharat Restaurant', storeAr: 'مطعم بهارات', driverEn: 'Mohammed A.', driverAr: 'محمد ع.', items: 3, total: 254, status: 'on_the_way', date: 'Apr 1, 12:45 PM', addressEn: 'Villa 12, Al Wasl Rd', addressAr: 'فيلا ١٢، شارع الوصل' },
-  { id: 'SUW-2840', customerEn: 'Fatima Al Rashidi', customerAr: 'فاطمة الراشدي', storeEn: 'Fresh Mart', storeAr: 'فريش مارت', driverEn: 'Ibrahim S.', driverAr: 'إبراهيم س.', items: 12, total: 187, status: 'preparing', date: 'Apr 1, 12:30 PM', addressEn: 'Apt 5B, JBR', addressAr: 'شقة 5B، JBR' },
-  { id: 'SUW-2839', customerEn: 'Omar Khalid', customerAr: 'عمر خالد', storeEn: 'Al Shifa Pharmacy', storeAr: 'صيدلية الشفاء', driverEn: 'Yusuf K.', driverAr: 'يوسف ك.', items: 2, total: 48, status: 'completed', date: 'Apr 1, 11:20 AM', addressEn: 'Villa 7, Jumeirah', addressAr: 'فيلا ٧، جميرا' },
-  { id: 'SUW-2838', customerEn: 'Layla Hassan', customerAr: 'ليلى حسن', storeEn: 'Burgetino', storeAr: 'برجتينو', driverEn: null, driverAr: null, items: 4, total: 96, status: 'pending', date: 'Apr 1, 1:00 PM', addressEn: 'Tower 3, Downtown', addressAr: 'برج ٣، وسط المدينة' },
-  { id: 'SUW-2837', customerEn: 'Khalid Ibrahim', customerAr: 'خالد إبراهيم', storeEn: 'TechZone', storeAr: 'تك زون', driverEn: null, driverAr: null, items: 1, total: 420, status: 'accepted', date: 'Apr 1, 12:55 PM', addressEn: 'Office 202, DIFC', addressAr: 'مكتب ٢٠٢، DIFC' },
-  { id: 'SUW-2836', customerEn: 'Sara Mohammed', customerAr: 'سارة محمد', storeEn: 'Baharat Restaurant', storeAr: 'مطعم بهارات', driverEn: null, driverAr: null, items: 2, total: 115, status: 'cancelled', date: 'Apr 1, 10:00 AM', addressEn: 'Marina Walk', addressAr: 'مارينا ووك' },
-]
+import { useApp } from '../../store/appStore'
+import { useStores } from '../../store/storesStore'
 
 const statusOptions = ['all', 'pending', 'accepted', 'preparing', 'on_the_way', 'completed', 'cancelled']
 
@@ -19,6 +12,17 @@ export default function AdminOrders() {
   const [status, setStatus] = useState('all')
   const [selected, setSelected] = useState(null)
   const { t, isAr } = useLang()
+  const { orders, updateOrderStatus, drivers } = useApp()
+  const { stores } = useStores()
+
+  const getStoreName = (storeId) => {
+    const s = stores.find(st => st.id === storeId)
+    return s ? (isAr ? s.nameAr : s.nameEn) : (isAr ? 'متجر' : 'Store')
+  }
+  const getDriverName = (driverId) => {
+    const d = drivers.find(dr => dr.id === driverId)
+    return d ? (isAr ? d.nameAr : d.nameEn) : null
+  }
 
   const statusLabel = {
     all: isAr ? 'الكل' : 'All',
@@ -31,11 +35,11 @@ export default function AdminOrders() {
   }
 
   const headers = isAr
-    ? ['الطلب', 'العميل', 'المتجر', 'السائق', 'الإجمالي', 'الحالة', 'التاريخ', 'إجراءات']
-    : ['Order', 'Customer', 'Store', 'Driver', 'Total', 'Status', 'Date', 'Actions']
+    ? ['الطلب', 'العميل', 'المتجر', 'السائق', 'الإجمالي', 'الحالة', 'الوقت', 'إجراءات']
+    : ['Order', 'Customer', 'Store', 'Driver', 'Total', 'Status', 'Time', 'Actions']
 
-  const filtered = allOrders.filter(o => {
-    const customer = isAr ? o.customerAr : o.customerEn
+  const filtered = orders.filter(o => {
+    const customer = isAr ? o.customerNameAr : o.customerNameEn
     const matchSearch = o.id.toLowerCase().includes(search.toLowerCase()) ||
                         customer.toLowerCase().includes(search.toLowerCase())
     const matchStatus = status === 'all' || o.status === status
@@ -43,10 +47,10 @@ export default function AdminOrders() {
   })
 
   const quickStats = [
-    { labelEn: 'Pending', labelAr: 'قيد الانتظار', count: 8, color: '#F39C12' },
-    { labelEn: 'Active', labelAr: 'نشط', count: 24, color: '#3498DB' },
-    { labelEn: 'Completed', labelAr: 'مكتمل', count: 298, color: '#2ECC71' },
-    { labelEn: 'Cancelled', labelAr: 'ملغي', count: 16, color: '#E74C3C' },
+    { labelEn: 'Pending', labelAr: 'قيد الانتظار', count: orders.filter(o => o.status === 'pending').length, color: '#F39C12' },
+    { labelEn: 'Active', labelAr: 'نشط', count: orders.filter(o => ['accepted','preparing','on_the_way'].includes(o.status)).length, color: '#3498DB' },
+    { labelEn: 'Completed', labelAr: 'مكتمل', count: orders.filter(o => o.status === 'completed').length, color: '#2ECC71' },
+    { labelEn: 'Cancelled', labelAr: 'ملغي', count: orders.filter(o => o.status === 'cancelled').length, color: '#E74C3C' },
   ]
 
   return (
@@ -54,7 +58,7 @@ export default function AdminOrders() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-black text-[#0F2A47]">{t('orderManagement')}</h1>
-          <p className="text-sm text-[#666]">{isAr ? '٣٤٦ طلب اليوم' : '346 orders today'}</p>
+          <p className="text-sm text-[#666]">{orders.length} {isAr ? 'طلب إجمالي' : 'total orders'}</p>
         </div>
         <button className="px-4 py-2.5 bg-[#C8A951] text-[#0F2A47] text-sm font-black rounded-xl">{t('exportCSV')}</button>
       </div>
@@ -99,32 +103,39 @@ export default function AdminOrders() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((order, i) => (
+              {filtered.length === 0 ? (
+                <tr><td colSpan={8} className="text-center py-10 text-[#999] text-sm">{isAr ? 'لا توجد طلبات' : 'No orders found'}</td></tr>
+              ) : filtered.map((order, i) => (
                 <tr key={order.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#FBF8F2] cursor-pointer`}
                   onClick={() => setSelected(selected?.id === order.id ? null : order)}>
                   <td className="px-4 py-3.5">
                     <p className="font-mono font-black text-xs text-[#0F2A47]">{order.id}</p>
-                    <p className="text-[10px] text-[#999]">{order.items} {isAr ? 'عناصر' : 'items'}</p>
+                    <p className="text-[10px] text-[#999]">{order.items?.length || 0} {isAr ? 'عناصر' : 'items'}</p>
                   </td>
-                  <td className="px-4 py-3.5 text-sm text-[#444]">{isAr ? order.customerAr : order.customerEn}</td>
-                  <td className="px-4 py-3.5 text-sm text-[#666]">{isAr ? order.storeAr : order.storeEn}</td>
+                  <td className="px-4 py-3.5 text-sm text-[#444]">{isAr ? order.customerNameAr : order.customerNameEn}</td>
+                  <td className="px-4 py-3.5 text-sm text-[#666]">{getStoreName(order.storeId)}</td>
                   <td className="px-4 py-3.5 text-sm">
-                    {(isAr ? order.driverAr : order.driverEn) ? (
-                      <span className="text-[#444]">{isAr ? order.driverAr : order.driverEn}</span>
+                    {order.driverId ? (
+                      <span className="text-[#444]">{getDriverName(order.driverId) || order.driverId}</span>
                     ) : (
-                      <button className="text-xs text-[#C8A951] font-black border border-[#C8A951]/30 px-2 py-0.5 rounded-full hover:bg-[#C8A951]/10">
+                      <button
+                        onClick={e => { e.stopPropagation(); updateOrderStatus(order.id, order.status, 'DRV-002') }}
+                        className="text-xs text-[#C8A951] font-black border border-[#C8A951]/30 px-2 py-0.5 rounded-full hover:bg-[#C8A951]/10">
                         {t('assignDriver')}
                       </button>
                     )}
                   </td>
                   <td className="px-4 py-3.5 font-black text-sm text-[#222]">{order.total} {isAr ? 'د' : 'AED'}</td>
                   <td className="px-4 py-3.5"><Badge status={order.status} label={statusLabel[order.status]} /></td>
-                  <td className="px-4 py-3.5 text-xs text-[#666] whitespace-nowrap">{order.date}</td>
+                  <td className="px-4 py-3.5 text-xs text-[#666] whitespace-nowrap">
+                    {new Date(order.createdAt).toLocaleTimeString(isAr ? 'ar-AE' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
+                  </td>
                   <td className="px-4 py-3.5">
                     <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
                       <button className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Eye size={13} /></button>
-                      <button className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Edit2 size={13} /></button>
-                      <button className="p-1.5 hover:bg-red-50 rounded-lg text-[#666] hover:text-red-600"><X size={13} /></button>
+                      <button
+                        onClick={() => updateOrderStatus(order.id, 'cancelled')}
+                        className="p-1.5 hover:bg-red-50 rounded-lg text-[#666] hover:text-red-600"><X size={13} /></button>
                     </div>
                   </td>
                 </tr>
@@ -144,37 +155,47 @@ export default function AdminOrders() {
               </button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-              <div><p className="text-xs text-[#666]">{isAr ? 'العميل' : 'Customer'}</p><p className="font-black text-sm text-[#222]">{isAr ? selected.customerAr : selected.customerEn}</p></div>
-              <div><p className="text-xs text-[#666]">{isAr ? 'المتجر' : 'Store'}</p><p className="font-black text-sm text-[#222]">{isAr ? selected.storeAr : selected.storeEn}</p></div>
+              <div><p className="text-xs text-[#666]">{isAr ? 'العميل' : 'Customer'}</p><p className="font-black text-sm text-[#222]">{isAr ? selected.customerNameAr : selected.customerNameEn}</p></div>
+              <div><p className="text-xs text-[#666]">{isAr ? 'المتجر' : 'Store'}</p><p className="font-black text-sm text-[#222]">{getStoreName(selected.storeId)}</p></div>
               <div><p className="text-xs text-[#666]">{isAr ? 'العنوان' : 'Address'}</p><p className="font-black text-sm text-[#222]">{isAr ? selected.addressAr : selected.addressEn}</p></div>
               <div><p className="text-xs text-[#666]">{isAr ? 'الإجمالي' : 'Total'}</p><p className="font-black text-sm text-[#0F2A47]">{selected.total} {isAr ? 'درهم' : 'AED'}</p></div>
             </div>
+            {/* Items */}
+            {selected.items && (
+              <div className="mb-4">
+                <p className="text-xs font-black text-[#666] mb-2">{isAr ? 'المنتجات' : 'Items'}</p>
+                <div className="flex flex-wrap gap-2">
+                  {selected.items.map((item, i) => (
+                    <span key={i} className="bg-white border border-[#E8E4DC] rounded-xl px-3 py-1.5 text-xs font-black text-[#444]">
+                      {item.qty}x {isAr ? item.nameAr : item.nameEn} — {item.price * item.qty} {isAr ? 'د' : 'AED'}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="flex gap-2 flex-wrap">
-              {[
-                { en: 'Mark Preparing', ar: 'تحديد: جاري التحضير', danger: false },
-                { en: 'Assign Driver', ar: 'تعيين سائق', danger: false },
-                { en: 'Cancel Order', ar: 'إلغاء الطلب', danger: true },
-                { en: 'Issue Refund', ar: 'إصدار استرداد', danger: true },
-              ].map(action => (
-                <button key={action.en} className={`px-3 py-2 text-xs font-black rounded-lg border transition-all ${
-                  action.danger
-                    ? 'border-red-200 text-red-600 hover:bg-red-50'
-                    : 'border-[#E8E4DC] text-[#444] hover:bg-white hover:border-[#0F2A47]/20'
-                }`}>
-                  {isAr ? action.ar : action.en}
+              {selected.status === 'pending' && (
+                <button onClick={() => { updateOrderStatus(selected.id, 'preparing'); setSelected(null) }}
+                  className="px-3 py-2 text-xs font-black rounded-lg border border-[#E8E4DC] text-[#444] hover:bg-white">
+                  {isAr ? 'تحديد: جاري التحضير' : 'Mark Preparing'}
                 </button>
-              ))}
+              )}
+              {!selected.driverId && (
+                <button onClick={() => { updateOrderStatus(selected.id, selected.status, 'DRV-002'); setSelected(s => ({ ...s, driverId: 'DRV-002' })) }}
+                  className="px-3 py-2 text-xs font-black rounded-lg border border-[#E8E4DC] text-[#444] hover:bg-white">
+                  {t('assignDriver')}
+                </button>
+              )}
+              <button onClick={() => { updateOrderStatus(selected.id, 'cancelled'); setSelected(null) }}
+                className="px-3 py-2 text-xs font-black rounded-lg border border-red-200 text-red-600 hover:bg-red-50">
+                {isAr ? 'إلغاء الطلب' : 'Cancel Order'}
+              </button>
             </div>
           </div>
         )}
 
         <div className="px-5 py-3 border-t border-[#F0ECE4] flex items-center justify-between text-xs text-[#666]">
-          <span>{isAr ? `عرض ${filtered.length} من ${allOrders.length} طلب` : `Showing ${filtered.length} of ${allOrders.length} orders`}</span>
-          <div className="flex gap-1">
-            {[1, 2, 3].map(p => (
-              <button key={p} className={`w-7 h-7 rounded-lg ${p === 1 ? 'bg-[#0F2A47] text-white' : 'hover:bg-[#FBF8F2] text-[#666]'}`}>{p}</button>
-            ))}
-          </div>
+          <span>{isAr ? `عرض ${filtered.length} من ${orders.length} طلب` : `Showing ${filtered.length} of ${orders.length} orders`}</span>
         </div>
       </div>
     </div>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="120" fill="#0F2A47"/>
+  <circle cx="256" cy="200" r="90" fill="none" stroke="#C8A951" stroke-width="28"/>
+  <path d="M256 120 L256 200" stroke="#C8A951" stroke-width="28" stroke-linecap="round"/>
+  <path d="M180 240 Q256 340 332 240" stroke="#C8A951" stroke-width="24" fill="none" stroke-linecap="round"/>
+  <text x="256" y="430" font-family="Arial,sans-serif" font-weight="900" font-size="88" fill="#C8A951" text-anchor="middle">SUMU</text>
+</svg>

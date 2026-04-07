@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Smartphone, Monitor, Settings, ArrowRight, Star, Shield, Zap, Truck } from 'lucide-react'
+import { Smartphone, Monitor, Settings, ArrowRight, Star, Shield, Zap, Truck, Store, ChevronRight } from 'lucide-react'
 import { useLang } from '../i18n/LangContext'
 import LangToggle from '../components/LangToggle'
 
@@ -11,10 +11,11 @@ export default function HomePage() {
       icon: Monitor,
       labelEn: 'Web Platform',
       labelAr: 'المنصة الإلكترونية',
-      descEn: 'Customer-facing marketplace, delivery & taxi booking portal',
-      descAr: 'بوابة التسوق ومتجر التوصيل وحجز التاكسي للعملاء',
+      descEn: 'Customer marketplace, delivery & taxi booking',
+      descAr: 'بوابة التسوق والتوصيل وحجز التاكسي للعملاء',
       href: '/web',
       color: '#C8A951',
+      badge: null,
       featuresEn: ['Home & Discovery', 'Marketplace', 'Checkout', 'Taxi Booking', 'Order Tracking'],
       featuresAr: ['الرئيسية والاكتشاف', 'المتجر', 'إتمام الطلب', 'حجز التاكسي', 'تتبع الطلبات'],
     },
@@ -22,34 +23,49 @@ export default function HomePage() {
       icon: Smartphone,
       labelEn: 'Mobile App',
       labelAr: 'تطبيق الجوال',
-      descEn: 'Interactive phone UI simulation of the SUMU mobile app',
-      descAr: 'محاكاة تفاعلية لواجهة تطبيق سمو للجوال',
+      descEn: 'Interactive simulation of the SUMU mobile app',
+      descAr: 'محاكاة تفاعلية لتطبيق سمو للجوال',
       href: '/mobile',
       color: '#2ECC71',
-      featuresEn: ['Home Screen', 'Categories', 'Orders', 'Taxi', 'Account'],
-      featuresAr: ['الشاشة الرئيسية', 'الأقسام', 'الطلبات', 'التاكسي', 'الحساب'],
+      badge: null,
+      featuresEn: ['Home Screen', 'Store Browse', 'Orders', 'Taxi', 'Account'],
+      featuresAr: ['الشاشة الرئيسية', 'تصفح المتاجر', 'الطلبات', 'التاكسي', 'الحساب'],
     },
     {
       icon: Settings,
       labelEn: 'Admin Dashboard',
       labelAr: 'لوحة الإدارة',
-      descEn: 'Full control panel for managing the entire platform',
+      descEn: 'Full control panel for the entire platform',
       descAr: 'لوحة تحكم كاملة لإدارة المنصة بأكملها',
-      href: '/admin',
+      href: '/admin/login',
       color: '#3498DB',
+      badge: isAr ? 'مدير' : 'Admin',
       featuresEn: ['Analytics', 'Users & Stores', 'Categories', 'Orders', 'Live Map', 'Financial'],
-      featuresAr: ['التحليلات', 'المستخدمون والمتاجر', 'الأقسام', 'الطلبات', 'الخريطة المباشرة', 'الإدارة المالية'],
+      featuresAr: ['التحليلات', 'المستخدمون والمتاجر', 'الأقسام', 'الطلبات', 'الخريطة المباشرة', 'المالية'],
+    },
+    {
+      icon: Store,
+      labelEn: 'Vendor Dashboard',
+      labelAr: 'لوحة المورد / المتجر',
+      descEn: 'Store owner portal — products, orders & analytics',
+      descAr: 'بوابة صاحب المتجر — المنتجات والطلبات والإحصائيات',
+      href: '/vendor/login',
+      color: '#9B59B6',
+      badge: isAr ? 'مورد' : 'Vendor',
+      featuresEn: ['Product Management', 'Order Control', 'Analytics', 'Wallet', 'Reviews', 'Settings'],
+      featuresAr: ['إدارة المنتجات', 'التحكم بالطلبات', 'الإحصائيات', 'المحفظة', 'التقييمات', 'الإعدادات'],
     },
     {
       icon: Truck,
-      labelEn: 'Driver Portal',
-      labelAr: 'بوابة موظف التوصيل',
-      descEn: 'Delivery driver dashboard — orders, map, earnings & history',
-      descAr: 'واجهة موظف التوصيل — الطلبات والخريطة والأرباح والسجل',
-      href: '/driver',
+      labelEn: 'Driver Dashboard',
+      labelAr: 'لوحة موظف التوصيل',
+      descEn: 'Driver portal — real-time orders, earnings & history',
+      descAr: 'بوابة السائق — الطلبات الفورية والأرباح والسجل',
+      href: '/driver/login',
       color: '#E74C3C',
-      featuresEn: ['New Orders', 'Accept / Decline', 'Live Navigation', 'Earnings', 'History'],
-      featuresAr: ['طلبات جديدة', 'قبول / رفض', 'ملاحة مباشرة', 'الأرباح', 'السجل'],
+      badge: isAr ? 'سائق' : 'Driver',
+      featuresEn: ['Available Orders', 'Active Deliveries', 'Earnings Charts', 'History', 'Online Toggle'],
+      featuresAr: ['الطلبات المتاحة', 'التوصيلات النشطة', 'مخططات الأرباح', 'السجل', 'تبديل الاتصال'],
     },
   ]
 
@@ -61,56 +77,61 @@ export default function HomePage() {
       </div>
 
       {/* Brand header */}
-      <div className="text-center mb-12">
-        <div className="flex justify-center mb-6">
-          <img src="/sumu-logo.png" alt="SUMU" className="w-24 h-24 object-contain drop-shadow-2xl" />
+      <div className="text-center mb-10">
+        <div className="flex justify-center mb-5">
+          <div className="w-20 h-20 bg-[#C8A951]/20 rounded-3xl flex items-center justify-center text-5xl">🏆</div>
         </div>
-        <div className="mb-2">
+        <div className="mb-2 flex items-center justify-center gap-3">
           <span className="text-4xl font-black text-[#C8A951] tracking-widest">سمو</span>
-          <span className="text-white/40 mx-3 text-3xl">·</span>
+          <span className="text-white/30 text-3xl">·</span>
           <span className="text-4xl font-black text-white tracking-[0.2em]">SUMU</span>
         </div>
-        <p className="text-white/50 text-base max-w-md mx-auto mt-3">
-          {isAr ? 'منصة الخليج المتكاملة — مطاعم · سوبرماركت · تاكسي · توصيل' : 'Premium Gulf platform — Restaurants · Supermarket · Taxi · Delivery'}
+        <p className="text-white/50 text-sm max-w-md mx-auto mt-2">
+          {isAr ? 'منصة الخليج المتكاملة — مطاعم · سوبرماركت · تاكسي · توصيل' : 'Premium Gulf super-app — Restaurants · Supermarket · Taxi · Delivery'}
         </p>
       </div>
 
       {/* Platform cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 w-full max-w-6xl mb-8">
         {platforms.map(platform => (
           <Link key={platform.labelEn} to={platform.href}
-            className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#C8A951]/50 rounded-2xl p-6 transition-all">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-xl" style={{ backgroundColor: platform.color + '20' }}>
-                <platform.icon size={22} style={{ color: platform.color }} />
+            className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#C8A951]/50 rounded-2xl p-5 transition-all hover:scale-[1.02]">
+            <div className="flex items-center justify-between mb-3">
+              <div className="p-2.5 rounded-xl" style={{ backgroundColor: platform.color + '25' }}>
+                <platform.icon size={20} style={{ color: platform.color }} />
               </div>
-              <h2 className="font-black text-white text-lg">{isAr ? platform.labelAr : platform.labelEn}</h2>
+              {platform.badge && (
+                <span className="text-[10px] font-black px-2 py-0.5 rounded-full border" style={{ color: platform.color, borderColor: platform.color + '40', backgroundColor: platform.color + '15' }}>
+                  {platform.badge}
+                </span>
+              )}
             </div>
-            <p className="text-white/50 text-sm mb-4 leading-relaxed">{isAr ? platform.descAr : platform.descEn}</p>
-            <ul className="space-y-1.5 mb-5">
+            <h2 className="font-black text-white text-sm mb-1">{isAr ? platform.labelAr : platform.labelEn}</h2>
+            <p className="text-white/40 text-xs mb-3 leading-relaxed">{isAr ? platform.descAr : platform.descEn}</p>
+            <ul className="space-y-1 mb-4">
               {(isAr ? platform.featuresAr : platform.featuresEn).map(f => (
-                <li key={f} className="flex items-center gap-2 text-xs text-white/60">
-                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: platform.color }}></div>
+                <li key={f} className="flex items-center gap-1.5 text-[11px] text-white/50">
+                  <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ backgroundColor: platform.color }}></div>
                   {f}
                 </li>
               ))}
             </ul>
-            <div className="flex items-center gap-2 text-sm font-black group-hover:gap-3 transition-all" style={{ color: platform.color }}>
-              {isAr ? `افتح ${platform.labelAr}` : `Open ${platform.labelEn}`}
-              <ArrowRight size={14} style={{ transform: isAr ? 'rotate(180deg)' : undefined }} />
+            <div className="flex items-center gap-1.5 text-xs font-black group-hover:gap-2 transition-all" style={{ color: platform.color }}>
+              {isAr ? 'فتح' : 'Open'}
+              <ChevronRight size={12} style={{ transform: isAr ? 'rotate(180deg)' : undefined }} />
             </div>
           </Link>
         ))}
       </div>
 
       {/* Brand attributes */}
-      <div className="flex flex-wrap items-center justify-center gap-6 text-white/40 text-sm">
-        <div className="flex items-center gap-2"><Star size={14} className="text-[#C8A951]" /> {isAr ? 'علامة خليجية فاخرة' : 'Premium Gulf Brand'}</div>
-        <div className="flex items-center gap-2"><Shield size={14} className="text-[#C8A951]" /> {isAr ? 'تصميم احترافي' : 'Enterprise-Grade Design'}</div>
-        <div className="flex items-center gap-2"><Zap size={14} className="text-[#C8A951]" /> {isAr ? 'واجهة جاهزة للإنتاج' : 'Production-Ready UI'}</div>
+      <div className="flex flex-wrap items-center justify-center gap-5 text-white/40 text-xs">
+        <div className="flex items-center gap-1.5"><Star size={12} className="text-[#C8A951]" /> {isAr ? 'علامة خليجية فاخرة' : 'Premium Gulf Brand'}</div>
+        <div className="flex items-center gap-1.5"><Shield size={12} className="text-[#C8A951]" /> {isAr ? 'تصميم احترافي' : 'Enterprise Design'}</div>
+        <div className="flex items-center gap-1.5"><Zap size={12} className="text-[#C8A951]" /> {isAr ? 'بيانات حية مترابطة' : 'Live Connected Data'}</div>
       </div>
 
-      <p className="text-white/20 text-xs mt-8">React + Vite + Tailwind CSS</p>
+      <p className="text-white/15 text-[10px] mt-6">React 19 + Vite + Tailwind CSS · SUMU Platform v2.0</p>
     </div>
   )
 }

@@ -1,0 +1,234 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Eye, EyeOff, Store, Lock, User, Phone, Mail, ChevronRight } from 'lucide-react'
+import { useAuth } from '../../store/authStore'
+import { useLang } from '../../i18n/LangContext'
+import LangToggle from '../../components/LangToggle'
+
+export default function VendorLogin() {
+  const [mode, setMode] = useState('login') // 'login' | 'register'
+  const [form, setForm] = useState({ username: '', password: '', nameAr: '', nameEn: '', email: '', phone: '' })
+  const [showPass, setShowPass] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [registered, setRegistered] = useState(false)
+  const [regError, setRegError] = useState('')
+  const { login, loginError, setLoginError, register } = useAuth()
+  const { isAr } = useLang()
+  const navigate = useNavigate()
+
+  const errorMsgs = {
+    username_password_wrong: isAr ? 'اسم المستخدم أو كلمة المرور غير صحيحة' : 'Username or password is incorrect',
+    wrong_role: isAr ? 'هذا ليس حساب مورد' : 'This is not a vendor account',
+    pending_approval: isAr ? 'حسابك قيد المراجعة من الإدارة، يرجى الانتظار' : 'Your account is pending admin approval. Please wait.',
+    rejected: isAr ? 'تم رفض طلبك من قبل الإدارة' : 'Your application was rejected by admin',
+    suspended: isAr ? 'تم تعليق حسابك' : 'Your account has been suspended',
+  }
+
+  const regErrors = {
+    username_taken: isAr ? 'اسم المستخدم مستخدم بالفعل' : 'Username already taken',
+    email_taken: isAr ? 'البريد الإلكتروني مستخدم بالفعل' : 'Email already in use',
+  }
+
+  const handleLogin = (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setTimeout(() => {
+      const ok = login(form.username, form.password, 'vendor')
+      setLoading(false)
+      if (ok) navigate('/vendor')
+    }, 600)
+  }
+
+  const handleRegister = (e) => {
+    e.preventDefault()
+    setRegError('')
+    if (!form.nameAr || !form.nameEn || !form.username || !form.password || !form.email || !form.phone) {
+      setRegError(isAr ? 'يرجى ملء جميع الحقول' : 'Please fill all fields')
+      return
+    }
+    setLoading(true)
+    setTimeout(() => {
+      const result = register({ ...form, role: 'vendor', avatar: '🏪' })
+      setLoading(false)
+      if (result.success) {
+        setRegistered(true)
+      } else {
+        setRegError(regErrors[result.error] || (isAr ? 'حدث خطأ' : 'An error occurred'))
+      }
+    }, 600)
+  }
+
+  if (registered) {
+    return (
+      <div className="min-h-screen bg-[#0F2A47] flex items-center justify-center p-4" dir={isAr ? 'rtl' : 'ltr'}>
+        <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
+          <div className="text-6xl mb-4">⏳</div>
+          <h2 className="font-black text-[#0F2A47] text-xl mb-2">
+            {isAr ? 'تم إرسال طلبك!' : 'Application Submitted!'}
+          </h2>
+          <p className="text-[#666] text-sm mb-4">
+            {isAr
+              ? 'طلب انضمامك كمورد تم استلامه. سيتم مراجعته من قبل الإدارة وإخطارك خلال 24-48 ساعة.'
+              : 'Your vendor application has been received. Admin will review and notify you within 24-48 hours.'}
+          </p>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-5">
+            <p className="text-xs font-black text-amber-700">
+              {isAr ? `📋 اسم المستخدم: ${form.username}` : `📋 Username: ${form.username}`}
+            </p>
+          </div>
+          <button onClick={() => { setRegistered(false); setMode('login') }}
+            className="w-full py-3 bg-[#0F2A47] text-white font-black rounded-xl text-sm">
+            {isAr ? 'العودة لتسجيل الدخول' : 'Back to Login'}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-[#0F2A47] flex items-center justify-center p-4" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="absolute top-4 end-4">
+        <LangToggle className="border-white/20 bg-white/10 text-white" />
+      </div>
+
+      <div className="w-full max-w-sm">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="w-20 h-20 bg-[#9B59B6]/20 border-2 border-[#9B59B6]/40 rounded-3xl flex items-center justify-center mx-auto mb-4">
+            <Store size={36} className="text-[#9B59B6]" />
+          </div>
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <span className="text-2xl font-black text-[#C8A951]">سمو</span>
+            <span className="text-white/30">·</span>
+            <span className="text-2xl font-black text-white tracking-widest">SUMU</span>
+          </div>
+          <p className="text-white/50 text-sm">{isAr ? 'بوابة الموردين والمتاجر' : 'Vendor & Store Portal'}</p>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex bg-white/10 rounded-2xl p-1 mb-4">
+          {[
+            { key: 'login', ar: 'تسجيل الدخول', en: 'Sign In' },
+            { key: 'register', ar: 'طلب انضمام', en: 'Apply Now' },
+          ].map(tab => (
+            <button key={tab.key} onClick={() => { setMode(tab.key); setLoginError(''); setRegError('') }}
+              className={`flex-1 py-2.5 rounded-xl text-sm font-black transition-all ${mode === tab.key ? 'bg-white text-[#0F2A47]' : 'text-white/60 hover:text-white'}`}>
+              {isAr ? tab.ar : tab.en}
+            </button>
+          ))}
+        </div>
+
+        {/* Card */}
+        <div className="bg-white rounded-3xl p-6 shadow-2xl">
+          {mode === 'login' ? (
+            <>
+              <h1 className="font-black text-[#0F2A47] text-xl mb-1">{isAr ? 'دخول المورد' : 'Vendor Login'}</h1>
+              <p className="text-sm text-[#888] mb-5">{isAr ? 'ادخل بيانات حسابك المعتمد' : 'Enter your approved account credentials'}</p>
+
+              {loginError && errorMsgs[loginError] && (
+                <div className={`mb-4 rounded-xl p-3 text-sm font-black border ${
+                  loginError === 'pending_approval' ? 'bg-amber-50 border-amber-200 text-amber-700' : 'bg-red-50 border-red-200 text-red-600'
+                }`}>
+                  {loginError === 'pending_approval' ? '⏳' : '⚠️'} {errorMsgs[loginError]}
+                </div>
+              )}
+
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-black text-[#666] mb-1.5">{isAr ? 'اسم المستخدم' : 'Username'}</label>
+                  <div className="relative">
+                    <User size={15} className={`absolute top-1/2 -translate-y-1/2 text-[#aaa] ${isAr ? 'right-3' : 'left-3'}`} />
+                    <input value={form.username} onChange={e => { setForm(f => ({ ...f, username: e.target.value })); setLoginError('') }}
+                      className={`w-full border-2 border-[#E8E4DC] rounded-xl py-3 text-sm outline-none focus:border-[#9B59B6] ${isAr ? 'pr-9 pl-3' : 'pl-9 pr-3'}`}
+                      required dir="ltr" placeholder={isAr ? 'اسم المستخدم' : 'username'} />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-black text-[#666] mb-1.5">{isAr ? 'كلمة المرور' : 'Password'}</label>
+                  <div className="relative">
+                    <Lock size={15} className={`absolute top-1/2 -translate-y-1/2 text-[#aaa] ${isAr ? 'right-3' : 'left-3'}`} />
+                    <input type={showPass ? 'text' : 'password'} value={form.password} onChange={e => { setForm(f => ({ ...f, password: e.target.value })); setLoginError('') }}
+                      className={`w-full border-2 border-[#E8E4DC] rounded-xl py-3 text-sm outline-none focus:border-[#9B59B6] ${isAr ? 'pr-9 pl-10' : 'pl-9 pr-10'}`}
+                      required dir="ltr" placeholder="••••••••" />
+                    <button type="button" onClick={() => setShowPass(!showPass)}
+                      className={`absolute top-1/2 -translate-y-1/2 text-[#aaa] ${isAr ? 'left-3' : 'right-3'}`}>
+                      {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                    </button>
+                  </div>
+                </div>
+                <button type="submit" disabled={loading}
+                  className="w-full py-3.5 bg-[#9B59B6] text-white font-black rounded-xl text-sm hover:bg-purple-700 disabled:opacity-60 flex items-center justify-center gap-2">
+                  {loading ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />{isAr ? 'جاري...' : 'Loading...'}</> : (isAr ? 'دخول' : 'Sign In')}
+                </button>
+              </form>
+
+              <div className="mt-4 bg-[#FBF8F2] rounded-xl p-3 space-y-1 text-center">
+                <p className="text-xs text-[#888] font-black">{isAr ? 'حسابات تجريبية:' : 'Demo accounts:'}</p>
+                <p className="text-xs text-[#666]">baharat / baharat123</p>
+                <p className="text-xs text-[#666]">burgetino / burger123</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1 className="font-black text-[#0F2A47] text-xl mb-1">{isAr ? 'طلب انضمام كمورد' : 'Apply as Vendor'}</h1>
+              <p className="text-sm text-[#888] mb-5">{isAr ? 'سيتم مراجعة طلبك من قبل الإدارة' : 'Your application will be reviewed by admin'}</p>
+
+              {regError && (
+                <div className="mb-4 bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-600 font-black">⚠️ {regError}</div>
+              )}
+
+              <form onSubmit={handleRegister} className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'اسم المتجر (ع)' : 'Store Name (AR)'}</label>
+                    <input value={form.nameAr} onChange={e => setForm(f => ({ ...f, nameAr: e.target.value }))}
+                      className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="rtl" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'اسم المتجر (إ)' : 'Store Name (EN)'}</label>
+                    <input value={form.nameEn} onChange={e => setForm(f => ({ ...f, nameEn: e.target.value }))}
+                      className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'اسم المستخدم' : 'Username'}</label>
+                  <input value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value }))}
+                    className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" />
+                </div>
+                <div>
+                  <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'كلمة المرور' : 'Password'}</label>
+                  <div className="relative">
+                    <input type={showPass ? 'text' : 'password'} value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
+                      className={`w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6] ${isAr ? 'pl-9' : 'pr-9'}`} dir="ltr" />
+                    <button type="button" onClick={() => setShowPass(!showPass)}
+                      className={`absolute top-1/2 -translate-y-1/2 text-[#aaa] ${isAr ? 'left-3' : 'right-3'}`}>
+                      {showPass ? <EyeOff size={14} /> : <Eye size={14} />}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'البريد الإلكتروني' : 'Email'}</label>
+                  <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                    className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" />
+                </div>
+                <div>
+                  <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'رقم الهاتف' : 'Phone'}</label>
+                  <input type="tel" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                    className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" placeholder="+971..." />
+                </div>
+                <button type="submit" disabled={loading}
+                  className="w-full py-3.5 bg-[#9B59B6] text-white font-black rounded-xl text-sm hover:bg-purple-700 disabled:opacity-60 flex items-center justify-center gap-2">
+                  {loading ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />{isAr ? 'جاري...' : 'Loading...'}</> : (isAr ? 'إرسال الطلب' : 'Submit Application')}
+                </button>
+              </form>
+            </>
+          )}
+        </div>
+
+        <p className="text-center text-white/30 text-xs mt-5">
+          <a href="/" className="hover:text-white/60">{isAr ? '← الرجوع للرئيسية' : '← Back to Home'}</a>
+        </p>
+      </div>
+    </div>
+  )
+}

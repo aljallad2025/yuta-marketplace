@@ -1,25 +1,16 @@
 import { useState } from 'react'
-import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom'
+import { Link, useLocation, Outlet } from 'react-router-dom'
 import { LayoutDashboard, Users, Store, Car, Package, Navigation, Map, DollarSign,
-  Tag, Settings, Bell, Search, Menu, Wallet, BarChart3, LogOut, Shield, CheckSquare
+  Tag, Settings, Bell, Search, Menu, Wallet, BarChart3, LogOut, Shield
 } from 'lucide-react'
 import SumuLogo from '../../components/SumuLogo'
 import LangToggle from '../../components/LangToggle'
 import { useLang } from '../../i18n/LangContext'
-import { useAuth } from '../../store/authStore'
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const location = useLocation()
-  const navigate = useNavigate()
   const { t, isAr } = useLang()
-  const { logout, getPendingVendors, getPendingDrivers, currentUser } = useAuth()
-  const pendingCount = getPendingVendors().length + getPendingDrivers().length
-
-  const handleLogout = () => {
-    logout()
-    navigate('/admin/login')
-  }
 
   const navGroups = [
     {
@@ -37,7 +28,6 @@ export default function AdminLayout() {
         { icon: Car, label: isAr ? 'السائقون' : 'Drivers', href: '/admin/drivers' },
         { icon: Package, label: isAr ? 'الطلبات' : 'Orders', href: '/admin/orders' },
         { icon: Tag, label: isAr ? 'الأقسام' : 'Categories', href: '/admin/categories' },
-        { icon: CheckSquare, label: isAr ? 'الموافقات' : 'Approvals', href: '/admin/approvals', badge: pendingCount || null },
       ]
     },
     {
@@ -91,12 +81,7 @@ export default function AdminLayout() {
                       isActive ? 'bg-[#C8A951] text-[#0F2A47]' : 'text-white/70 hover:bg-white/10 hover:text-white'
                     }`}>
                     <item.icon size={16} className="flex-shrink-0" />
-                    {sidebarOpen && <span className="text-sm font-bold flex-1">{item.label}</span>}
-                    {item.badge && (
-                      <span className={`w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center flex-shrink-0 ${isActive ? 'bg-[#0F2A47] text-[#C8A951]' : 'bg-[#E74C3C] text-white'}`}>
-                        {item.badge}
-                      </span>
-                    )}
+                    {sidebarOpen && <span className="text-sm font-bold">{item.label}</span>}
                   </Link>
                 )
               })}
@@ -111,12 +96,12 @@ export default function AdminLayout() {
                 <Shield size={12} className="text-[#0F2A47]" />
               </div>
               <div className="min-w-0">
-                <p className="text-white text-xs font-black truncate">{currentUser?.nameAr || t('superAdmin')}</p>
-                <p className="text-white/40 text-[9px] truncate">{currentUser?.email || 'admin@sumu.ae'}</p>
+                <p className="text-white text-xs font-black truncate">{t('superAdmin')}</p>
+                <p className="text-white/40 text-[9px] truncate">admin@sumu.ae</p>
               </div>
             </div>
           )}
-          <button onClick={handleLogout} className="flex items-center gap-2 text-white/50 hover:text-white text-xs px-2 py-1 font-semibold w-full">
+          <button className="flex items-center gap-2 text-white/50 hover:text-white text-xs px-2 py-1 font-semibold">
             <LogOut size={14} />
             {sidebarOpen && t('signOut')}
           </button>
@@ -135,12 +120,10 @@ export default function AdminLayout() {
           </div>
           <div className="ml-auto flex items-center gap-2">
             <LangToggle className="border-[#E8E4DC]" />
-            <Link to="/admin/approvals" className="relative p-2 rounded-lg hover:bg-[#FBF8F2] text-[#666]">
+            <button className="relative p-2 rounded-lg hover:bg-[#FBF8F2] text-[#666]">
               <Bell size={17} />
-              {pendingCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-[#E74C3C] rounded-full text-[9px] text-white font-black flex items-center justify-center">{pendingCount}</span>
-              )}
-            </Link>
+              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#E74C3C] rounded-full"></span>
+            </button>
             <div className="w-8 h-8 bg-[#0F2A47] rounded-full flex items-center justify-center">
               <Shield size={13} className="text-[#C8A951]" />
             </div>

@@ -14,11 +14,12 @@ const variants = {
   blue:       'bg-[#0F2A47]/10 text-[#0F2A47] border-[#0F2A47]/20',
 }
 
-export default function Badge({ status, label, className = '' }) {
-  const cls = variants[status] || variants.inactive
+export default function Badge({ status, variant, label, children, className = '' }) {
+  const key = variant || status
+  const cls = variants[key] || variants.inactive
   return (
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${cls} ${className}`}>
-      {label || status?.replace(/_/g, ' ')}
+      {children || label || key?.replace(/_/g, ' ')}
     </span>
   )
 }
