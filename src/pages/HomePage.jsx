@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Smartphone, Monitor, Settings, ArrowRight, Star, Shield, Zap, Truck, Store, ChevronRight } from 'lucide-react'
+import { Smartphone, Monitor, Settings, ArrowRight, Star, Shield, Zap, Truck, Store, ChevronRight, Package } from 'lucide-react'
 import { useLang } from '../i18n/LangContext'
 import LangToggle from '../components/LangToggle'
 
@@ -66,6 +66,18 @@ export default function HomePage() {
       badge: isAr ? 'سائق' : 'Driver',
       featuresEn: ['Available Orders', 'Active Deliveries', 'Earnings Charts', 'History', 'Online Toggle'],
       featuresAr: ['الطلبات المتاحة', 'التوصيلات النشطة', 'مخططات الأرباح', 'السجل', 'تبديل الاتصال'],
+    },
+    {
+      icon: Package,
+      labelEn: 'React Native App',
+      labelAr: 'تطبيق React Native',
+      descEn: 'Full mobile app — export as APK / IPA',
+      descAr: 'تطبيق جوال كامل — تصدير كـ APK / IPA',
+      href: '/react-native',
+      color: '#00D4FF',
+      badge: isAr ? 'جديد ✨' : 'New ✨',
+      featuresEn: ['Expo SDK 52', 'Bottom Tab Nav', 'Cart & Checkout', 'Taxi Booking', 'EAS Build Ready'],
+      featuresAr: ['Expo SDK 52', 'تنقل بالتبويبات', 'سلة ودفع', 'حجز التاكسي', 'جاهز لـ EAS Build'],
     },
   ]
 

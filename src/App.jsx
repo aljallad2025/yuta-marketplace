@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 
 // Home
 import HomePage from './pages/HomePage'
+import ReactNativePage from './pages/ReactNativePage'
 
 // Auth login pages
 import AdminLogin from './pages/auth/AdminLogin'
@@ -84,6 +85,9 @@ export default function App() {
 
         {/* Mobile App Preview (public) */}
         <Route path="/mobile" element={<MobileApp />} />
+
+        {/* React Native App Info */}
+        <Route path="/react-native" element={<ReactNativePage />} />
 
         {/* ── Admin Dashboard (protected: admin) ───────────────── */}
         <Route path="/admin" element={
