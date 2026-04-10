@@ -2,6 +2,9 @@
   "expo": {
     "name": "سومو",
     "slug": "sumu-app",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
