@@ -3,14 +3,16 @@
   "short_name": "SUMU",
   "description": "منصة الخليج المتكاملة — مطاعم، سوبرماركت، تاكسي، توصيل",
   "start_url": "/mobile",
-  "scope": "/",
+  "scope": "/mobile",
   "display": "standalone",
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#0F2A47",
   "theme_color": "#0F2A47",
   "lang": "ar",
   "dir": "rtl",
   "categories": ["food", "shopping", "lifestyle", "travel"],
+  "prefer_related_applications": false,
   "icons": [
     { "src": "/icons/icon-72.png",  "sizes": "72x72",   "type": "image/png", "purpose": "any" },
     { "src": "/icons/icon-96.png",  "sizes": "96x96",   "type": "image/png", "purpose": "any" },
@@ -36,6 +38,5 @@
       "url": "/mobile",
       "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96", "type": "image/png" }]
     }
-  ],
-  "prefer_related_applications": false
+  ]
 }
