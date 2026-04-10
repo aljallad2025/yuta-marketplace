@@ -1,202 +1,90 @@
-import { useState, createContext, useContext, useEffect } from 'react'
+import { useState, createContext, useContext, useEffect, useCallback } from 'react'
+import { authAPI, usersAPI } from '../services/api.js'
+import { resetSocket } from '../hooks/useSocket.js'
 
-// ─── Default accounts ────────────────────────────────────────────────
-const defaultUsers = [
-  // Admin
-  {
-    id: 'ADM-001',
-    role: 'admin',
-    username: 'admin',
-    password: 'admin123',
-    nameAr: 'المدير العام',
-    nameEn: 'Super Admin',
-    email: 'admin@sumu.ae',
-    status: 'approved',
-    avatar: '🛡️',
-  },
-  // Vendors
-  {
-    id: 'VND-001',
-    role: 'vendor',
-    storeId: 1,
-    username: 'baharat',
-    password: 'baharat123',
-    nameAr: 'مطعم بهارات',
-    nameEn: 'Baharat Restaurant',
-    email: 'baharat@sumu.ae',
-    phone: '+971501110001',
-    status: 'approved',
-    avatar: '🍽️',
-    appliedAt: '2024-01-10',
-  },
-  {
-    id: 'VND-002',
-    role: 'vendor',
-    storeId: 2,
-    username: 'burgetino',
-    password: 'burger123',
-    nameAr: 'برجتينو',
-    nameEn: 'Burgetino',
-    email: 'burgetino@sumu.ae',
-    phone: '+971501110002',
-    status: 'approved',
-    avatar: '🍔',
-    appliedAt: '2024-02-15',
-  },
-  {
-    id: 'VND-003',
-    role: 'vendor',
-    storeId: 4,
-    username: 'freshmart',
-    password: 'fresh123',
-    nameAr: 'فريش مارت',
-    nameEn: 'Fresh Mart',
-    email: 'freshmart@sumu.ae',
-    phone: '+971501110003',
-    status: 'pending',
-    avatar: '🛒',
-    appliedAt: '2024-03-20',
-  },
-  // Drivers
-  {
-    id: 'DRV-001',
-    role: 'driver',
-    driverId: 'DRV-001',
-    username: 'ameri',
-    password: 'driver123',
-    nameAr: 'محمد العامري',
-    nameEn: 'Mohammed Al Ameri',
-    email: 'ameri@sumu.ae',
-    phone: '+971505001001',
-    status: 'approved',
-    avatar: '🚗',
-    appliedAt: '2023-06-10',
-  },
-  {
-    id: 'DRV-002',
-    role: 'driver',
-    driverId: 'DRV-002',
-    username: 'mutairi',
-    password: 'driver456',
-    nameAr: 'علي المطيري',
-    nameEn: 'Ali Al Mutairi',
-    email: 'mutairi@sumu.ae',
-    phone: '+971505002002',
-    status: 'approved',
-    avatar: '🚙',
-    appliedAt: '2023-09-22',
-  },
-  {
-    id: 'DRV-003',
-    role: 'driver',
-    driverId: 'DRV-003',
-    username: 'shammari',
-    password: 'driver789',
-    nameAr: 'خالد الشمري',
-    nameEn: 'Khalid Al Shammari',
-    email: 'shammari@sumu.ae',
-    phone: '+971505003003',
-    status: 'pending',
-    avatar: '🛵',
-    appliedAt: '2024-01-15',
-  },
-]
-
-// ─── Context ──────────────────────────────────────────────────────────
 const AuthContext = createContext()
-
-const SESSION_KEY = 'sumu_session'
+const TOKEN_KEY = 'sumu_token'
+const USER_KEY = 'sumu_user'
 
 export function AuthProvider({ children }) {
-  const [users, setUsers] = useState(defaultUsers)
   const [currentUser, setCurrentUser] = useState(() => {
-    try {
-      const saved = sessionStorage.getItem(SESSION_KEY)
-      return saved ? JSON.parse(saved) : null
-    } catch { return null }
+    try { return JSON.parse(localStorage.getItem(USER_KEY)) } catch { return null }
   })
+  const [users, setUsers] = useState([])
   const [loginError, setLoginError] = useState('')
+  const [loginLoading, setLoginLoading] = useState(false)
 
-  // Persist session
+  // ── Load users list (admin) ──────────────────────────────────────
+  const loadUsers = useCallback(async () => {
+    try {
+      const res = await usersAPI.getAll()
+      setUsers(res.data)
+    } catch {}
+  }, [])
+
   useEffect(() => {
-    if (currentUser) {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(currentUser))
-    } else {
-      sessionStorage.removeItem(SESSION_KEY)
-    }
-  }, [currentUser])
+    if (currentUser?.role === 'admin') loadUsers()
+  }, [currentUser, loadUsers])
 
   // ── Login ────────────────────────────────────────────────────────
-  const login = (username, password, requiredRole) => {
+  const login = useCallback(async (username, password, requiredRole) => {
     setLoginError('')
-    const user = users.find(
-      u => u.username.toLowerCase() === username.toLowerCase() && u.password === password
-    )
-    if (!user) {
-      setLoginError('username_password_wrong')
+    setLoginLoading(true)
+    try {
+      const res = await authAPI.login(username, password, requiredRole)
+      const { token, user } = res.data
+      localStorage.setItem(TOKEN_KEY, token)
+      localStorage.setItem(USER_KEY, JSON.stringify(user))
+      setCurrentUser(user)
+      return true
+    } catch (err) {
+      const code = err.response?.data?.error || 'unknown_error'
+      setLoginError(code)
       return false
+    } finally {
+      setLoginLoading(false)
     }
-    if (requiredRole && user.role !== requiredRole) {
-      setLoginError('wrong_role')
-      return false
-    }
-    if (user.status === 'pending') {
-      setLoginError('pending_approval')
-      return false
-    }
-    if (user.status === 'rejected') {
-      setLoginError('rejected')
-      return false
-    }
-    if (user.status === 'suspended') {
-      setLoginError('suspended')
-      return false
-    }
-    setCurrentUser(user)
-    return true
-  }
+  }, [])
 
   // ── Logout ───────────────────────────────────────────────────────
-  const logout = () => {
+  const logout = useCallback(() => {
+    localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(USER_KEY)
     setCurrentUser(null)
     setLoginError('')
-  }
+    resetSocket()
+  }, [])
 
-  // ── Register (vendor / driver) ───────────────────────────────────
-  const register = (data) => {
-    // Check duplicate username
-    if (users.find(u => u.username.toLowerCase() === data.username.toLowerCase())) {
-      return { success: false, error: 'username_taken' }
+  // ── Register ─────────────────────────────────────────────────────
+  const register = useCallback(async (data) => {
+    try {
+      await authAPI.register(data)
+      return { success: true }
+    } catch (err) {
+      return { success: false, error: err.response?.data?.error || 'register_failed' }
     }
-    if (users.find(u => u.email.toLowerCase() === data.email.toLowerCase())) {
-      return { success: false, error: 'email_taken' }
-    }
-    const newUser = {
-      id: `${data.role === 'vendor' ? 'VND' : 'DRV'}-${Date.now()}`,
-      ...data,
-      status: 'pending',
-      appliedAt: new Date().toISOString().split('T')[0],
-    }
-    setUsers(prev => [...prev, newUser])
-    return { success: true }
-  }
+  }, [])
 
-  // ── Admin approvals ──────────────────────────────────────────────
-  const approveUser = (id) => {
+  // ── Admin: approve/reject/suspend/delete ─────────────────────────
+  const approveUser = useCallback(async (id) => {
+    await usersAPI.updateStatus(id, 'approved')
     setUsers(prev => prev.map(u => u.id === id ? { ...u, status: 'approved' } : u))
-  }
+  }, [])
 
-  const rejectUser = (id) => {
+  const rejectUser = useCallback(async (id) => {
+    await usersAPI.updateStatus(id, 'rejected')
     setUsers(prev => prev.map(u => u.id === id ? { ...u, status: 'rejected' } : u))
-  }
+  }, [])
 
-  const suspendUser = (id) => {
+  const suspendUser = useCallback(async (id) => {
+    await usersAPI.updateStatus(id, 'suspended')
     setUsers(prev => prev.map(u => u.id === id ? { ...u, status: 'suspended' } : u))
-  }
+  }, [])
 
-  const deleteUser = (id) => {
+  const deleteUser = useCallback(async (id) => {
+    await usersAPI.delete(id)
     setUsers(prev => prev.filter(u => u.id !== id))
-  }
+  }, [])
 
   // ── Helpers ──────────────────────────────────────────────────────
   const getPendingVendors = () => users.filter(u => u.role === 'vendor' && u.status === 'pending')
@@ -211,8 +99,8 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{
-      currentUser, users, loginError, setLoginError,
-      login, logout, register,
+      currentUser, users, loginError, loginLoading, setLoginError,
+      login, logout, register, loadUsers,
       approveUser, rejectUser, suspendUser, deleteUser,
       getPendingVendors, getPendingDrivers, getVendorUsers, getDriverUsers,
       isLoggedIn, isAdmin, isVendor, isDriver,
