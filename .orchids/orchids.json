@@ -1,7 +1,7 @@
 {
   "startupCommands": [
     "npm install; node server/index.js",
-    "npm install; npm run dev -- --port 3000 --host 0.0.0.0"
+    "npm run dev -- --port 3000 --host 0.0.0.0"
   ],
   "projectId": "1639a51c-3ccc-41f5-b2fa-8426dfa651dd",
   "templateId": "any"

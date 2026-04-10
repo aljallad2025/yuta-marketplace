@@ -1,5 +1,6 @@
 import { useLang } from '../../i18n/LangContext'
 import { useApp } from '../../store/appStore'
+import { useAuth } from '../../store/authStore'
 import { useStores } from '../../store/storesStore'
 import { ShoppingBag, Package, DollarSign, Star, Clock, TrendingUp, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -26,7 +27,9 @@ const chartData = [
 
 export default function VendorDashboard() {
   const { isAr } = useLang()
-  const { getStoreOrders, getStoreStats, getStoreProducts, updateOrderStatus, activeVendorId } = useApp()
+  const { getStoreOrders, getStoreStats, getStoreProducts, updateOrderStatus } = useApp()
+  const { currentUser } = useAuth()
+  const activeVendorId = currentUser?.storeId || currentUser?.store_id || 1
   const { stores } = useStores()
 
   const store = stores.find(s => s.id === activeVendorId) || stores[0]

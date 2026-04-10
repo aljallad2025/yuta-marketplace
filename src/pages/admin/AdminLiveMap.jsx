@@ -1,22 +1,9 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { RefreshCw } from 'lucide-react'
 import Badge from '../../components/Badge'
 import { useLang } from '../../i18n/LangContext'
-
-const driversData = [
-  { id: 'D1', nameEn: 'Mohammed A.', nameAr: 'محمد ع.', status: 'delivering', x: 120, y: 140, orders: 2 },
-  { id: 'D2', nameEn: 'Yusuf K.', nameAr: 'يوسف ك.', status: 'available', x: 280, y: 200, orders: 0 },
-  { id: 'D3', nameEn: 'Ibrahim S.', nameAr: 'إبراهيم س.', status: 'delivering', x: 440, y: 110, orders: 1 },
-  { id: 'D4', nameEn: 'Hassan M.', nameAr: 'حسن م.', status: 'on_ride', x: 350, y: 280, orders: 0 },
-  { id: 'D5', nameEn: 'Ali R.', nameAr: 'علي ر.', status: 'available', x: 180, y: 300, orders: 0 },
-  { id: 'D6', nameEn: 'Saeed K.', nameAr: 'سعيد ك.', status: 'delivering', x: 520, y: 220, orders: 3 },
-]
-
-const orders_active = [
-  { id: 'SUW-2841', fromEn: 'Baharat Rest.', fromAr: 'مطعم بهارات', status: 'on_the_way', x: 95, y: 160 },
-  { id: 'SUW-2840', fromEn: 'Fresh Mart', fromAr: 'فريش مارت', status: 'preparing', x: 310, y: 175 },
-  { id: 'SUW-2838', fromEn: 'Burgetino', fromAr: 'برجتينو', status: 'pending', x: 460, y: 240 },
-]
+import { useApp } from '../../store/appStore'
+import { useStores } from '../../store/storesStore'
 
 export default function AdminLiveMap() {
   const [selected, setSelected] = useState(null)

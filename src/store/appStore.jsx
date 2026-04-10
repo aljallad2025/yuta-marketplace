@@ -1,8 +1,72 @@
 import { useState, createContext, useContext, useCallback, useEffect } from 'react'
 import { productsAPI, ordersAPI, driversAPI, notifAPI, storesAPI, statsAPI } from '../services/api.js'
-import { useSocket } from '../hooks/useSocket.js'
+import { useSocket, getSocket } from '../hooks/useSocket.js'
 
 const AppContext = createContext()
+
+// Normalise product from API → shape expected by components
+function normProduct(p) {
+  return {
+    ...p,
+    nameAr: p.nameAr ?? p.name_ar,
+    nameEn: p.nameEn ?? p.name_en,
+    image: p.image ?? p.emoji,
+    emoji: p.emoji ?? p.image,
+    active: p.active ?? (p.isActive === 1 || p.isActive === true),
+    isActive: p.isActive ?? p.active,
+    storeId: p.storeId ?? p.store_id,
+    store_id: p.store_id ?? p.storeId,
+  }
+}
+
+// Normalise order from API → shape expected by components
+function normOrder(o) {
+  return {
+    ...o,
+    customerNameAr: o.customerNameAr ?? o.customer_name_ar,
+    customerNameEn: o.customerNameEn ?? o.customer_name_en,
+    customerPhone: o.customerPhone ?? o.customer_phone,
+    addressAr: o.addressAr ?? o.address_ar,
+    addressEn: o.addressEn ?? o.address_en,
+    storeId: o.storeId ?? o.store_id,
+    store_id: o.store_id ?? o.storeId,
+    driverId: o.driverId ?? o.driver_id,
+    driver_id: o.driver_id ?? o.driverId,
+    createdAt: o.createdAt ?? o.created_at,
+    created_at: o.created_at ?? o.createdAt,
+  }
+}
+
+// Normalise driver from API → shape expected by components
+function normDriver(d) {
+  return {
+    ...d,
+    nameAr: d.nameAr ?? d.name_ar,
+    nameEn: d.nameEn ?? d.name_en,
+    vehicleAr: d.vehicleAr ?? d.vehicle_ar,
+    vehicleEn: d.vehicleEn ?? d.vehicle_en,
+    isOnline: d.isOnline ?? d.is_online,
+    online: !!(d.isOnline ?? d.is_online),
+    joinDate: d.joinDate ?? d.joinedAt ?? d.joined_at,
+    locationAr: d.locationAr ?? d.location_ar,
+    locationEn: d.locationEn ?? d.location_en,
+  }
+}
+
+// Normalise notification from API → shape expected by components
+function normNotif(n) {
+  return {
+    ...n,
+    titleAr: n.titleAr ?? n.title_ar,
+    titleEn: n.titleEn ?? n.title_en,
+    msgAr: n.msgAr ?? n.msg_ar,
+    msgEn: n.msgEn ?? n.msg_en,
+    storeId: n.storeId ?? n.store_id,
+    read: !!(n.isRead ?? n.is_read ?? n.read),
+    isRead: !!(n.isRead ?? n.is_read ?? n.read),
+    time: n.time ?? n.createdAt ?? n.created_at,
+  }
+}
 
 export function AppProvider({ children }) {
   const [products, setProducts] = useState([])
@@ -23,10 +87,10 @@ export function AppProvider({ children }) {
         notifAPI.getAll(),
         storesAPI.getAll(),
       ])
-      if (prodRes.status === 'fulfilled') setProducts(prodRes.value.data)
-      if (orderRes.status === 'fulfilled') setOrders(orderRes.value.data)
-      if (drvRes.status === 'fulfilled') setDrivers(drvRes.value.data)
-      if (notifRes.status === 'fulfilled') setNotifications(notifRes.value.data)
+      if (prodRes.status === 'fulfilled') setProducts(prodRes.value.data.map(normProduct))
+      if (orderRes.status === 'fulfilled') setOrders(orderRes.value.data.map(normOrder))
+      if (drvRes.status === 'fulfilled') setDrivers(drvRes.value.data.map(normDriver))
+      if (notifRes.status === 'fulfilled') setNotifications(notifRes.value.data.map(normNotif))
       if (storeRes.status === 'fulfilled') setStores(storeRes.value.data)
     } finally {
       setLoading(false)
@@ -43,7 +107,7 @@ export function AppProvider({ children }) {
     'order:new': async ({ orderId }) => {
       try {
         const res = await ordersAPI.getOne(orderId)
-        setOrders(prev => [res.data, ...prev.filter(o => o.id !== orderId)])
+        setOrders(prev => [normOrder(res.data), ...prev.filter(o => o.id !== orderId)])
         setNotifications(prev => [{
           id: Date.now(), type: 'order',
           title_ar: 'طلب جديد', title_en: 'New Order',
@@ -55,7 +119,7 @@ export function AppProvider({ children }) {
     'order:updated': async ({ orderId }) => {
       try {
         const res = await ordersAPI.getOne(orderId)
-        setOrders(prev => prev.map(o => o.id === orderId ? res.data : o))
+        setOrders(prev => prev.map(o => o.id === orderId ? normOrder(res.data) : o))
       } catch {}
     },
     'driver:status_changed': ({ driverId, is_online }) => {
@@ -65,14 +129,32 @@ export function AppProvider({ children }) {
 
   // ── Products ──────────────────────────────────────────────────────
   const addProduct = useCallback(async (product) => {
-    const res = await productsAPI.create(product)
-    setProducts(prev => [...prev, res.data])
-    return res.data
+    // Map camelCase form fields to snake_case for API
+    const payload = {
+      name_ar: product.nameAr, name_en: product.nameEn,
+      emoji: product.image || product.emoji,
+      price: product.price, stock: product.stock,
+      category: product.category, description: product.description,
+      store_id: product.storeId || product.store_id,
+    }
+    const res = await productsAPI.create(payload)
+    const norm = normProduct(res.data)
+    setProducts(prev => [...prev, norm])
+    return norm
   }, [])
 
   const updateProduct = useCallback(async (id, updates) => {
-    const res = await productsAPI.update(id, updates)
-    setProducts(prev => prev.map(p => p.id === id ? res.data : p))
+    const payload = {
+      name_ar: updates.nameAr, name_en: updates.nameEn,
+      emoji: updates.image || updates.emoji,
+      price: updates.price, stock: updates.stock,
+      category: updates.category, description: updates.description,
+      is_active: updates.isActive ?? (updates.active ? 1 : undefined),
+    }
+    // Remove undefined keys
+    Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k])
+    const res = await productsAPI.update(id, payload)
+    setProducts(prev => prev.map(p => p.id === id ? normProduct(res.data) : p))
   }, [])
 
   const deleteProduct = useCallback(async (id) => {
@@ -83,8 +165,9 @@ export function AppProvider({ children }) {
   const toggleProduct = useCallback(async (id) => {
     const product = products.find(p => p.id === id)
     if (!product) return
-    const res = await productsAPI.update(id, { is_active: product.is_active ? 0 : 1 })
-    setProducts(prev => prev.map(p => p.id === id ? res.data : p))
+    const currentActive = product.active || product.isActive
+    const res = await productsAPI.update(id, { is_active: currentActive ? 0 : 1 })
+    setProducts(prev => prev.map(p => p.id === id ? normProduct(res.data) : p))
   }, [products])
 
   const getStoreProducts = useCallback((storeId) => {
@@ -94,19 +177,16 @@ export function AppProvider({ children }) {
   // ── Orders ────────────────────────────────────────────────────────
   const addOrder = useCallback(async (order) => {
     const res = await ordersAPI.create(order)
-    setOrders(prev => [res.data, ...prev])
-    return res.data
+    const norm = normOrder(res.data)
+    setOrders(prev => [norm, ...prev])
+    return norm
   }, [])
 
   const updateOrderStatus = useCallback(async (orderId, status, driverId = null) => {
     const res = await ordersAPI.updateStatus(orderId, status, driverId)
-    setOrders(prev => prev.map(o => o.id === orderId ? res.data : o))
+    setOrders(prev => prev.map(o => o.id === orderId ? normOrder(res.data) : o))
     // Socket broadcast
-    const token = localStorage.getItem('sumu_token')
-    if (token) {
-      const { getSocket } = await import('../hooks/useSocket.js')
-      getSocket().emit('order:status_update', { orderId, status })
-    }
+    try { getSocket().emit('order:status_update', { orderId, status }) } catch {}
   }, [])
 
   const getStoreOrders = useCallback((storeId) => {
@@ -123,13 +203,19 @@ export function AppProvider({ children }) {
 
   // ── Drivers ───────────────────────────────────────────────────────
   const updateDriver = useCallback(async (id, updates) => {
-    const res = await driversAPI.update(id, updates)
-    setDrivers(prev => prev.map(d => d.id === id ? res.data : d))
+    const payload = {}
+    if (updates.isOnline !== undefined) payload.is_online = updates.isOnline ? 1 : 0
+    if (updates.online !== undefined) payload.is_online = updates.online ? 1 : 0
+    if (updates.status !== undefined) payload.status = updates.status
+    if (updates.locationAr !== undefined) payload.location_ar = updates.locationAr
+    if (updates.locationEn !== undefined) payload.location_en = updates.locationEn
+    const res = await driversAPI.update(id, Object.keys(payload).length ? payload : updates)
+    setDrivers(prev => prev.map(d => d.id === id ? normDriver(res.data) : d))
   }, [])
 
   const approveDriver = useCallback(async (id) => {
     const res = await driversAPI.update(id, { status: 'available' })
-    setDrivers(prev => prev.map(d => d.id === id ? res.data : d))
+    setDrivers(prev => prev.map(d => d.id === id ? normDriver(res.data) : d))
   }, [])
 
   // ── Notifications ─────────────────────────────────────────────────

@@ -19,11 +19,11 @@ export default function VendorLayout() {
   const navigate = useNavigate()
   const { isAr } = useLang()
   const { logout, currentUser } = useAuth()
-  const { notifications, markNotificationRead, markAllNotificationsRead, unreadCount, activeVendorId, setActiveVendorId } = useApp()
+  const { notifications, markNotificationRead, markAllNotificationsRead, unreadCount } = useApp()
   const { stores } = useStores()
 
   // Use logged-in vendor's storeId from auth session
-  const loggedStoreId = currentUser?.storeId || activeVendorId
+  const loggedStoreId = currentUser?.storeId || currentUser?.store_id || 1
   const vendorStore = stores.find(s => s.id === loggedStoreId) || stores[0]
   // Filter notifs relevant to this store
   const vendorNotifs = notifications.filter(n => !n.storeId || n.storeId === loggedStoreId).slice(0, 8)
@@ -157,16 +157,10 @@ export default function VendorLayout() {
               )}
             </div>
 
-            {/* Store selector */}
-            <select
-              value={activeVendorId}
-              onChange={e => setActiveVendorId(Number(e.target.value))}
-              className="text-xs font-black border border-[#E8E4DC] rounded-xl px-2 py-1.5 bg-[#FBF8F2] text-[#0F2A47] outline-none"
-            >
-              {stores.map(s => (
-                <option key={s.id} value={s.id}>{isAr ? s.nameAr : s.nameEn}</option>
-              ))}
-            </select>
+            {/* Store name display */}
+            <div className="text-xs font-black border border-[#E8E4DC] rounded-xl px-3 py-1.5 bg-[#FBF8F2] text-[#0F2A47]">
+              {isAr ? vendorStore?.nameAr : vendorStore?.nameEn}
+            </div>
           </div>
         </header>
 

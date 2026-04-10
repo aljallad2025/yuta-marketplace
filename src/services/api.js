@@ -15,9 +15,26 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Handle auth errors globally
+// snake_case → camelCase deep converter
+function toCamel(str) {
+  return str.replace(/_([a-z])/g, (_, c) => c.toUpperCase())
+}
+function convertKeys(obj) {
+  if (Array.isArray(obj)) return obj.map(convertKeys)
+  if (obj && typeof obj === 'object' && !(obj instanceof File)) {
+    return Object.fromEntries(
+      Object.entries(obj).map(([k, v]) => [toCamel(k), convertKeys(v)])
+    )
+  }
+  return obj
+}
+
+// Handle auth errors globally + auto-convert keys
 api.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    res.data = convertKeys(res.data)
+    return res
+  },
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem('sumu_token')

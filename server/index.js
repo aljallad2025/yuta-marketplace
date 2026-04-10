@@ -1,67 +1,84 @@
+import 'dotenv/config'
 import express from 'express'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import cors from 'cors'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { existsSync } from 'fs'
 import { getDb, seedDatabase } from './db.js'
 import { setupSocket } from './socket/index.js'
 
-import authRoutes from './routes/auth.js'
-import storeRoutes from './routes/stores.js'
+import authRoutes    from './routes/auth.js'
+import storeRoutes   from './routes/stores.js'
 import productRoutes from './routes/products.js'
-import orderRoutes from './routes/orders.js'
-import userRoutes from './routes/users.js'
-import driverRoutes from './routes/drivers.js'
-import notifRoutes from './routes/notifications.js'
-import uploadRoutes from './routes/uploads.js'
-import statsRoutes from './routes/stats.js'
+import orderRoutes   from './routes/orders.js'
+import userRoutes    from './routes/users.js'
+import driverRoutes  from './routes/drivers.js'
+import notifRoutes   from './routes/notifications.js'
+import uploadRoutes  from './routes/uploads.js'
+import statsRoutes   from './routes/stats.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const PORT = process.env.PORT || 4000
+const PORT       = process.env.PORT || 4000
+const IS_PROD    = process.env.NODE_ENV === 'production'
+const DIST_DIR   = join(__dirname, '..', 'dist')
 
-const app = express()
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+  : ['http://localhost:3000', 'http://localhost:4000']
+
+const corsOptions = {
+  origin: IS_PROD ? allowedOrigins : '*',
+  credentials: true,
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
+}
+
+const app        = express()
 const httpServer = createServer(app)
-const io = new Server(httpServer, {
-  cors: { origin: '*', methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'] },
+const io         = new Server(httpServer, {
+  cors: { origin: IS_PROD ? allowedOrigins : '*', methods: ['GET','POST'] },
 })
 
-// ── Middleware ────────────────────────────────────────────────────────
-app.use(cors({ origin: '*' }))
+app.use(cors(corsOptions))
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
+app.set('trust proxy', 1)
 
-// Static uploads
 app.use('/uploads', express.static(join(__dirname, '..', 'public', 'uploads')))
 
-// ── Routes ───────────────────────────────────────────────────────────
-app.use('/api/auth', authRoutes)
-app.use('/api/stores', storeRoutes)
-app.use('/api/products', productRoutes)
-app.use('/api/orders', orderRoutes)
-app.use('/api/users', userRoutes)
-app.use('/api/drivers', driverRoutes)
-app.use('/api/notifications', notifRoutes)
-app.use('/api/uploads', uploadRoutes)
-app.use('/api/stats', statsRoutes)
+if (IS_PROD && existsSync(DIST_DIR)) {
+  app.use(express.static(DIST_DIR))
+}
 
-// Health check
+app.use('/api/auth',          authRoutes)
+app.use('/api/stores',        storeRoutes)
+app.use('/api/products',      productRoutes)
+app.use('/api/orders',        orderRoutes)
+app.use('/api/users',         userRoutes)
+app.use('/api/drivers',       driverRoutes)
+app.use('/api/notifications', notifRoutes)
+app.use('/api/uploads',       uploadRoutes)
+app.use('/api/stats',         statsRoutes)
+
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString(), version: '1.0.0' })
+  res.json({ status: 'ok', env: process.env.NODE_ENV || 'development', timestamp: new Date().toISOString(), version: '2.0.0' })
 })
 
-// ── Socket.io ────────────────────────────────────────────────────────
-setupSocket(io)
+if (IS_PROD && existsSync(DIST_DIR)) {
+  app.get('/{*path}', (req, res) => res.sendFile(join(DIST_DIR, 'index.html')))
+}
 
-// Attach io to app for use in routes
+setupSocket(io)
 app.set('io', io)
 
-// ── Start ─────────────────────────────────────────────────────────────
 getDb()
 seedDatabase()
 
-httpServer.listen(PORT, () => {
-  console.log(`🚀 SUMU API Server running on http://localhost:${PORT}`)
-  console.log(`📡 Socket.io ready`)
-  console.log(`🗄️  SQLite database: sumu.db`)
+httpServer.listen(PORT, '0.0.0.0', () => {
+  console.log(`\n  🚀  SUMU Server → http://localhost:${PORT}`)
+  console.log(`  📡  Socket.io   → ready`)
+  console.log(`  🗄️   Database    → ${process.env.DB_PATH || 'sumu.db'}`)
+  console.log(`  🌍  Mode        → ${IS_PROD ? 'PRODUCTION' : 'development'}\n`)
 })

@@ -1,4 +1,7 @@
+import { useState, useEffect } from 'react'
 import { Users, Store, Car, Package, TrendingUp, DollarSign, Zap, Clock } from 'lucide-react'
+import { statsAPI } from '../../services/api.js'
+import { useApp } from '../../store/appStore'
 import StatCard from '../../components/StatCard'
 import Badge from '../../components/Badge'
 import { useLang } from '../../i18n/LangContext'
@@ -43,7 +46,20 @@ const activeDrivers = [
 
 export default function AdminDashboard() {
   const { t, isAr } = useLang()
-  const chartData = revenueData.map(d => ({ ...d, dayLabel: isAr ? d.dayAr : d.day }))
+  const { orders, drivers } = useApp()
+  const [apiStats, setApiStats] = useState(null)
+
+  useEffect(() => {
+    statsAPI.admin().then(res => setApiStats(res.data)).catch(() => {})
+  }, [])
+
+  const stats = apiStats || {}
+  const chartData = (stats.last7 || revenueData).map(d => ({
+    ...d,
+    dayLabel: d.day || (isAr ? d.dayAr : d.dayEn),
+    revenue: d.revenue || 0,
+    orders: d.orders || 0,
+  }))
 
   return (
     <div className="p-6 space-y-6" dir={isAr ? 'rtl' : 'ltr'}>
@@ -66,17 +82,17 @@ export default function AdminDashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label={t('totalUsers')} value="12,847" change="+8.2%" changeType="up" icon={Users} color="#0F2A47" />
-        <StatCard label={t('activeStores')} value="284" change="+3.1%" changeType="up" icon={Store} color="#C8A951" />
-        <StatCard label={t('activeDrivers')} value="142" change="+5.4%" changeType="up" icon={Car} color="#2ECC71" />
-        <StatCard label={t('ordersToday')} value="346" change="+12.7%" changeType="up" icon={Package} color="#3498DB" />
+        <StatCard label={t('totalUsers')} value={stats.totalCustomers?.toLocaleString() || "—"} icon={Users} color="#0F2A47" />
+        <StatCard label={t('activeStores')} value={stats.totalStores?.toLocaleString() || "—"} icon={Store} color="#C8A951" />
+        <StatCard label={t('activeDrivers')} value={`${stats.activeDrivers || 0} / ${stats.totalDrivers || 0}`} icon={Car} color="#2ECC71" />
+        <StatCard label={t('ordersToday')} value={stats.todayOrders?.toLocaleString() || "—"} icon={Package} color="#3498DB" />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label={t('revenueToday')} value="81,420 AED" change="+15.3%" changeType="up" icon={DollarSign} color="#C8A951" />
+        <StatCard label={t('revenueToday')} value={`${stats.totalRevenue?.toFixed(0) || 0} AED`} icon={DollarSign} color="#C8A951" />
         <StatCard label={t('activeRides')} value="38" change="+2" changeType="up" icon={Zap} color="#9B59B6" />
         <StatCard label={t('avgDelivery')} value={isAr ? '٢٢ دقيقة' : '22 min'} change="-3 min" changeType="up" icon={Clock} color="#0F2A47" />
-        <StatCard label={t('commission')} value="8,142 AED" change="+15.3%" changeType="up" icon={TrendingUp} color="#E74C3C" />
+        <StatCard label={t('commission')} value={`${((stats.totalRevenue||0)*0.12).toFixed(0)} AED`} icon={TrendingUp} color="#E74C3C" />
       </div>
 
       {/* Charts */}

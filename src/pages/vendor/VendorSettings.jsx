@@ -2,12 +2,14 @@ import { useState } from 'react'
 import { useLang } from '../../i18n/LangContext'
 import { useStores } from '../../store/storesStore'
 import { useApp } from '../../store/appStore'
+import { useAuth } from '../../store/authStore'
 import { Store, Clock, Phone, DollarSign, ToggleLeft, ToggleRight, Save, CheckCircle } from 'lucide-react'
 
 export default function VendorSettings() {
   const { isAr } = useLang()
+  const { currentUser } = useAuth()
+  const activeVendorId = currentUser?.storeId || currentUser?.store_id || 1
   const { stores, updateStore } = useStores()
-  const { activeVendorId } = useApp()
   const store = stores.find(s => s.id === activeVendorId) || stores[0]
 
   const [form, setForm] = useState({
@@ -22,7 +24,7 @@ export default function VendorSettings() {
   const [saved, setSaved] = useState(false)
 
   const handleSave = () => {
-    updateStore(store?.id || activeVendorId, form)
+    updateStore(store?.id || form)
     setSaved(true)
     setTimeout(() => setSaved(false), 3000)
   }

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Search, ChevronDown, ChevronUp, Phone, MapPin, Clock, Package } from 'lucide-react'
 import { useLang } from '../../i18n/LangContext'
 import { useApp } from '../../store/appStore'
+import { useAuth } from '../../store/authStore'
 import Badge from '../../components/Badge'
 
 const statusMap = {
@@ -15,7 +16,9 @@ const statusMap = {
 
 export default function VendorOrders() {
   const { isAr } = useLang()
-  const { getStoreOrders, updateOrderStatus, activeVendorId } = useApp()
+  const { currentUser } = useAuth()
+  const activeVendorId = currentUser?.storeId || currentUser?.store_id || 1
+  const { getStoreOrders, updateOrderStatus } = useApp()
   const orders = getStoreOrders(activeVendorId)
 
   const [search, setSearch] = useState('')

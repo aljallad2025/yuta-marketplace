@@ -2,19 +2,18 @@ import { useState } from 'react'
 import { Search, UserCheck, UserX, Eye, MapPin, Star } from 'lucide-react'
 import Badge from '../../components/Badge'
 import { useLang } from '../../i18n/LangContext'
-
-const drivers = [
-  { id: 'DRV-001', nameEn: 'Mohammed Al Ameri', nameAr: 'محمد العامري', phone: '+971 50 111 2222', vehicle: 'Toyota Corolla · DXB 1234', status: 'delivering', rating: 4.9, trips: 284, earnings: 12400, locationEn: 'Dubai Marina', locationAr: 'دبي مارينا', approved: true },
-  { id: 'DRV-002', nameEn: 'Yusuf Al Kaabi', nameAr: 'يوسف الكعبي', phone: '+971 55 222 3333', vehicle: 'Honda Civic · SHJ 5678', status: 'available', rating: 4.7, trips: 156, earnings: 7800, locationEn: 'Downtown Dubai', locationAr: 'وسط مدينة دبي', approved: true },
-  { id: 'DRV-003', nameEn: 'Ibrahim Saeed', nameAr: 'إبراهيم سعيد', phone: '+971 52 333 4444', vehicle: 'Nissan Altima · ABD 9012', status: 'delivering', rating: 4.8, trips: 312, earnings: 15600, locationEn: 'JBR Beach', locationAr: 'شاطئ JBR', approved: true },
-  { id: 'DRV-004', nameEn: 'Hassan Al Mulla', nameAr: 'حسن الملا', phone: '+971 56 444 5555', vehicle: 'Toyota Camry · DXB 3421', status: 'on_ride', rating: 4.9, trips: 421, earnings: 19200, locationEn: 'Business Bay', locationAr: 'خليج الأعمال', approved: true },
-  { id: 'DRV-005', nameEn: 'Ali Rashid', nameAr: 'علي راشد', phone: '+971 50 555 6666', vehicle: 'Hyundai Sonata · SHJ 7890', status: 'inactive', rating: 4.5, trips: 89, earnings: 4200, locationEn: 'Sharjah', locationAr: 'الشارقة', approved: false },
-]
+import { useApp } from '../../store/appStore'
 
 export default function AdminDrivers() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
   const { t, isAr } = useLang()
+  const { drivers: allDrivers } = useApp()
+  const drivers = allDrivers.map(d => ({
+    ...d,
+    vehicle: [d.vehicleEn, d.plate].filter(Boolean).join(' · '),
+    approved: d.status !== 'pending',
+  }))
 
   const filterLabels = {
     all: isAr ? 'الكل' : 'All',
@@ -42,10 +41,10 @@ export default function AdminDrivers() {
     : ['Driver', 'Vehicle', 'Status', 'Rating', 'Trips', 'Earnings', 'Location', 'Actions']
 
   const stats = [
-    { labelEn: 'Online', labelAr: 'متصل', count: 38, color: '#2ECC71' },
-    { labelEn: 'Delivering', labelAr: 'يوصّل', count: 24, color: '#3498DB' },
-    { labelEn: 'On Ride', labelAr: 'في رحلة', count: 12, color: '#9B59B6' },
-    { labelEn: 'Pending Approval', labelAr: 'بانتظار الموافقة', count: 5, color: '#F39C12' },
+    { labelEn: 'Online', labelAr: 'متصل', count: drivers.filter(d => d.online || d.isOnline).length, color: '#2ECC71' },
+    { labelEn: 'Delivering', labelAr: 'يوصّل', count: drivers.filter(d => d.status === 'delivering').length, color: '#3498DB' },
+    { labelEn: 'Available', labelAr: 'متاح', count: drivers.filter(d => d.status === 'available').length, color: '#9B59B6' },
+    { labelEn: 'Pending', labelAr: 'بانتظار الموافقة', count: drivers.filter(d => d.status === 'pending').length, color: '#F39C12' },
   ]
 
   const filtered = drivers.filter(d => {

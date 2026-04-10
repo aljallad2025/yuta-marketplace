@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { DollarSign, TrendingUp, ArrowUpRight, ArrowDownRight, Wallet, Clock } from 'lucide-react'
 import { useLang } from '../../i18n/LangContext'
 import { useApp } from '../../store/appStore'
+import { useAuth } from '../../store/authStore'
 import { useStores } from '../../store/storesStore'
 
 const transactions = [
@@ -15,7 +16,9 @@ const transactions = [
 
 export default function VendorWallet() {
   const { isAr } = useLang()
-  const { getStoreStats, activeVendorId } = useApp()
+  const { currentUser } = useAuth()
+  const activeVendorId = currentUser?.storeId || currentUser?.store_id || 1
+  const { getStoreStats } = useApp()
   const { stores } = useStores()
   const store = stores.find(s => s.id === activeVendorId) || stores[0]
   const stats = getStoreStats(activeVendorId)

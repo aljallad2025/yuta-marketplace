@@ -4,7 +4,9 @@ import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const DB_PATH = join(__dirname, '..', 'sumu.db')
+const DB_PATH = process.env.DB_PATH
+  ? (process.env.DB_PATH.startsWith('/') ? process.env.DB_PATH : join(__dirname, '..', process.env.DB_PATH))
+  : join(__dirname, '..', 'sumu.db')
 
 let db
 

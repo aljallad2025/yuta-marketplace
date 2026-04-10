@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Plus, Pencil, Trash2, ToggleLeft, ToggleRight, Search, Package, X } from 'lucide-react'
 import { useLang } from '../../i18n/LangContext'
 import { useApp } from '../../store/appStore'
+import { useAuth } from '../../store/authStore'
 
 const EMOJIS = ['🍔','🍗','🥩','🍕','🍝','🥗','🍜','🍣','🥙','🌮','🍱','🥘','🍛','🧆','🥪','🍞','🥛','🥚','🧃','🍊','💊','🧴','💄','🛒','📱','🔌','🧹','🏪','🫘','🍰','🍩','☕']
 
@@ -9,7 +10,9 @@ const defaultForm = { nameAr: '', nameEn: '', price: '', category: '', image: '�
 
 export default function VendorProducts() {
   const { isAr } = useLang()
-  const { getStoreProducts, addProduct, updateProduct, deleteProduct, toggleProduct, activeVendorId } = useApp()
+  const { getStoreProducts, addProduct, updateProduct, deleteProduct, toggleProduct } = useApp()
+  const { currentUser } = useAuth()
+  const activeVendorId = currentUser?.storeId || currentUser?.store_id || 1
   const products = getStoreProducts(activeVendorId)
 
   const [search, setSearch] = useState('')

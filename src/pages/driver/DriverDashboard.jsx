@@ -30,12 +30,12 @@ export default function DriverDashboard() {
   const { isAr } = useLang()
   const { logout, currentUser } = useAuth()
   const {
-    orders, updateOrderStatus, activeDriverId, drivers,
+    orders, updateOrderStatus, drivers, updateDriver,
     getDriverOrders, getDriverStats, notifications, unreadCount
   } = useApp()
 
   // Use logged-in driver's ID from auth
-  const loggedDriverId = currentUser?.driverId || activeDriverId
+  const loggedDriverId = currentUser?.driverId || currentUser?.driver_id
   const driver = drivers.find(d => d.id === loggedDriverId) || drivers[0]
   const driverStats = getDriverStats(loggedDriverId)
 

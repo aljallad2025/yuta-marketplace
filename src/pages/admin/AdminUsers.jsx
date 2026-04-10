@@ -1,21 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, UserCheck, UserX, Edit2, Eye } from 'lucide-react'
 import Badge from '../../components/Badge'
 import { useLang } from '../../i18n/LangContext'
-
-const users = [
-  { id: 'USR-001', nameEn: 'Ahmed Al Mansouri', nameAr: 'أحمد المنصوري', email: 'ahmed@email.com', phone: '+971 50 123 4567', status: 'active', orders: 14, joined: 'Jan 2024', wallet: 150 },
-  { id: 'USR-002', nameEn: 'Fatima Al Rashidi', nameAr: 'فاطمة الراشدي', email: 'fatima@email.com', phone: '+971 55 234 5678', status: 'active', orders: 8, joined: 'Feb 2024', wallet: 0 },
-  { id: 'USR-003', nameEn: 'Omar Khalid', nameAr: 'عمر خالد', email: 'omar@email.com', phone: '+971 52 345 6789', status: 'suspended', orders: 2, joined: 'Mar 2024', wallet: 75 },
-  { id: 'USR-004', nameEn: 'Layla Hassan', nameAr: 'ليلى حسن', email: 'layla@email.com', phone: '+971 56 456 7890', status: 'active', orders: 22, joined: 'Nov 2023', wallet: 320 },
-  { id: 'USR-005', nameEn: 'Khalid Ibrahim', nameAr: 'خالد إبراهيم', email: 'khalid@email.com', phone: '+971 50 567 8901', status: 'active', orders: 5, joined: 'Mar 2024', wallet: 0 },
-  { id: 'USR-006', nameEn: 'Sara Mohammed', nameAr: 'سارة محمد', email: 'sara@email.com', phone: '+971 55 678 9012', status: 'inactive', orders: 0, joined: 'Mar 2024', wallet: 0 },
-]
+import { useApp } from '../../store/appStore'
 
 export default function AdminUsers() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
   const { t, isAr } = useLang()
+  const { users: rawUsers, loadUsers, orders } = useApp()
+  useEffect(() => { loadUsers() }, [loadUsers])
+  const users = rawUsers.map(u => ({
+    ...u,
+    nameAr: u.nameAr || u.name_ar || '',
+    nameEn: u.nameEn || u.name_en || '',
+    orders: orders.filter(o => (o.customerId || o.customer_id) === u.id).length || u.totalOrders || 0,
+    joined: u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-US', {month:'short', year:'numeric'}) : '',
+  }))
 
   const filterLabels = {
     all: isAr ? 'الكل' : 'All',

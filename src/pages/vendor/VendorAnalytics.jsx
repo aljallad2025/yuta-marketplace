@@ -1,5 +1,6 @@
 import { useLang } from '../../i18n/LangContext'
 import { useApp } from '../../store/appStore'
+import { useAuth } from '../../store/authStore'
 import { useStores } from '../../store/storesStore'
 import { TrendingUp, DollarSign, ShoppingBag, Star, Users, Package } from 'lucide-react'
 import {
@@ -26,7 +27,9 @@ const categoryData = [
 
 export default function VendorAnalytics() {
   const { isAr } = useLang()
-  const { getStoreOrders, getStoreStats, activeVendorId } = useApp()
+  const { currentUser } = useAuth()
+  const activeVendorId = currentUser?.storeId || currentUser?.store_id || 1
+  const { getStoreOrders, getStoreStats } = useApp()
   const { stores } = useStores()
 
   const store = stores.find(s => s.id === activeVendorId) || stores[0]
