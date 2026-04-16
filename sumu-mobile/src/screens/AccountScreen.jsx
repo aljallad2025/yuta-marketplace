@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Switch } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
@@ -21,12 +21,42 @@ function MenuItem({ icon, label, value, onPress, danger, rightElement }) {
 }
 
 export default function AccountScreen({ navigation }) {
-  const { isAr, toggleLang, user, setIsLoggedIn } = useApp();
+  const { isAr, toggleLang, user, profile, orders, logout } = useApp();
   const insets = useSafeAreaInsets();
+  const [loggingOut, setLoggingOut] = useState(false);
   const t = (ar, en) => isAr ? ar : en;
 
+  // بيانات المستخدم الحقيقية
+  const displayName = profile?.name || user?.user_metadata?.name || t('مستخدم', 'User');
+  const displayPhone = profile?.phone || user?.phone || user?.user_metadata?.phone || t('غير محدد', 'Not set');
+  const displayEmail = user?.email || '';
+  const walletBalance = profile?.wallet || 0;
+  const totalOrders = orders.length || profile?.total_orders || 0;
+  const totalRides = profile?.total_rides || 0;
+  const userRating = profile?.rating || 5.0;
+
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    Alert.alert(
+      t('تسجيل الخروج', 'Log Out'),
+      t('هل تريد تسجيل الخروج؟', 'Are you sure you want to log out?'),
+      [
+        { text: t('إلغاء', 'Cancel'), style: 'cancel' },
+        {
+          text: t('خروج', 'Log Out'),
+          style: 'destructive',
+          onPress: async () => {
+            setLoggingOut(true);
+            try {
+              await logout();
+            } catch (e) {
+              Alert.alert(t('خطأ', 'Error'), e.message);
+            } finally {
+              setLoggingOut(false);
+            }
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -39,28 +69,30 @@ export default function AccountScreen({ navigation }) {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30 }}>
-        {/* Profile Card */}
+        {/* بطاقة الملف الشخصي */}
         <View style={[styles.profileCard, SHADOWS.md]}>
           <View style={styles.avatar}>
-            <Text style={{ fontSize: 40 }}>{user.avatar}</Text>
+            <Text style={{ fontSize: 40 }}>{profile?.avatar || '👤'}</Text>
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.userName}>{isAr ? user.name : user.nameEn}</Text>
-            <Text style={styles.userPhone}>{user.phone}</Text>
-            <Text style={styles.userEmail}>{user.email}</Text>
+            <Text style={styles.userName}>{displayName}</Text>
+            {displayPhone !== t('غير محدد', 'Not set') && (
+              <Text style={styles.userPhone}>{displayPhone}</Text>
+            )}
+            <Text style={styles.userEmail} numberOfLines={1}>{displayEmail}</Text>
           </View>
           <TouchableOpacity style={styles.editBtn}>
             <Ionicons name="pencil" size={16} color={COLORS.primary} />
           </TouchableOpacity>
         </View>
 
-        {/* Wallet */}
+        {/* المحفظة */}
         <View style={[styles.walletCard, SHADOWS.md]}>
           <View style={styles.walletLeft}>
             <Text style={styles.walletEmoji}>💰</Text>
             <View>
               <Text style={styles.walletLabel}>{t('رصيد المحفظة', 'Wallet Balance')}</Text>
-              <Text style={styles.walletAmount}>{user.wallet} AED</Text>
+              <Text style={styles.walletAmount}>{walletBalance.toFixed(2)} AED</Text>
             </View>
           </View>
           <TouchableOpacity style={styles.topUpBtn}>
@@ -69,12 +101,12 @@ export default function AccountScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        {/* Quick Stats */}
+        {/* إحصائيات حقيقية */}
         <View style={styles.statsRow}>
           {[
-            { value: '12', labelAr: 'طلب', labelEn: 'Orders', emoji: '📦' },
-            { value: '3', labelAr: 'رحلة', labelEn: 'Rides', emoji: '🚕' },
-            { value: '4.8', labelAr: 'تقييم', labelEn: 'Rating', emoji: '⭐' },
+            { value: String(totalOrders), labelAr: 'طلب', labelEn: 'Orders', emoji: '📦' },
+            { value: String(totalRides), labelAr: 'رحلة', labelEn: 'Rides', emoji: '🚕' },
+            { value: userRating.toFixed(1), labelAr: 'تقييم', labelEn: 'Rating', emoji: '⭐' },
           ].map((stat, i) => (
             <View key={i} style={[styles.statBox, SHADOWS.sm]}>
               <Text style={styles.statEmoji}>{stat.emoji}</Text>
@@ -84,7 +116,7 @@ export default function AccountScreen({ navigation }) {
           ))}
         </View>
 
-        {/* Account Menu */}
+        {/* الحساب */}
         <View style={styles.menuSection}>
           <Text style={styles.menuSectionTitle}>{t('الحساب', 'Account')}</Text>
           <View style={[styles.menuCard, SHADOWS.sm]}>
@@ -95,6 +127,7 @@ export default function AccountScreen({ navigation }) {
           </View>
         </View>
 
+        {/* الإعدادات */}
         <View style={styles.menuSection}>
           <Text style={styles.menuSectionTitle}>{t('الإعدادات', 'Settings')}</Text>
           <View style={[styles.menuCard, SHADOWS.sm]}>
@@ -111,19 +144,24 @@ export default function AccountScreen({ navigation }) {
           </View>
         </View>
 
+        {/* تسجيل الخروج */}
         <View style={styles.menuSection}>
           <View style={[styles.menuCard, SHADOWS.sm]}>
             <MenuItem
               icon="log-out-outline"
-              label={t('تسجيل الخروج', 'Log Out')}
+              label={loggingOut ? t('جاري الخروج...', 'Logging out...') : t('تسجيل الخروج', 'Log Out')}
               danger
-              onPress={handleLogout}
+              onPress={loggingOut ? undefined : handleLogout}
+              rightElement={loggingOut ? <ActivityIndicator size="small" color={COLORS.danger} /> : undefined}
             />
           </View>
         </View>
 
-        {/* Version */}
+        {/* الإصدار */}
         <Text style={styles.version}>سومو v1.0.0 · Sumu App</Text>
+        {user?.id && (
+          <Text style={styles.userId}>ID: {user.id.slice(0, 8)}...</Text>
+        )}
       </ScrollView>
     </View>
   );
@@ -224,5 +262,6 @@ const styles = StyleSheet.create({
   },
   menuLabel: { flex: 1, fontSize: FONTS.sizes.sm, fontWeight: '600', color: COLORS.text },
   menuValue: { fontSize: 13, color: COLORS.textSecondary, marginEnd: 8 },
-  version: { textAlign: 'center', fontSize: 12, color: COLORS.textMuted, marginTop: SPACING.lg, marginBottom: SPACING.xl },
+  version: { textAlign: 'center', fontSize: 12, color: COLORS.textMuted, marginTop: SPACING.lg },
+  userId: { textAlign: 'center', fontSize: 10, color: COLORS.textMuted, marginTop: 4, marginBottom: SPACING.xl },
 });

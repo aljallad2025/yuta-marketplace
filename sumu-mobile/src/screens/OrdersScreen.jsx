@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useCallback } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, RefreshControl, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
@@ -13,50 +13,29 @@ const STATUS_CONFIG = {
   cancelled:  { color: '#EF4444', bg: '#FEF2F2', ar: 'ملغي',          en: 'Cancelled',   icon: 'close-circle' },
 };
 
-// Sample orders for demo
-const DEMO_ORDERS = [
-  {
-    id: 'ORD-001',
-    items: [
-      { nameAr: 'دجاج بالبهارات', nameEn: 'Spiced Chicken', qty: 2, price: 38, emoji: '🍗' },
-      { nameAr: 'شاي هندي', nameEn: 'Masala Tea', qty: 1, price: 10, emoji: '🍵' },
-    ],
-    store: { nameAr: 'بهارات المطبخ', nameEn: 'Baharat Kitchen', emoji: '🍛' },
-    total: 91,
-    deliveryFee: 5,
-    status: 'on_the_way',
-    createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-    eta: 15,
-  },
-  {
-    id: 'ORD-002',
-    items: [
-      { nameAr: 'برغر كلاسيك', nameEn: 'Classic Burger', qty: 1, price: 32, emoji: '🍔' },
-      { nameAr: 'بطاطس مقلية', nameEn: 'French Fries', qty: 1, price: 15, emoji: '🍟' },
-    ],
-    store: { nameAr: 'برجرتينو', nameEn: 'Burgetino', emoji: '🍔' },
-    total: 54,
-    deliveryFee: 7,
-    status: 'delivered',
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-];
-
 function OrderCard({ order, isAr, t }) {
   const config = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
-  const date = new Date(order.createdAt);
-  const dateStr = date.toLocaleDateString(isAr ? 'ar-AE' : 'en-AE', {
-    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
-  });
+  const dateStr = new Date(order.created_at || order.createdAt).toLocaleDateString(
+    isAr ? 'ar-AE' : 'en-AE',
+    { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+  );
+
+  // تطبيع البيانات من Supabase أو المحلية
+  const items = Array.isArray(order.items) ? order.items : [];
+  const storeName = isAr
+    ? (order.store_name_ar || order.store?.nameAr || '')
+    : (order.store_name_en || order.store?.nameEn || '');
+  const storeEmoji = order.store_emoji || order.store?.emoji || '🏪';
+  const total = order.total || 0;
+  const eta = order.eta || 30;
 
   return (
     <View style={[styles.orderCard, SHADOWS.sm]}>
-      {/* Order Header */}
       <View style={styles.orderHeader}>
         <View style={styles.storeInfo}>
-          <Text style={styles.storeEmoji}>{order.store?.emoji || '🏪'}</Text>
+          <Text style={styles.storeEmoji}>{storeEmoji}</Text>
           <View>
-            <Text style={styles.storeName}>{isAr ? order.store?.nameAr : order.store?.nameEn}</Text>
+            <Text style={styles.storeName}>{storeName}</Text>
             <Text style={styles.orderDate}>{dateStr}</Text>
           </View>
         </View>
@@ -68,25 +47,23 @@ function OrderCard({ order, isAr, t }) {
         </View>
       </View>
 
-      {/* Items */}
       <View style={styles.orderItems}>
-        {order.items.slice(0, 3).map((item, i) => (
+        {items.slice(0, 3).map((item, i) => (
           <Text key={i} style={styles.itemText} numberOfLines={1}>
-            {item.emoji} {isAr ? item.nameAr : item.nameEn} × {item.qty}
+            {item.emoji || '•'} {isAr ? (item.name_ar || item.nameAr) : (item.name_en || item.nameEn)} × {item.qty}
           </Text>
         ))}
-        {order.items.length > 3 && (
-          <Text style={styles.moreItems}>+{order.items.length - 3} {t('منتجات أخرى', 'more items')}</Text>
+        {items.length > 3 && (
+          <Text style={styles.moreItems}>+{items.length - 3} {t('منتجات أخرى', 'more items')}</Text>
         )}
       </View>
 
-      {/* Footer */}
       <View style={styles.orderFooter}>
-        <Text style={styles.orderTotal}>{order.total} AED</Text>
+        <Text style={styles.orderTotal}>{total} AED</Text>
         {order.status === 'on_the_way' && (
           <View style={styles.etaBadge}>
             <Ionicons name="time" size={12} color={COLORS.primary} />
-            <Text style={styles.etaText}>{t(`${order.eta} دقيقة`, `${order.eta} min`)}</Text>
+            <Text style={styles.etaText}>{t(`${eta} دقيقة`, `${eta} min`)}</Text>
           </View>
         )}
         {order.status === 'delivered' && (
@@ -100,52 +77,85 @@ function OrderCard({ order, isAr, t }) {
 }
 
 export default function OrdersScreen({ navigation }) {
-  const { isAr, orders } = useApp();
+  const { isAr, orders, loadOrders, isLoggedIn } = useApp();
   const insets = useSafeAreaInsets();
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const t = (ar, en) => isAr ? ar : en;
 
-  const allOrders = [...orders, ...DEMO_ORDERS];
-  const active = allOrders.filter(o => ['pending', 'preparing', 'on_the_way'].includes(o.status));
-  const past = allOrders.filter(o => ['delivered', 'cancelled'].includes(o.status));
+  useEffect(() => {
+    if (isLoggedIn) {
+      setLoading(true);
+      loadOrders().finally(() => setLoading(false));
+    }
+  }, [isLoggedIn]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadOrders();
+    setRefreshing(false);
+  }, [loadOrders]);
+
+  const active = orders.filter(o => ['pending', 'preparing', 'on_the_way'].includes(o.status));
+  const past = orders.filter(o => ['delivered', 'cancelled'].includes(o.status));
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{t('طلباتي', 'My Orders')}</Text>
+        {orders.length > 0 && (
+          <View style={styles.countBadge}>
+            <Text style={styles.countText}>{orders.length}</Text>
+          </View>
+        )}
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
-        {/* Active Orders */}
-        {active.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{t('الطلبات النشطة', 'Active Orders')}</Text>
-            {active.map(order => (
-              <OrderCard key={order.id} order={order} isAr={isAr} t={t} />
-            ))}
-          </View>
-        )}
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+          <Text style={styles.loadingText}>{t('جاري تحميل الطلبات...', 'Loading orders...')}</Text>
+        </View>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 20 }}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={COLORS.primary} />}
+        >
+          {/* الطلبات النشطة */}
+          {active.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeaderRow}>
+                <Text style={styles.sectionTitle}>{t('الطلبات النشطة', 'Active Orders')}</Text>
+                <View style={styles.activeDot} />
+              </View>
+              {active.map(order => (
+                <OrderCard key={order.id} order={order} isAr={isAr} t={t} />
+              ))}
+            </View>
+          )}
 
-        {/* Past Orders */}
-        {past.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{t('الطلبات السابقة', 'Past Orders')}</Text>
-            {past.map(order => (
-              <OrderCard key={order.id} order={order} isAr={isAr} t={t} />
-            ))}
-          </View>
-        )}
+          {/* الطلبات السابقة */}
+          {past.length > 0 && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>{t('الطلبات السابقة', 'Past Orders')}</Text>
+              {past.map(order => (
+                <OrderCard key={order.id} order={order} isAr={isAr} t={t} />
+              ))}
+            </View>
+          )}
 
-        {allOrders.length === 0 && (
-          <View style={styles.empty}>
-            <Text style={styles.emptyEmoji}>📦</Text>
-            <Text style={styles.emptyTitle}>{t('لا توجد طلبات', 'No Orders Yet')}</Text>
-            <Text style={styles.emptyDesc}>{t('ابدأ بطلب شيء لذيذ!', 'Start by ordering something delicious!')}</Text>
-            <TouchableOpacity style={styles.orderNowBtn} onPress={() => navigation.navigate('Home')}>
-              <Text style={styles.orderNowText}>{t('اطلب الآن', 'Order Now')}</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </ScrollView>
+          {orders.length === 0 && !loading && (
+            <View style={styles.empty}>
+              <Text style={styles.emptyEmoji}>📦</Text>
+              <Text style={styles.emptyTitle}>{t('لا توجد طلبات', 'No Orders Yet')}</Text>
+              <Text style={styles.emptyDesc}>{t('ابدأ بطلب شيء لذيذ!', 'Start by ordering something delicious!')}</Text>
+              <TouchableOpacity style={styles.orderNowBtn} onPress={() => navigation.navigate('Home')}>
+                <Text style={styles.orderNowText}>{t('اطلب الآن', 'Order Now')}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </ScrollView>
+      )}
     </View>
   );
 }
@@ -153,15 +163,30 @@ export default function OrdersScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: SPACING.lg,
     paddingBottom: SPACING.md,
     backgroundColor: COLORS.card,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
+    gap: SPACING.sm,
   },
   headerTitle: { fontSize: FONTS.sizes.xxl, fontWeight: '800', color: COLORS.primary },
+  countBadge: {
+    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.full,
+    minWidth: 24, height: 24,
+    alignItems: 'center', justifyContent: 'center',
+    paddingHorizontal: 8,
+  },
+  countText: { color: '#fff', fontSize: 12, fontWeight: '800' },
+  loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
+  loadingText: { color: COLORS.textSecondary, fontSize: 14 },
   section: { paddingHorizontal: SPACING.lg, paddingTop: SPACING.lg },
-  sectionTitle: { fontSize: FONTS.sizes.md, fontWeight: '700', color: COLORS.textSecondary, marginBottom: SPACING.md },
+  sectionHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: SPACING.md },
+  sectionTitle: { fontSize: FONTS.sizes.md, fontWeight: '700', color: COLORS.textSecondary },
+  activeDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#10B981' },
   orderCard: {
     backgroundColor: COLORS.card,
     borderRadius: RADIUS.lg,

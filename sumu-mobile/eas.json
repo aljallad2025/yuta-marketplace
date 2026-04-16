@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 7.0.0"
+    "version": ">= 7.0.0",
+    "appVersionSource": "local"
   },
   "build": {
     "development": {
@@ -22,10 +23,12 @@
     "production": {
       "distribution": "store",
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "gradleCommand": ":app:bundleRelease"
       },
       "ios": {
-        "buildConfiguration": "Release"
+        "buildConfiguration": "Release",
+        "credentialsSource": "remote"
       }
     },
     "aab": {

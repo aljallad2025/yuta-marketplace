@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -18,6 +18,7 @@ import OrdersScreen from '../screens/OrdersScreen';
 import TaxiScreen from '../screens/TaxiScreen';
 import AccountScreen from '../screens/AccountScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
+import AuthScreen from '../screens/AuthScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -56,79 +57,109 @@ function AccountStack() {
   );
 }
 
-export default function AppNavigator() {
+function MainTabs() {
   const { isAr, cartCount, activeOrders } = useApp();
-
   const t = (ar, en) => isAr ? ar : en;
+
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarStyle: styles.tabBar,
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: '#BBB',
+        tabBarLabelStyle: styles.tabLabel,
+        tabBarIcon: ({ focused, color }) => {
+          const icons = {
+            Home:    focused ? 'home' : 'home-outline',
+            Stores:  focused ? 'grid' : 'grid-outline',
+            Orders:  focused ? 'bag' : 'bag-outline',
+            Taxi:    focused ? 'car' : 'car-outline',
+            Account: focused ? 'person' : 'person-outline',
+          };
+          return <Ionicons name={icons[route.name] || 'ellipse'} size={22} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen
+        name="Home"
+        component={HomeStack}
+        options={{ tabBarLabel: t('الرئيسية', 'Home') }}
+      />
+      <Tab.Screen
+        name="Stores"
+        component={StoresStack}
+        options={{
+          tabBarLabel: t('المتاجر', 'Stores'),
+          tabBarBadge: cartCount > 0 ? cartCount : undefined,
+          tabBarBadgeStyle: styles.badge,
+        }}
+      />
+      <Tab.Screen
+        name="Orders"
+        component={OrdersScreen}
+        options={{
+          tabBarLabel: t('طلباتي', 'Orders'),
+          tabBarBadge: activeOrders.length > 0 ? activeOrders.length : undefined,
+          tabBarBadgeStyle: styles.badge,
+        }}
+      />
+      <Tab.Screen
+        name="Taxi"
+        component={TaxiScreen}
+        options={{ tabBarLabel: t('تاكسي', 'Taxi') }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountStack}
+        options={{ tabBarLabel: t('حسابي', 'Account') }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+export default function AppNavigator() {
+  const { isLoggedIn, authLoading } = useApp();
+
+  // شاشة التحميل أثناء التحقق من الجلسة
+  if (authLoading) {
+    return (
+      <View style={styles.loadingScreen}>
+        <View style={styles.loadingLogo}>
+          <Ionicons name="bicycle" size={48} color={COLORS.gold} />
+        </View>
+        <ActivityIndicator size="large" color={COLORS.primary} style={{ marginTop: 24 }} />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Main">
-          {() => (
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                headerShown: false,
-                tabBarStyle: styles.tabBar,
-                tabBarActiveTintColor: COLORS.primary,
-                tabBarInactiveTintColor: '#BBB',
-                tabBarLabelStyle: styles.tabLabel,
-                tabBarIcon: ({ focused, color, size }) => {
-                  const icons = {
-                    Home:    focused ? 'home' : 'home-outline',
-                    Stores:  focused ? 'grid' : 'grid-outline',
-                    Orders:  focused ? 'bag' : 'bag-outline',
-                    Taxi:    focused ? 'car' : 'car-outline',
-                    Account: focused ? 'person' : 'person-outline',
-                  };
-                  return <Ionicons name={icons[route.name] || 'ellipse'} size={22} color={color} />;
-                },
-              })}
-            >
-              <Tab.Screen
-                name="Home"
-                component={HomeStack}
-                options={{
-                  tabBarLabel: t('الرئيسية', 'Home'),
-                }}
-              />
-              <Tab.Screen
-                name="Stores"
-                component={StoresStack}
-                options={{
-                  tabBarLabel: t('المتاجر', 'Stores'),
-                  tabBarBadge: cartCount > 0 ? cartCount : undefined,
-                  tabBarBadgeStyle: styles.badge,
-                }}
-              />
-              <Tab.Screen
-                name="Orders"
-                component={OrdersScreen}
-                options={{
-                  tabBarLabel: t('طلباتي', 'Orders'),
-                  tabBarBadge: activeOrders.length > 0 ? activeOrders.length : undefined,
-                  tabBarBadgeStyle: styles.badge,
-                }}
-              />
-              <Tab.Screen
-                name="Taxi"
-                component={TaxiScreen}
-                options={{ tabBarLabel: t('تاكسي', 'Taxi') }}
-              />
-              <Tab.Screen
-                name="Account"
-                component={AccountStack}
-                options={{ tabBarLabel: t('حسابي', 'Account') }}
-              />
-            </Tab.Navigator>
-          )}
-        </Stack.Screen>
+        {isLoggedIn ? (
+          <Stack.Screen name="Main" component={MainTabs} />
+        ) : (
+          <Stack.Screen name="Auth" component={AuthScreen} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
+  loadingScreen: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingLogo: {
+    width: 100, height: 100,
+    borderRadius: 50,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   tabBar: {
     backgroundColor: '#FFFFFF',
     borderTopColor: '#E8E4DC',

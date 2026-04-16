@@ -5,9 +5,13 @@ import { useApp } from '../context/AppContext';
 
 export default function StoreCard({ store, onPress, horizontal }) {
   const { isAr } = useApp();
-  const name = isAr ? store.nameAr : store.nameEn;
-  const desc = isAr ? store.descriptionAr : store.descriptionEn;
-  const badge = isAr ? store.badge : store.badgeEn;
+  // دعم كلاً من camelCase و snake_case
+  const name = isAr ? (store.name_ar || store.nameAr) : (store.name_en || store.nameEn);
+  const desc = isAr ? (store.description_ar || store.descriptionAr) : (store.description_en || store.descriptionEn);
+  const badge = isAr ? (store.badge_ar || store.badge) : (store.badge_en || store.badgeEn);
+  const deliveryFee = store.delivery_fee ?? store.deliveryFee ?? 0;
+  const deliveryTime = store.delivery_time || store.deliveryTime;
+  const isOpen = store.is_open ?? store.isOpen ?? true;
 
   if (horizontal) {
     return (
@@ -21,19 +25,19 @@ export default function StoreCard({ store, onPress, horizontal }) {
           <View style={styles.metaRow}>
             <Text style={styles.rating}>⭐ {store.rating}</Text>
             <Text style={styles.dot}>·</Text>
-            <Text style={styles.meta}>{store.deliveryTime} min</Text>
+            <Text style={styles.meta}>{deliveryTime} min</Text>
             <Text style={styles.dot}>·</Text>
             <Text style={styles.meta}>
-              {store.deliveryFee === 0 ? (isAr ? 'توصيل مجاني' : 'Free') : `${store.deliveryFee} AED`}
+              {deliveryFee === 0 ? (isAr ? 'توصيل مجاني' : 'Free') : `${deliveryFee} AED`}
             </Text>
           </View>
         </View>
-        {!store.isOpen && (
+        {!isOpen && (
           <View style={styles.closedBadge}>
             <Text style={styles.closedText}>{isAr ? 'مغلق' : 'Closed'}</Text>
           </View>
         )}
-        {badge && store.isOpen && (
+        {badge && isOpen && (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{badge}</Text>
           </View>
@@ -46,12 +50,12 @@ export default function StoreCard({ store, onPress, horizontal }) {
     <TouchableOpacity style={[styles.card, SHADOWS.md]} onPress={onPress} activeOpacity={0.85}>
       <View style={styles.emojiContainer}>
         <Text style={styles.bigEmoji}>{store.emoji}</Text>
-        {!store.isOpen && (
+        {!isOpen && (
           <View style={styles.closedOverlay}>
             <Text style={styles.closedText}>{isAr ? 'مغلق' : 'Closed'}</Text>
           </View>
         )}
-        {badge && store.isOpen && (
+        {badge && isOpen && (
           <View style={styles.topBadge}>
             <Text style={styles.topBadgeText}>{badge}</Text>
           </View>
@@ -63,10 +67,10 @@ export default function StoreCard({ store, onPress, horizontal }) {
         <View style={styles.metaRow}>
           <Text style={styles.rating}>⭐ {store.rating}</Text>
           <Text style={styles.dot}>·</Text>
-          <Text style={styles.meta}>{store.deliveryTime} min</Text>
+          <Text style={styles.meta}>{deliveryTime} min</Text>
           <Text style={styles.dot}>·</Text>
           <Text style={styles.meta}>
-            {store.deliveryFee === 0 ? (isAr ? 'توصيل مجاني' : 'Free Delivery') : `${store.deliveryFee} AED`}
+            {deliveryFee === 0 ? (isAr ? 'توصيل مجاني' : 'Free Delivery') : `${deliveryFee} AED`}
           </Text>
         </View>
       </View>

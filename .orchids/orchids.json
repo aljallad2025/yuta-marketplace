@@ -1,7 +1,8 @@
 {
   "startupCommands": [
     "npm install; node server/index.js",
-    "npm run dev"
+    "npm run dev",
+    "cd sumu-mobile && npm install --legacy-peer-deps"
   ],
   "projectId": "1639a51c-3ccc-41f5-b2fa-8426dfa651dd",
   "templateId": "any"

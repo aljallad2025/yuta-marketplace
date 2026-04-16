@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput,
+  ActivityIndicator, Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,26 +16,35 @@ const PAYMENT_METHODS = [
 ];
 
 export default function CheckoutScreen({ navigation }) {
-  const { isAr, cart, cartTotal, currentStore, placeOrder, user } = useApp();
+  const { isAr, cart, cartTotal, currentStore, placeOrder, profile } = useApp();
   const insets = useSafeAreaInsets();
   const [address, setAddress] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
   const [notes, setNotes] = useState('');
+  const [placing, setPlacing] = useState(false);
 
   const t = (ar, en) => isAr ? ar : en;
-  const deliveryFee = currentStore?.deliveryFee || 0;
+  const deliveryFee = currentStore?.delivery_fee ?? currentStore?.deliveryFee ?? 0;
   const total = cartTotal + deliveryFee;
+  const walletBalance = profile?.wallet || 0;
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     if (!address.trim()) {
-      alert(t('يرجى إدخال عنوان التوصيل', 'Please enter delivery address'));
+      Alert.alert(t('تنبيه', 'Notice'), t('يرجى إدخال عنوان التوصيل', 'Please enter delivery address'));
       return;
     }
-    const order = placeOrder(address, paymentMethod);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'OrderPlaced', params: { order } }],
-    });
+    setPlacing(true);
+    try {
+      const order = await placeOrder(address, paymentMethod, notes);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'OrderPlaced', params: { order } }],
+      });
+    } catch (e) {
+      Alert.alert(t('خطأ', 'Error'), e.message);
+    } finally {
+      setPlacing(false);
+    }
   };
 
   return (
@@ -113,7 +123,7 @@ export default function CheckoutScreen({ navigation }) {
             <View style={styles.walletBalance}>
               <Ionicons name="wallet" size={16} color={COLORS.success} />
               <Text style={styles.walletText}>
-                {t(`رصيد المحفظة: ${user.wallet} AED`, `Wallet balance: ${user.wallet} AED`)}
+                {t(`رصيد المحفظة: ${walletBalance.toFixed(2)} AED`, `Wallet balance: ${walletBalance.toFixed(2)} AED`)}
               </Text>
             </View>
           )}
@@ -156,9 +166,15 @@ export default function CheckoutScreen({ navigation }) {
 
       {/* Place Order */}
       <View style={[styles.footer, { paddingBottom: insets.bottom + SPACING.md }]}>
-        <TouchableOpacity style={styles.placeBtn} onPress={handleOrder}>
-          <Text style={styles.placeBtnText}>{t('تأكيد الطلب', 'Place Order')}</Text>
-          <Text style={styles.placeBtnTotal}>{total.toFixed(2)} AED</Text>
+        <TouchableOpacity style={[styles.placeBtn, placing && { opacity: 0.7 }]} onPress={handleOrder} disabled={placing}>
+          {placing ? (
+            <ActivityIndicator color="#fff" style={{ flex: 1 }} />
+          ) : (
+            <>
+              <Text style={styles.placeBtnText}>{t('تأكيد الطلب', 'Place Order')}</Text>
+              <Text style={styles.placeBtnTotal}>{total.toFixed(2)} AED</Text>
+            </>
+          )}
         </TouchableOpacity>
       </View>
     </View>

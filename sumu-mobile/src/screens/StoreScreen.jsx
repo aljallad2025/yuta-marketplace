@@ -1,24 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity, StyleSheet,
-  FlatList, Alert,
+  FlatList, Alert, ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useApp } from '../context/AppContext';
 import { COLORS, SPACING, RADIUS, SHADOWS, FONTS } from '../constants/theme';
 import { PRODUCTS } from '../constants/data';
+import { storeService } from '../services/api';
 
 export default function StoreScreen({ navigation, route }) {
   const { store } = route.params;
   const { isAr, cart, addToCart, removeFromCart, cartCount, currentStore } = useApp();
   const insets = useSafeAreaInsets();
 
-  const products = PRODUCTS[store.id] || [];
+  // جلب المنتجات من Supabase مع fallback للبيانات المحلية
+  const [products, setProducts] = useState(PRODUCTS[store.id] || []);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+
+  useEffect(() => {
+    setLoadingProducts(true);
+    storeService.getProducts(store.id)
+      .then(data => {
+        if (data?.length) {
+          // تطبيع البيانات من Supabase
+          const normalized = data.map(p => ({
+            ...p,
+            nameAr: p.name_ar || p.nameAr,
+            nameEn: p.name_en || p.nameEn,
+            descriptionAr: p.description_ar || p.descriptionAr,
+            descriptionEn: p.description_en || p.descriptionEn,
+          }));
+          setProducts(normalized);
+        }
+      })
+      .catch(() => {}) // يبقى على البيانات المحلية
+      .finally(() => setLoadingProducts(false));
+  }, [store.id]);
+
   const categories = [...new Set(products.map(p => p.category))];
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [activeCategory, setActiveCategory] = useState(null);
+
+  useEffect(() => {
+    if (categories.length && !activeCategory) {
+      setActiveCategory(categories[0]);
+    }
+  }, [products]);
 
   const t = (ar, en) => isAr ? ar : en;
+
+  // تطبيع بيانات المتجر
+  const storeName = isAr ? (store.name_ar || store.nameAr) : (store.name_en || store.nameEn);
+  const storeDesc = isAr ? (store.description_ar || store.descriptionAr) : (store.description_en || store.descriptionEn);
+  const deliveryFeeDisplay = (store.delivery_fee ?? store.deliveryFee) === 0
+    ? t('توصيل مجاني', 'Free')
+    : `${store.delivery_fee ?? store.deliveryFee} AED`;
 
   const getQty = (productId) => {
     const item = cart.find(i => i.id === productId);
@@ -53,15 +90,13 @@ export default function StoreScreen({ navigation, route }) {
         </TouchableOpacity>
         <Text style={styles.heroEmoji}>{store.emoji}</Text>
         <View style={styles.heroInfo}>
-          <Text style={styles.heroName}>{isAr ? store.nameAr : store.nameEn}</Text>
-          <Text style={styles.heroDesc}>{isAr ? store.descriptionAr : store.descriptionEn}</Text>
+          <Text style={styles.heroName}>{storeName}</Text>
+          <Text style={styles.heroDesc}>{storeDesc}</Text>
           <View style={styles.heroMeta}>
             <View style={styles.badge}><Text style={styles.badgeText}>⭐ {store.rating}</Text></View>
-            <View style={styles.badge}><Text style={styles.badgeText}>🕐 {store.deliveryTime} min</Text></View>
+            <View style={styles.badge}><Text style={styles.badgeText}>🕐 {store.delivery_time || store.deliveryTime} min</Text></View>
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>
-                {store.deliveryFee === 0 ? t('توصيل مجاني', 'Free') : `${store.deliveryFee} AED`}
-              </Text>
+              <Text style={styles.badgeText}>{deliveryFeeDisplay}</Text>
             </View>
           </View>
         </View>
