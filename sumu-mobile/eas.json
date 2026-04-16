@@ -26,6 +26,7 @@
         "buildType": "app-bundle",
         "gradleCommand": ":app:bundleRelease"
       },
+      "prebuildCommand": "sed -i 's/useLegacyPackaging true/useLegacyPackaging false/g' android/app/build.gradle 2>/dev/null || true",
       "ios": {
         "buildConfiguration": "Release",
         "credentialsSource": "remote"
