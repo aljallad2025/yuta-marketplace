@@ -29,9 +29,10 @@
         "backgroundColor": "#0F2A47"
       },
       "package": "com.sumu.app",
-      "versionCode": 2,
+      "versionCode": 3,
       "targetSdkVersion": 35,
       "compileSdkVersion": 35,
+      "minSdkVersion": 24,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
@@ -46,6 +47,17 @@
     "plugins": [
       "expo-font",
       "expo-splash-screen",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "useLegacyPackaging": false,
+            "enableShrinkResources": true,
+            "enableProguardInReleaseBuilds": true,
+            "extraProguardRules": "-keep class com.facebook.react.** { *; }"
+          }
+        }
+      ],
       [
         "expo-location",
         {
