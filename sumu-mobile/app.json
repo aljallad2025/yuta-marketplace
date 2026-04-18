@@ -30,7 +30,7 @@
         "backgroundColor": "#0F2A47"
       },
       "package": "com.sumu.app",
-      "versionCode": 6,
+      "versionCode": 7,
       "jsEngine": "hermes",
       "permissions": [
         "ACCESS_FINE_LOCATION",
