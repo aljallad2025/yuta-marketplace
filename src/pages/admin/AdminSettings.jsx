@@ -4,15 +4,15 @@ import { useCategories } from '../../store/categoriesStore.jsx'
 import { useLang } from '../../i18n/LangContext'
 
 const promoCodes = [
-  { code: 'SUMU10', discount: '25 AED', type: 'Fixed', uses: 142, limit: 500, active: true },
+  { code: 'SUMU10', discount: '25 SAR', type: 'Fixed', uses: 142, limit: 500, active: true },
   { code: 'WELCOME20', discount: '20%', type: 'Percent', uses: 89, limit: 200, active: true },
-  { code: 'TAXI15', discount: '15 AED', type: 'Fixed', uses: 234, limit: 300, active: false },
+  { code: 'TAXI15', discount: '15 SAR', type: 'Fixed', uses: 234, limit: 300, active: false },
 ]
 
 const banners = [
   { id: 1, titleAr: 'عروض رمضان', titleEn: 'Ramadan Offers', subAr: 'خصم ٤٠٪ على المتاجر المختارة', subEn: '40% off selected stores', active: true },
   { id: 2, titleAr: 'توصيل مجاني', titleEn: 'Free Delivery', subAr: 'للطلب الأول للأعضاء الجدد', subEn: 'First order for new users', active: true },
-  { id: 3, titleAr: 'عروض التاكسي', titleEn: 'Taxi Promo', subAr: 'رحلات من ٣ درهم', subEn: 'Rides from 3 AED', active: false },
+  { id: 3, titleAr: 'عروض التاكسي', titleEn: 'Taxi Promo', subAr: 'رحلات من ٣ درهم', subEn: 'Rides from 3 SAR', active: false },
 ]
 
 const EMOJI_OPTIONS = ['🍔', '🛒', '🧹', '💄', '💊', '🏪', '🍰', '📱', '🌸', '🐾', '📚', '🧴', '🏋️', '🍕', '☕', '🎮', '👗', '🏠', '🚗', '✈️']
@@ -149,9 +149,9 @@ export default function AdminSettings() {
           </div>
           <div className="p-4 space-y-4">
             {[
-              { label: isAr ? 'رسوم التوصيل الأساسية (درهم)' : 'Base Delivery Fee (AED)', key: 'base' },
-              { label: isAr ? 'توصيل مجاني فوق (درهم)' : 'Free Delivery Above (AED)', key: 'freeAbove' },
-              { label: isAr ? 'سعر الكيلومتر (درهم)' : 'Per Km Rate (AED)', key: 'perKm' },
+              { label: isAr ? 'رسوم التوصيل الأساسية (درهم)' : 'Base Delivery Fee (SAR)', key: 'base' },
+              { label: isAr ? 'توصيل مجاني فوق (درهم)' : 'Free Delivery Above (SAR)', key: 'freeAbove' },
+              { label: isAr ? 'سعر الكيلومتر (درهم)' : 'Per Km Rate (SAR)', key: 'perKm' },
             ].map(field => (
               <div key={field.key}>
                 <label className="text-xs font-bold text-[#444] mb-1.5 block">{field.label}</label>

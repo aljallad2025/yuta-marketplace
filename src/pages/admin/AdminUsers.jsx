@@ -105,7 +105,7 @@ export default function AdminUsers() {
                     } />
                   </td>
                   <td className="px-5 py-4 text-sm font-black text-[#222]">{user.orders}</td>
-                  <td className="px-5 py-4 text-sm text-[#444]">{user.wallet > 0 ? `${user.wallet} ${isAr ? 'د' : 'AED'}` : '—'}</td>
+                  <td className="px-5 py-4 text-sm text-[#444]">{user.wallet > 0 ? `${user.wallet} ${isAr ? 'د' : 'SAR'}` : '—'}</td>
                   <td className="px-5 py-4 text-xs text-[#666]">{user.joined}</td>
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-1">

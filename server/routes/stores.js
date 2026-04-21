@@ -7,7 +7,8 @@ const router = Router()
 // GET /api/stores — public
 router.get('/', (req, res) => {
   const db = getDb()
-  const stores = db.prepare('SELECT * FROM stores ORDER BY id').all()
+  const { category } = req.query
+  const stores = category ? db.prepare('SELECT * FROM stores WHERE category=? ORDER BY id').all(category) : db.prepare('SELECT * FROM stores ORDER BY id').all()
   res.json(stores)
 })
 
@@ -26,15 +27,16 @@ router.put('/:id', verifyToken, (req, res) => {
   if (role !== 'admin' && (role !== 'vendor' || storeId !== id)) {
     return res.status(403).json({ error: 'forbidden' })
   }
-  const { name_ar, name_en, phone, min_order, delivery_fee, delivery_time, is_open, address_ar, address_en } = req.body
+  const { name_ar, name_en, phone, min_order, delivery_fee, delivery_time, is_open, address_ar, address_en, logo, cover_image } = req.body
   const db = getDb()
   db.prepare(`
     UPDATE stores SET name_ar=COALESCE(?,name_ar), name_en=COALESCE(?,name_en),
     phone=COALESCE(?,phone), min_order=COALESCE(?,min_order),
     delivery_fee=COALESCE(?,delivery_fee), delivery_time=COALESCE(?,delivery_time),
-    is_open=COALESCE(?,is_open), address_ar=COALESCE(?,address_ar), address_en=COALESCE(?,address_en)
+    is_open=COALESCE(?,is_open), address_ar=COALESCE(?,address_ar), address_en=COALESCE(?,address_en),
+    logo=COALESCE(?,logo), cover_image=COALESCE(?,cover_image)
     WHERE id=?
-  `).run(name_ar,name_en,phone,min_order,delivery_fee,delivery_time,is_open,address_ar,address_en,id)
+  `).run(name_ar,name_en,phone,min_order,delivery_fee,delivery_time,is_open,address_ar,address_en,logo,cover_image,id)
   const updated = db.prepare('SELECT * FROM stores WHERE id=?').get(id)
   res.json(updated)
 })

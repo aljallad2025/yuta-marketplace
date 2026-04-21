@@ -27,6 +27,18 @@ import WebAccount from './pages/WebAccount'
 
 // Mobile App
 import MobileApp from './pages/MobileApp'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import ContactUs from './pages/ContactUs'
+import SupermarketPage from './pages/catalog/SupermarketPage'
+import RestaurantsPage from './pages/catalog/RestaurantsPage'
+import DeliveryPage from './pages/catalog/DeliveryPage'
+import HotelsPage from './pages/catalog/HotelsPage'
+import FlightsPage from './pages/catalog/FlightsPage'
+import DoctorsPage from './pages/catalog/DoctorsPage'
+import PharmacyPage from './pages/catalog/PharmacyPage'
+import InsurancePage from './pages/catalog/InsurancePage'
+import CosmeticsPage from './pages/catalog/CosmeticsPage'
+import UserLogin from './pages/auth/UserLogin'
 
 // Admin
 import AdminLayout from './pages/admin/AdminLayout'
@@ -69,6 +81,7 @@ export default function App() {
 
         {/* ── Auth pages (public) ──────────────────────────────── */}
         <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/login" element={<UserLogin />} />
         <Route path="/vendor/login" element={<VendorLogin />} />
         <Route path="/driver/login" element={<DriverLogin />} />
 
@@ -81,6 +94,17 @@ export default function App() {
           <Route path="taxi" element={<WebTaxi />} />
           <Route path="orders" element={<WebOrders />} />
           <Route path="account" element={<WebAccount />} />
+          <Route path="restaurants" element={<RestaurantsPage />} />
+          <Route path="delivery" element={<DeliveryPage />} />
+          <Route path="supermarket" element={<SupermarketPage />} />
+          <Route path="hotels" element={<HotelsPage />} />
+          <Route path="flights" element={<FlightsPage />} />
+          <Route path="doctors" element={<DoctorsPage />} />
+          <Route path="pharmacy" element={<PharmacyPage />} />
+          <Route path="insurance" element={<InsurancePage />} />
+          <Route path="cosmetics" element={<CosmeticsPage />} />
+          <Route path="privacy" element={<PrivacyPolicy />} />
+          <Route path="contact" element={<ContactUs />} />
         </Route>
 
         {/* Mobile App Preview (public) */}

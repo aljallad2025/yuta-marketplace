@@ -127,7 +127,7 @@ export default function AdminDrivers() {
                     </div>
                   </td>
                   <td className="px-4 py-4 text-sm font-black text-[#222]">{driver.trips}</td>
-                  <td className="px-4 py-4 text-sm text-[#0F2A47] font-black">{driver.earnings.toLocaleString()} {isAr ? 'د' : 'AED'}</td>
+                  <td className="px-4 py-4 text-sm text-[#0F2A47] font-black">{driver.earnings.toLocaleString()} {isAr ? 'د' : 'SAR'}</td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-1 text-xs text-[#666]">
                       <MapPin size={11} className="text-[#C8A951]" /> {isAr ? driver.locationAr : driver.locationEn}

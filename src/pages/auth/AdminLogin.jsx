@@ -23,8 +23,8 @@ export default function AdminLogin() {
   const handleSubmit = (e) => {
     e.preventDefault()
     setLoading(true)
-    setTimeout(() => {
-      const ok = login(username, password, 'admin')
+    setTimeout(async () => {
+      const ok = await login(username, password, 'admin')
       setLoading(false)
       if (ok) navigate('/admin')
     }, 600)

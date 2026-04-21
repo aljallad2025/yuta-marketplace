@@ -119,7 +119,7 @@ export default function AdminTaxi() {
                       {isAr ? ride.typeAr : ride.typeEn}
                     </span>
                   </td>
-                  <td className="px-4 py-3.5 font-black text-sm text-[#222]">{ride.fare} {isAr ? 'د' : 'AED'}</td>
+                  <td className="px-4 py-3.5 font-black text-sm text-[#222]">{ride.fare} {isAr ? 'د' : 'SAR'}</td>
                   <td className="px-4 py-3.5">
                     <Badge status={ride.status} label={
                       isAr ? (ride.status === 'on_the_way' ? 'نشط' : ride.status === 'completed' ? 'مكتمل' : ride.status === 'cancelled' ? 'ملغي' : 'قيد الانتظار') : undefined

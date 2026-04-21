@@ -61,7 +61,7 @@ export default function AdminFinancial() {
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-[#666] font-semibold">{isAr ? card.labelAr : card.labelEn}</p>
-                <p className="text-xl font-black text-[#222] mt-1 leading-tight">{card.value} {isAr ? 'د' : 'AED'}</p>
+                <p className="text-xl font-black text-[#222] mt-1 leading-tight">{card.value} {isAr ? 'د' : 'SAR'}</p>
                 <p className="text-xs text-emerald-600 font-black mt-1">
                   {card.change || (isAr ? card.changeAr : card.changeEn)}
                 </p>
@@ -139,7 +139,7 @@ export default function AdminFinancial() {
                       w.typeEn === 'Driver' ? 'bg-[#0F2A47]/10 text-[#0F2A47]' : 'bg-[#C8A951]/15 text-[#a88b3a]'
                     }`}>{isAr ? w.typeAr : w.typeEn}</span>
                   </td>
-                  <td className="px-4 py-3.5 font-black text-sm text-[#222]">{w.amount.toLocaleString()} {isAr ? 'د' : 'AED'}</td>
+                  <td className="px-4 py-3.5 font-black text-sm text-[#222]">{w.amount.toLocaleString()} {isAr ? 'د' : 'SAR'}</td>
                   <td className="px-4 py-3.5">
                     <Badge status={w.status} label={isAr ? (w.status === 'pending' ? 'معلق' : 'مكتمل') : undefined} />
                   </td>

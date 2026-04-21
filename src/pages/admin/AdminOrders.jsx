@@ -125,7 +125,7 @@ export default function AdminOrders() {
                       </button>
                     )}
                   </td>
-                  <td className="px-4 py-3.5 font-black text-sm text-[#222]">{order.total} {isAr ? 'د' : 'AED'}</td>
+                  <td className="px-4 py-3.5 font-black text-sm text-[#222]">{order.total} {isAr ? 'د' : 'SAR'}</td>
                   <td className="px-4 py-3.5"><Badge status={order.status} label={statusLabel[order.status]} /></td>
                   <td className="px-4 py-3.5 text-xs text-[#666] whitespace-nowrap">
                     {new Date(order.createdAt).toLocaleTimeString(isAr ? 'ar-AE' : 'en-US', { hour: '2-digit', minute: '2-digit' })}
@@ -158,7 +158,7 @@ export default function AdminOrders() {
               <div><p className="text-xs text-[#666]">{isAr ? 'العميل' : 'Customer'}</p><p className="font-black text-sm text-[#222]">{isAr ? selected.customerNameAr : selected.customerNameEn}</p></div>
               <div><p className="text-xs text-[#666]">{isAr ? 'المتجر' : 'Store'}</p><p className="font-black text-sm text-[#222]">{getStoreName(selected.storeId)}</p></div>
               <div><p className="text-xs text-[#666]">{isAr ? 'العنوان' : 'Address'}</p><p className="font-black text-sm text-[#222]">{isAr ? selected.addressAr : selected.addressEn}</p></div>
-              <div><p className="text-xs text-[#666]">{isAr ? 'الإجمالي' : 'Total'}</p><p className="font-black text-sm text-[#0F2A47]">{selected.total} {isAr ? 'درهم' : 'AED'}</p></div>
+              <div><p className="text-xs text-[#666]">{isAr ? 'الإجمالي' : 'Total'}</p><p className="font-black text-sm text-[#0F2A47]">{selected.total} {isAr ? 'درهم' : 'SAR'}</p></div>
             </div>
             {/* Items */}
             {selected.items && (
@@ -167,7 +167,7 @@ export default function AdminOrders() {
                 <div className="flex flex-wrap gap-2">
                   {selected.items.map((item, i) => (
                     <span key={i} className="bg-white border border-[#E8E4DC] rounded-xl px-3 py-1.5 text-xs font-black text-[#444]">
-                      {item.qty}x {isAr ? item.nameAr : item.nameEn} — {item.price * item.qty} {isAr ? 'د' : 'AED'}
+                      {item.qty}x {isAr ? item.nameAr : item.nameEn} — {item.price * item.qty} {isAr ? 'د' : 'SAR'}
                     </span>
                   ))}
                 </div>

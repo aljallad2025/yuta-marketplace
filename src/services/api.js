@@ -32,7 +32,9 @@ function convertKeys(obj) {
 // Handle auth errors globally + auto-convert keys
 api.interceptors.response.use(
   (res) => {
+    const errorField = res.data?.error
     res.data = convertKeys(res.data)
+    if (errorField) res.data.error = errorField
     return res
   },
   (err) => {

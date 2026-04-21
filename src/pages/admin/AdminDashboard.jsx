@@ -89,10 +89,10 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label={t('revenueToday')} value={`${stats.totalRevenue?.toFixed(0) || 0} AED`} icon={DollarSign} color="#C8A951" />
+        <StatCard label={t('revenueToday')} value={`${stats.totalRevenue?.toFixed(0) || 0} SAR`} icon={DollarSign} color="#C8A951" />
         <StatCard label={t('activeRides')} value="38" change="+2" changeType="up" icon={Zap} color="#9B59B6" />
         <StatCard label={t('avgDelivery')} value={isAr ? '٢٢ دقيقة' : '22 min'} change="-3 min" changeType="up" icon={Clock} color="#0F2A47" />
-        <StatCard label={t('commission')} value={`${((stats.totalRevenue||0)*0.12).toFixed(0)} AED`} icon={TrendingUp} color="#E74C3C" />
+        <StatCard label={t('commission')} value={`${((stats.totalRevenue||0)*0.12).toFixed(0)} SAR`} icon={TrendingUp} color="#E74C3C" />
       </div>
 
       {/* Charts */}
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
                     <td className="px-4 py-3 text-xs font-mono font-black text-[#0F2A47]">{order.id}</td>
                     <td className="px-4 py-3 text-xs text-[#444] font-semibold">{isAr ? order.customerAr : order.customerEn}</td>
                     <td className="px-4 py-3 text-xs text-[#666]">{isAr ? order.storeAr : order.storeEn}</td>
-                    <td className="px-4 py-3 text-xs font-black text-[#222]">{order.total} {isAr ? 'د' : 'AED'}</td>
+                    <td className="px-4 py-3 text-xs font-black text-[#222]">{order.total} {isAr ? 'د' : 'SAR'}</td>
                     <td className="px-4 py-3"><Badge status={order.status} /></td>
                   </tr>
                 ))}

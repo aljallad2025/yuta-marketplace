@@ -24,7 +24,7 @@ router.get('/', verifyToken, (req, res) => {
   } else if (role === 'driver') {
     orders = db.prepare("SELECT * FROM orders WHERE driver_id=? OR (status='accepted' AND driver_id IS NULL) ORDER BY created_at DESC").all(userId)
   } else {
-    orders = db.prepare('SELECT * FROM orders WHERE customer_id=? ORDER BY created_at DESC').all(userId)
+    orders = db.prepare('SELECT * FROM orders WHERE customer_id=? OR (customer_id IS NULL AND customer_phone=(SELECT phone FROM users WHERE id=?)) ORDER BY created_at DESC').all(userId, userId)
   }
 
   res.json(orders.map(parseOrder))
@@ -57,7 +57,7 @@ router.post('/', (req, res) => {
   db.prepare(`
     INSERT INTO orders (id, store_id, customer_id, customer_name_ar, customer_name_en, customer_phone, address_ar, address_en, items, subtotal, delivery_fee, total, status, notes, created_at, updated_at)
     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'pending',?,?,?)
-  `).run(id, store_id, customer_id||null, customer_name_ar||'عميل', customer_name_en||'Customer', customer_phone, address_ar, address_en||'', JSON.stringify(items), subtotal||0, delivery_fee||0, total||0, notes||'', now, now)
+  `).run(id, store_id, null, customer_name_ar||'عميل', customer_name_en||'Customer', customer_phone, address_ar, address_en||'', JSON.stringify(items), subtotal||0, delivery_fee||0, total||0, notes||'', now, now)
 
   // Notification for vendor
   db.prepare(`INSERT INTO notifications (type,title_ar,title_en,msg_ar,msg_en,store_id,is_read) VALUES (?,?,?,?,?,?,0)`)

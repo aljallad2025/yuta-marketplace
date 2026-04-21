@@ -10,6 +10,8 @@ import { getDb, seedDatabase } from './db.js'
 import { setupSocket } from './socket/index.js'
 
 import authRoutes    from './routes/auth.js'
+import catalogRouter from './routes/catalog.js'
+import categoriesRouter from './routes/categories.js'
 import storeRoutes   from './routes/stores.js'
 import productRoutes from './routes/products.js'
 import orderRoutes   from './routes/orders.js'
@@ -18,6 +20,7 @@ import driverRoutes  from './routes/drivers.js'
 import notifRoutes   from './routes/notifications.js'
 import uploadRoutes  from './routes/uploads.js'
 import statsRoutes   from './routes/stats.js'
+import optionRoutes  from './routes/options.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const PORT       = process.env.PORT || 4000
@@ -53,12 +56,15 @@ if (IS_PROD && existsSync(DIST_DIR)) {
 }
 
 app.use('/api/auth',          authRoutes)
+app.use('/api/catalog', catalogRouter)
+app.use('/api/categories', categoriesRouter)
 app.use('/api/stores',        storeRoutes)
 app.use('/api/products',      productRoutes)
 app.use('/api/orders',        orderRoutes)
 app.use('/api/users',         userRoutes)
 app.use('/api/drivers',       driverRoutes)
 app.use('/api/notifications', notifRoutes)
+app.use('/api/options',        optionRoutes)
 app.use('/api/uploads',       uploadRoutes)
 app.use('/api/stats',         statsRoutes)
 

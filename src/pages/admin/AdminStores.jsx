@@ -105,9 +105,9 @@ export default function AdminStores() {
               <input value={newStore.ownerEn} onChange={e => setNewStore(s => ({ ...s, ownerEn: e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" dir="ltr" /></div>
             <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'اسم المالك (عربي)' : 'Owner Name (AR)'}</label>
               <input value={newStore.ownerAr} onChange={e => setNewStore(s => ({ ...s, ownerAr: e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" dir="rtl" /></div>
-            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'رسوم التوصيل (درهم)' : 'Delivery Fee (AED)'}</label>
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'رسوم التوصيل (درهم)' : 'Delivery Fee (SAR)'}</label>
               <input type="number" value={newStore.deliveryFee} onChange={e => setNewStore(s => ({ ...s, deliveryFee: +e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" /></div>
-            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'الحد الأدنى للطلب' : 'Min. Order (AED)'}</label>
+            <div><label className="text-xs font-black text-[#444] block mb-1">{isAr ? 'الحد الأدنى للطلب' : 'Min. Order (SAR)'}</label>
               <input type="number" value={newStore.minOrder} onChange={e => setNewStore(s => ({ ...s, minOrder: +e.target.value }))} className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" /></div>
           </div>
           <div className="flex gap-2 justify-end pt-2">
@@ -187,7 +187,7 @@ export default function AdminStores() {
                       </td>
                       <td className="px-4 py-4 text-sm font-black text-[#222]">{(store.orders||0).toLocaleString()}</td>
                       <td className="px-4 py-4"><span className="text-sm font-black text-[#C8A951]">{store.commission||0}%</span></td>
-                      <td className="px-4 py-4 text-sm font-black text-[#0F2A47]">{(store.revenue||0).toLocaleString()} {isAr ? 'د' : 'AED'}</td>
+                      <td className="px-4 py-4 text-sm font-black text-[#0F2A47]">{(store.revenue||0).toLocaleString()} {isAr ? 'د' : 'SAR'}</td>
                       <td className="px-4 py-4">
                         <div className="flex items-center gap-1">
                           <button onClick={() => startEdit(store)} className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Edit2 size={13} /></button>

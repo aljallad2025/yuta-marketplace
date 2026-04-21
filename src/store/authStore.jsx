@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
       setCurrentUser(user)
       return true
     } catch (err) {
-      const code = err.response?.data?.error || 'unknown_error'
+      const code = err.response?.data?.error || err.response?.data?.message || 'unknown_error'
       setLoginError(code)
       return false
     } finally {
