@@ -52,6 +52,7 @@ import AdminLiveMap from './pages/admin/AdminLiveMap'
 import AdminFinancial from './pages/admin/AdminFinancial'
 import AdminSettings from './pages/admin/AdminSettings'
 import AdminCategories from './pages/admin/AdminCategories'
+import WebCategories from './pages/WebCategories'
 import AdminApprovals from './pages/admin/AdminApprovals'
 
 // Vendor (Supplier) Dashboard
@@ -94,6 +95,7 @@ export default function App() {
           <Route path="taxi" element={<WebTaxi />} />
           <Route path="orders" element={<WebOrders />} />
           <Route path="account" element={<WebAccount />} />
+          <Route path="categories" element={<WebCategories />} />
           <Route path="restaurants" element={<RestaurantsPage />} />
           <Route path="delivery" element={<DeliveryPage />} />
           <Route path="supermarket" element={<SupermarketPage />} />

@@ -5,18 +5,6 @@ import SumuLogo from '../components/SumuLogo'
 import { useLang } from '../i18n/LangContext'
 import { useCategories } from '../store/categoriesStore.jsx'
 
-const CATEGORY_PATHS = {
-  restaurant: '/web/restaurants',
-  supermarket: '/web/supermarket',
-  pharmacy: '/web/pharmacy',
-  cosmetics: '/web/cosmetics',
-  delivery: '/web/delivery',
-  hotels: '/web/hotels',
-  flights: '/web/flights',
-  doctors: '/web/doctors',
-  insurance: '/web/insurance',
-}
-
 const slides = [
   { key: 'exclusiveOffers', key2: 'browseNow', bg: 'from-[#8B6914] via-[#C8A951] to-[#a88b3a]', badge: '✨' },
   { key: 'freeDelivery', key2: 'freeDeliverySub', bg: 'from-[#0F2A47] to-[#1a3a5c]', badge: '🚚' },
@@ -126,7 +114,7 @@ export default function WebHome() {
         </div>
         <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
           {activeCategories.map(cat => (
-            <Link key={cat.id} to={CATEGORY_PATHS[cat.slug] || CATEGORY_PATHS[cat.name_en?.toLowerCase()] || "/web/marketplace"}
+            <Link key={cat.id} to={cat.path || "/web/marketplace"}
               className="bg-white rounded-2xl p-3 text-center shadow-sm border border-[#E8E4DC] hover:border-[#C8A951]/50 hover:shadow-md transition-all cursor-pointer hover-lift">
               <div className="text-2xl sm:text-3xl mb-1.5">{cat.emoji}</div>
               <p className="text-xs font-bold text-[#0F2A47] leading-tight">
