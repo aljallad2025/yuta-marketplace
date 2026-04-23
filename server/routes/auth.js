@@ -90,3 +90,34 @@ router.get('/me', (req, res) => {
 })
 
 export default router
+
+// POST /api/auth/customer/login
+router.post('/customer/login', (req, res) => {
+  const { email, password } = req.body
+  if (!email || !password) return res.status(400).json({ error: 'credentials_required' })
+  const db = getDb()
+  let user = db.prepare("SELECT * FROM users WHERE LOWER(email)=LOWER(?) AND role='customer'").get(email)
+  if (!user) user = db.prepare("SELECT * FROM users WHERE LOWER(username)=LOWER(?) AND role='customer'").get(email)
+  if (!user) return res.status(401).json({ error: 'invalid_credentials' })
+  const valid = bcrypt.compareSync(password, user.password_hash)
+  if (!valid) return res.status(401).json({ error: 'invalid_credentials' })
+  const token = signToken(user)
+  const { password_hash, ...safeUser } = user
+  res.json({ token, user: safeUser })
+})
+
+// POST /api/auth/customer/register
+router.post('/customer/register', (req, res) => {
+  const { email, password, name, phone } = req.body
+  if (!email || !password || !name) return res.status(400).json({ error: 'missing_fields' })
+  const db = getDb()
+  const exists = db.prepare('SELECT id FROM users WHERE LOWER(email)=LOWER(?)').get(email)
+  if (exists) return res.status(409).json({ error: 'email_already_exists' })
+  const hash = bcrypt.hashSync(password, 10)
+  const id = uuid()
+  db.prepare("INSERT INTO users (id, username, email, phone, password_hash, role, name_ar, name_en, status) VALUES (?,?,?,?,?,'customer',?,?,'approved')").run(id, email, email, phone || '', hash, name, name)
+  const user = db.prepare('SELECT * FROM users WHERE id=?').get(id)
+  const token = signToken(user)
+  const { password_hash, ...safeUser } = user
+  res.json({ token, user: safeUser })
+})

@@ -47,13 +47,22 @@ export function StoresProvider({ children }) {
   useEffect(() => { loadStores() }, [loadStores])
 
   const addStore = useCallback(async (store) => {
+    const payload = {
+      name_ar: store.nameAr || store.name_ar || '',
+      name_en: store.nameEn || store.name_en || '',
+      category: store.category || (store.catId === 1 ? 'restaurant' : store.catId === 2 ? 'supermarket' : store.catId === 5 ? 'pharmacy' : store.catId === 6 ? 'cosmetics' : 'restaurant'),
+      logo: store.emoji || store.logo || '🏪',
+      phone: store.phone || '',
+      min_order: store.minOrder ?? store.min_order ?? 0,
+      delivery_fee: store.deliveryFee ?? store.delivery_fee ?? 0,
+      delivery_time: store.deliveryTime || store.delivery_time || '30-45',
+    }
     try {
-      const res = await storesAPI.create(store)
+      const res = await storesAPI.create(payload)
       setStores(prev => [...prev, mapStore(res.data)])
       return res.data
     } catch {
-      // optimistic fallback
-      const newStore = mapStore({ id: Date.now(), ...store, is_open: 1, rating: 0 })
+      const newStore = mapStore({ id: Date.now(), ...payload, is_open: 1, rating: 0 })
       setStores(prev => [...prev, newStore])
       return newStore
     }

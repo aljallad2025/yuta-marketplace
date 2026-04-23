@@ -20,6 +20,7 @@ import driverRoutes  from './routes/drivers.js'
 import notifRoutes   from './routes/notifications.js'
 import uploadRoutes  from './routes/uploads.js'
 import statsRoutes   from './routes/stats.js'
+import taxiRoutes    from './routes/taxi.js'
 import optionRoutes  from './routes/options.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -67,6 +68,7 @@ app.use('/api/notifications', notifRoutes)
 app.use('/api/options',        optionRoutes)
 app.use('/api/uploads',       uploadRoutes)
 app.use('/api/stats',         statsRoutes)
+app.use('/api/taxi',          taxiRoutes)
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', env: process.env.NODE_ENV || 'development', timestamp: new Date().toISOString(), version: '2.0.0' })
