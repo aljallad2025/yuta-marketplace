@@ -5,22 +5,17 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { authService } from '../services/api';
+import { useApp } from '../context/AppContext';
 import { COLORS, SPACING, RADIUS, FONTS, SHADOWS } from '../constants/theme';
 
 export default function AuthScreen() {
   const insets = useSafeAreaInsets();
-  const [mode, setMode] = useState('login'); // 'login' | 'register'
+  const { login, register } = useApp();
+  const [mode, setMode] = useState('login');
   const [isAr, setIsAr] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
-
-  const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    password: '',
-  });
+  const [form, setForm] = useState({ name: '', phone: '', email: '', password: '' });
 
   const t = (ar, en) => isAr ? ar : en;
   const update = (key, val) => setForm(prev => ({ ...prev, [key]: val }));
@@ -30,251 +25,117 @@ export default function AuthScreen() {
       Alert.alert(t('خطأ', 'Error'), t('يرجى ملء جميع الحقول', 'Please fill all fields'));
       return;
     }
-    if (form.password.length < 6) {
-      Alert.alert(t('خطأ', 'Error'), t('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'Password must be at least 6 characters'));
-      return;
-    }
-
     setLoading(true);
     try {
       if (mode === 'login') {
-        await authService.signIn(form.email, form.password);
+        await login(form.email, form.password);
       } else {
         if (!form.name) {
           Alert.alert(t('خطأ', 'Error'), t('يرجى إدخال اسمك', 'Please enter your name'));
           setLoading(false);
           return;
         }
-        const { user, session } = await authService.signUp(form.email, form.password, form.name, form.phone);
-        if (!session) {
-          Alert.alert(
-            t('تم إنشاء الحساب', 'Account Created'),
-            t('تحقق من بريدك الإلكتروني لتأكيد الحساب', 'Check your email to confirm your account')
-          );
-        }
+        await register(form.email, form.password, form.name, form.phone);
       }
     } catch (err) {
-      const msg = err.message || t('حدث خطأ', 'An error occurred');
-      Alert.alert(t('خطأ', 'Error'), msg);
+      Alert.alert(t('خطأ', 'Error'), err.message || t('حدث خطأ، تحقق من الاتصال', 'Error, check your connection'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.container, { paddingTop: insets.top }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => setIsAr(!isAr)} style={styles.langToggle}>
-            <Text style={styles.langToggleText}>{isAr ? 'EN' : 'ع'}</Text>
-          </TouchableOpacity>
-        </View>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <ScrollView contentContainerStyle={[styles.container, { paddingTop: insets.top + 20 }]}
+        keyboardShouldPersistTaps="handled">
+        <TouchableOpacity style={styles.langBtn} onPress={() => setIsAr(v => !v)}>
+          <Text style={styles.langText}>{isAr ? 'EN' : 'ع'}</Text>
+        </TouchableOpacity>
 
-        {/* Logo */}
-        <View style={styles.logoSection}>
-          <View style={styles.logoCircle}>
-            <Text style={styles.logoEmoji}>🛵</Text>
+        <View style={styles.logoWrap}>
+          <View style={styles.logo}>
+            <Ionicons name="bicycle" size={40} color={COLORS.gold} />
           </View>
-          <Text style={styles.logoTitle}>سومو</Text>
-          <Text style={styles.logoSubtitle}>{t('توصيل سريع · تاكسي ذكي', 'Fast Delivery · Smart Taxi')}</Text>
+          <Text style={styles.appName}>سومو</Text>
+          <Text style={styles.tagline}>Fast Delivery · Smart Taxi</Text>
         </View>
 
-        {/* Tab Switcher */}
-        <View style={styles.tabRow}>
-          <TouchableOpacity
-            style={[styles.tab, mode === 'login' && styles.activeTab]}
-            onPress={() => setMode('login')}
-          >
-            <Text style={[styles.tabText, mode === 'login' && styles.activeTabText]}>
-              {t('تسجيل الدخول', 'Sign In')}
-            </Text>
+        <View style={styles.tabs}>
+          <TouchableOpacity style={[styles.tab, mode === 'login' && styles.activeTab]} onPress={() => setMode('login')}>
+            <Text style={[styles.tabText, mode === 'login' && styles.activeTabText]}>{t('تسجيل الدخول', 'Sign In')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, mode === 'register' && styles.activeTab]}
-            onPress={() => setMode('register')}
-          >
-            <Text style={[styles.tabText, mode === 'register' && styles.activeTabText]}>
-              {t('إنشاء حساب', 'Sign Up')}
-            </Text>
+          <TouchableOpacity style={[styles.tab, mode === 'register' && styles.activeTab]} onPress={() => setMode('register')}>
+            <Text style={[styles.tabText, mode === 'register' && styles.activeTabText]}>{t('إنشاء حساب', 'Sign Up')}</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Form */}
-        <View style={[styles.formCard, SHADOWS.md]}>
+        <View style={styles.form}>
           {mode === 'register' && (
             <>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>{t('الاسم الكامل', 'Full Name')}</Text>
-                <View style={styles.inputRow}>
-                  <Ionicons name="person-outline" size={18} color={COLORS.textMuted} style={styles.inputIcon} />
-                  <TextInput
-                    style={styles.input}
-                    placeholder={t('أحمد محمد', 'Ahmed Mohamed')}
-                    placeholderTextColor={COLORS.textMuted}
-                    value={form.name}
-                    onChangeText={v => update('name', v)}
-                    textAlign={isAr ? 'right' : 'left'}
-                  />
-                </View>
+              <Text style={styles.label}>{t('الاسم', 'Name')}</Text>
+              <View style={styles.inputWrap}>
+                <Ionicons name="person-outline" size={18} color="#999" style={styles.inputIcon} />
+                <TextInput style={styles.input} value={form.name} onChangeText={v => update('name', v)}
+                  placeholder={t('الاسم الكامل', 'Full name')} placeholderTextColor="#BBB" />
               </View>
-
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>{t('رقم الهاتف', 'Phone Number')}</Text>
-                <View style={styles.inputRow}>
-                  <Ionicons name="call-outline" size={18} color={COLORS.textMuted} style={styles.inputIcon} />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="+971 50 000 0000"
-                    placeholderTextColor={COLORS.textMuted}
-                    value={form.phone}
-                    onChangeText={v => update('phone', v)}
-                    keyboardType="phone-pad"
-                    textAlign={isAr ? 'right' : 'left'}
-                  />
-                </View>
+              <Text style={styles.label}>{t('الجوال', 'Phone')}</Text>
+              <View style={styles.inputWrap}>
+                <Ionicons name="call-outline" size={18} color="#999" style={styles.inputIcon} />
+                <TextInput style={styles.input} value={form.phone} onChangeText={v => update('phone', v)}
+                  placeholder="+966 5X XXX XXXX" placeholderTextColor="#BBB" keyboardType="phone-pad" />
               </View>
             </>
           )}
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>{t('البريد الإلكتروني', 'Email')}</Text>
-            <View style={styles.inputRow}>
-              <Ionicons name="mail-outline" size={18} color={COLORS.textMuted} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="example@email.com"
-                placeholderTextColor={COLORS.textMuted}
-                value={form.email}
-                onChangeText={v => update('email', v)}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                textAlign={isAr ? 'right' : 'left'}
-              />
-            </View>
+          <Text style={styles.label}>{t('البريد الإلكتروني', 'Email')}</Text>
+          <View style={styles.inputWrap}>
+            <Ionicons name="mail-outline" size={18} color="#999" style={styles.inputIcon} />
+            <TextInput style={styles.input} value={form.email} onChangeText={v => update('email', v)}
+              placeholder="example@email.com" placeholderTextColor="#BBB"
+              keyboardType="email-address" autoCapitalize="none" />
           </View>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>{t('كلمة المرور', 'Password')}</Text>
-            <View style={styles.inputRow}>
-              <Ionicons name="lock-closed-outline" size={18} color={COLORS.textMuted} style={styles.inputIcon} />
-              <TextInput
-                style={[styles.input, { flex: 1 }]}
-                placeholder={t('••••••••', '••••••••')}
-                placeholderTextColor={COLORS.textMuted}
-                value={form.password}
-                onChangeText={v => update('password', v)}
-                secureTextEntry={!showPass}
-                textAlign={isAr ? 'right' : 'left'}
-              />
-              <TouchableOpacity onPress={() => setShowPass(!showPass)} style={{ padding: 4 }}>
-                <Ionicons name={showPass ? 'eye-off-outline' : 'eye-outline'} size={18} color={COLORS.textMuted} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {mode === 'login' && (
-            <TouchableOpacity style={styles.forgotBtn}>
-              <Text style={styles.forgotText}>{t('نسيت كلمة المرور؟', 'Forgot password?')}</Text>
+          <Text style={styles.label}>{t('كلمة المرور', 'Password')}</Text>
+          <View style={styles.inputWrap}>
+            <Ionicons name="lock-closed-outline" size={18} color="#999" style={styles.inputIcon} />
+            <TextInput style={[styles.input, { flex: 1 }]} value={form.password} onChangeText={v => update('password', v)}
+              placeholder="••••••••" placeholderTextColor="#BBB" secureTextEntry={!showPass} />
+            <TouchableOpacity onPress={() => setShowPass(v => !v)}>
+              <Ionicons name={showPass ? 'eye-off-outline' : 'eye-outline'} size={18} color="#999" />
             </TouchableOpacity>
-          )}
+          </View>
 
-          <TouchableOpacity
-            style={[styles.submitBtn, loading && { opacity: 0.7 }]}
-            onPress={handleSubmit}
-            disabled={loading}
-            activeOpacity={0.85}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.submitText}>
-                {mode === 'login' ? t('تسجيل الدخول', 'Sign In') : t('إنشاء الحساب', 'Create Account')}
-              </Text>
-            )}
+          <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit} disabled={loading}>
+            {loading ? <ActivityIndicator color="#fff" /> :
+              <Text style={styles.submitText}>{mode === 'login' ? t('تسجيل الدخول', 'Sign In') : t('إنشاء الحساب', 'Create Account')}</Text>}
           </TouchableOpacity>
-        </View>
 
-        {/* Footer */}
-        <Text style={styles.terms}>
-          {t(
-            'بالمتابعة توافق على شروط الاستخدام وسياسة الخصوصية',
-            'By continuing, you agree to our Terms & Privacy Policy'
-          )}
-        </Text>
+          <Text style={styles.terms}>{t('بالمتابعة توافق على', 'By continuing you agree to our')} <Text style={{ color: COLORS.gold }}>{t('الشروط والخصوصية', 'Terms & Privacy Policy')}</Text></Text>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
-  scroll: { flexGrow: 1, paddingHorizontal: SPACING.lg, paddingBottom: 40 },
-  header: { flexDirection: 'row', justifyContent: 'flex-end', paddingVertical: SPACING.md },
-  langToggle: {
-    backgroundColor: COLORS.primary,
-    borderRadius: RADIUS.full,
-    width: 36, height: 36,
-    alignItems: 'center', justifyContent: 'center',
-  },
-  langToggleText: { color: '#fff', fontSize: 13, fontWeight: '800' },
-  logoSection: { alignItems: 'center', marginVertical: SPACING.xxl },
-  logoCircle: {
-    width: 90, height: 90, borderRadius: 45,
-    backgroundColor: COLORS.primary,
-    alignItems: 'center', justifyContent: 'center',
-    marginBottom: SPACING.md,
-  },
-  logoEmoji: { fontSize: 42 },
-  logoTitle: { fontSize: 36, fontWeight: '900', color: COLORS.primary, letterSpacing: 1 },
-  logoSubtitle: { fontSize: 14, color: COLORS.textSecondary, marginTop: 4 },
-  tabRow: {
-    flexDirection: 'row',
-    backgroundColor: COLORS.border,
-    borderRadius: RADIUS.full,
-    padding: 4,
-    marginBottom: SPACING.lg,
-  },
-  tab: { flex: 1, paddingVertical: 10, borderRadius: RADIUS.full, alignItems: 'center' },
+  container: { flexGrow: 1, backgroundColor: COLORS.background, paddingHorizontal: SPACING.lg, paddingBottom: 40 },
+  langBtn: { alignSelf: 'flex-end', backgroundColor: COLORS.primary, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 6 },
+  langText: { color: '#fff', fontWeight: '800', fontSize: 12 },
+  logoWrap: { alignItems: 'center', marginVertical: 30 },
+  logo: { width: 90, height: 90, borderRadius: 45, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
+  appName: { fontSize: 32, fontWeight: '900', color: COLORS.primary },
+  tagline: { fontSize: 13, color: '#888', marginTop: 4 },
+  tabs: { flexDirection: 'row', backgroundColor: '#F0F0F0', borderRadius: 14, padding: 4, marginBottom: 24 },
+  tab: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 12 },
   activeTab: { backgroundColor: COLORS.primary },
-  tabText: { fontSize: 14, fontWeight: '700', color: COLORS.textSecondary },
+  tabText: { fontSize: 14, fontWeight: '700', color: '#888' },
   activeTabText: { color: '#fff' },
-  formCard: {
-    backgroundColor: COLORS.card,
-    borderRadius: RADIUS.xl,
-    padding: SPACING.xl,
-    marginBottom: SPACING.lg,
-  },
-  inputGroup: { marginBottom: SPACING.md },
-  label: { fontSize: 13, fontWeight: '700', color: COLORS.text, marginBottom: 8 },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.background,
-    borderRadius: RADIUS.md,
-    borderWidth: 1.5,
-    borderColor: COLORS.border,
-    paddingHorizontal: SPACING.md,
-  },
-  inputIcon: { marginEnd: 8 },
-  input: {
-    flex: 1,
-    paddingVertical: 12,
-    fontSize: FONTS.sizes.sm,
-    color: COLORS.text,
-  },
-  forgotBtn: { alignSelf: 'flex-end', marginBottom: SPACING.md },
-  forgotText: { fontSize: 13, color: COLORS.gold, fontWeight: '600' },
-  submitBtn: {
-    backgroundColor: COLORS.primary,
-    borderRadius: RADIUS.xl,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginTop: SPACING.sm,
-  },
-  submitText: { color: '#fff', fontSize: FONTS.sizes.md, fontWeight: '800' },
-  terms: { textAlign: 'center', fontSize: 11, color: COLORS.textMuted, lineHeight: 18 },
+  form: { gap: 6 },
+  label: { fontSize: 13, fontWeight: '700', color: COLORS.primary, marginBottom: 4, marginTop: 8 },
+  inputWrap: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: RADIUS.md, borderWidth: 1, borderColor: '#E8E4DC', paddingHorizontal: 14, height: 50, ...SHADOWS.sm },
+  inputIcon: { marginRight: 10 },
+  input: { flex: 1, fontSize: 14, color: COLORS.primary },
+  submitBtn: { backgroundColor: COLORS.primary, borderRadius: RADIUS.md, height: 52, alignItems: 'center', justifyContent: 'center', marginTop: 20 },
+  submitText: { color: '#fff', fontSize: 16, fontWeight: '900' },
+  terms: { textAlign: 'center', fontSize: 11, color: '#999', marginTop: 16 },
 });
