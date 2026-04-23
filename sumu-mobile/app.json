@@ -32,7 +32,7 @@
         "backgroundColor": "#0F2A47"
       },
       "package": "com.sumu.app",
-      "versionCode": 10,
+      "versionCode": 11,
       "jsEngine": "hermes",
       "permissions": [
         "ACCESS_FINE_LOCATION",
@@ -46,6 +46,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "./plugins/withProguard",
       "expo-font",
       "expo-splash-screen",
       "./plugins/withAndroid16KBPageSize",
@@ -66,7 +67,8 @@
                 "**/libjscexecutor.so"
               ]
             },
-            "enableNewArchitecture": true
+            "enableNewArchitecture": true,
+            "ndkVersion": "27.0.12077973"
           }
         }
       ],

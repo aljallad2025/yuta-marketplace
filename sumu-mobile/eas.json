@@ -29,7 +29,8 @@
       "ios": {
         "buildConfiguration": "Release",
         "credentialsSource": "remote"
-      }
+      },
+      "env": {}
     },
     "aab": {
       "distribution": "internal",
