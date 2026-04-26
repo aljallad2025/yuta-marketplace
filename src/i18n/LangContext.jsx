@@ -13,7 +13,7 @@ const LANG_LABELS = {
 }
 
 export function LangProvider({ children }) {
-  const [lang, setLang] = useState(() => (['en','th','lo','vi'].includes(localStorage.getItem('yuta_lang')) ? localStorage.getItem('yuta_lang') : 'th'))
+  const [lang, setLang] = useState(() => (localStorage.getItem('yuta_lang') || 'lo'))
 
   useEffect(() => {
     document.documentElement.dir = RTL_LANGS.includes(lang) ? 'rtl' : 'ltr'
