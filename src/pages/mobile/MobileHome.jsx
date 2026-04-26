@@ -4,9 +4,9 @@ import { useLang } from '../../i18n/LangContext'
 import { useMobile } from '../../store/mobileStore.jsx'
 
 const slides = [
-  { key: 'exclusiveOffers', sub: 'حتى 40% على متاجر مختارة', bg: 'from-[#8B6914] to-[#C8A951]' },
-  { key: 'freeDelivery',    sub: 'على أول طلب',               bg: 'from-[#0F2A47] to-[#1a3a5c]' },
-  { key: 'taxiFrom',        sub: 'احجز رحلتك الآن',           bg: 'from-[#1a3a5c] to-[#0F2A47]', tab: 'taxi' },
+  { key: 'exclusiveOffers', sub: 'حتى 40% على متاجر مختارة', bg: 'from-[#8B6914] to-[#00C9A7]' },
+  { key: 'freeDelivery',    sub: 'على أول طلب',               bg: 'from-[#0D1B4B] to-[#0A3D8F]' },
+  { key: 'taxiFrom',        sub: 'احجز رحلتك الآن',           bg: 'from-[#0A3D8F] to-[#0D1B4B]', tab: 'taxi' },
 ]
 
 export default function MobileHome() {
@@ -38,23 +38,23 @@ export default function MobileHome() {
     : []
 
   return (
-    <div className="bg-[#FBF8F2] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="bg-[#F0F9F8] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Header */}
-      <div className="bg-[#0F2A47] px-4 pt-2 pb-4 relative z-20">
+      <div className="bg-[#0D1B4B] px-4 pt-2 pb-4 relative z-20">
         <div className="flex items-center justify-between mb-2">
           <button className="flex items-center gap-1 text-white/60 text-xs active:opacity-70">
-            <MapPin size={11} className="text-[#C8A951]" />
+            <MapPin size={11} className="text-[#00C9A7]" />
             <span>{isAr ? 'دبي مارينا' : 'Dubai Marina'}</span>
-            <ChevronRight size={10} className="text-[#C8A951]" />
+            <ChevronRight size={10} className="text-[#00C9A7]" />
           </button>
-          <img src="/sumu-logo.png" alt="SUMU" className="w-8 h-8 rounded-lg object-cover" />
+          <img src="/yuta-logo.png" alt="YUTA" className="w-8 h-8 rounded-lg object-cover" />
           <button
             onClick={() => setNotifOpen(true)}
             className="relative p-1.5 bg-white/10 rounded-lg active:bg-white/20"
           >
             <Bell size={14} className="text-white" />
             {unreadNotifs > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#C8A951] rounded-full text-[7px] font-black text-[#0F2A47] flex items-center justify-center">
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#00C9A7] rounded-full text-[7px] font-black text-[#0D1B4B] flex items-center justify-center">
                 {unreadNotifs}
               </span>
             )}
@@ -80,14 +80,14 @@ export default function MobileHome() {
 
         {/* Search Dropdown */}
         {showSearch && searchQuery.trim().length > 1 && (
-          <div className="absolute start-3 end-3 top-full mt-1 bg-white rounded-2xl shadow-xl z-50 border border-[#E8E4DC] overflow-hidden">
+          <div className="absolute start-3 end-3 top-full mt-1 bg-white rounded-2xl shadow-xl z-50 border border-[#D0EDEA] overflow-hidden">
             {searchResults.length === 0 ? (
               <p className="p-4 text-xs text-[#999] text-center">{isAr ? 'لا نتائج' : 'No results'}</p>
             ) : searchResults.map(store => (
               <button
                 key={store.id}
                 onClick={() => { openStore(store); setShowSearch(false); setSearchQuery('') }}
-                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FBF8F2] border-b border-[#F0ECE4] last:border-0 active:bg-[#F0ECE4]"
+                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F0F9F8] border-b border-[#F0ECE4] last:border-0 active:bg-[#F0ECE4]"
               >
                 <span className="text-xl">{store.emoji}</span>
                 <span className="text-xs font-bold text-[#222]">{isAr ? store.nameAr : store.nameEn}</span>
@@ -108,11 +108,11 @@ export default function MobileHome() {
         onClick={() => slides[slide].tab ? setActiveTab(slides[slide].tab) : setActiveTab('stores')}
       >
         <div className="p-4 flex items-center gap-3">
-          <img src="/sumu-logo.png" alt="SUMU" className="w-12 h-12 rounded-xl object-cover shadow-md flex-shrink-0" />
+          <img src="/yuta-logo.png" alt="YUTA" className="w-12 h-12 rounded-xl object-cover shadow-md flex-shrink-0" />
           <div className="flex-1">
             <p className="text-white font-black text-sm">{t(slides[slide].key)}</p>
             <p className="text-white/60 text-[10px] mt-0.5">{slides[slide].sub}</p>
-            <span className="mt-2 inline-block px-3 py-1.5 bg-[#C8A951] text-[#0F2A47] font-bold text-xs rounded-full">
+            <span className="mt-2 inline-block px-3 py-1.5 bg-[#00C9A7] text-[#0D1B4B] font-bold text-xs rounded-full">
               {t('browseNow')} →
             </span>
           </div>
@@ -122,7 +122,7 @@ export default function MobileHome() {
             <button
               key={i}
               onClick={e => { e.stopPropagation(); setSlide(i) }}
-              className={`rounded-full transition-all ${i === slide ? 'w-4 h-1.5 bg-[#C8A951]' : 'w-1.5 h-1.5 bg-white/40'}`}
+              className={`rounded-full transition-all ${i === slide ? 'w-4 h-1.5 bg-[#00C9A7]' : 'w-1.5 h-1.5 bg-white/40'}`}
             />
           ))}
         </div>
@@ -132,24 +132,24 @@ export default function MobileHome() {
       {activeOrder && (
         <button
           onClick={() => setActiveTab('orders')}
-          className="mx-3 mt-3 w-[calc(100%-24px)] bg-[#0F2A47] rounded-xl p-3 flex items-center gap-3 active:opacity-80"
+          className="mx-3 mt-3 w-[calc(100%-24px)] bg-[#0D1B4B] rounded-xl p-3 flex items-center gap-3 active:opacity-80"
         >
-          <div className="p-2 bg-[#C8A951]/20 rounded-lg">
-            <Zap size={14} className="text-[#C8A951]" />
+          <div className="p-2 bg-[#00C9A7]/20 rounded-lg">
+            <Zap size={14} className="text-[#00C9A7]" />
           </div>
           <div className="flex-1 text-start">
             <p className="text-white text-xs font-black">{isAr ? 'طلبك في الطريق!' : 'Order on the way!'}</p>
             <p className="text-white/50 text-[10px]">~{activeOrder.eta} {isAr ? 'دقيقة' : 'min'} · #{activeOrder.id}</p>
           </div>
-          <span className="text-[#C8A951] text-xs font-bold">{isAr ? 'تتبع ←' : '→ Track'}</span>
+          <span className="text-[#00C9A7] text-xs font-bold">{isAr ? 'تتبع ←' : '→ Track'}</span>
         </button>
       )}
 
       {/* Categories */}
       <div className="px-3 mt-4">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs font-black text-[#0F2A47]">{t('browseCategories')}</p>
-          <button onClick={() => setActiveTab('stores')} className="text-xs text-[#C8A951] font-bold active:opacity-70">
+          <p className="text-xs font-black text-[#0D1B4B]">{t('browseCategories')}</p>
+          <button onClick={() => setActiveTab('stores')} className="text-xs text-[#00C9A7] font-bold active:opacity-70">
             {t('seeAll')}
           </button>
         </div>
@@ -158,10 +158,10 @@ export default function MobileHome() {
             <button
               key={cat.id}
               onClick={() => setActiveTab('stores')}
-              className="bg-white rounded-xl p-2 text-center shadow-sm border border-[#E8E4DC] active:bg-[#FBF8F2] active:border-[#C8A951]/40 transition-all"
+              className="bg-white rounded-xl p-2 text-center shadow-sm border border-[#D0EDEA] active:bg-[#F0F9F8] active:border-[#00C9A7]/40 transition-all"
             >
               <div className="text-xl mb-1">{cat.emoji}</div>
-              <p className="text-[9px] font-bold text-[#0F2A47] leading-tight">{isAr ? cat.labelAr : cat.labelEn}</p>
+              <p className="text-[9px] font-bold text-[#0D1B4B] leading-tight">{isAr ? cat.labelAr : cat.labelEn}</p>
             </button>
           ))}
         </div>
@@ -170,8 +170,8 @@ export default function MobileHome() {
       {/* Featured Stores */}
       <div className="px-3 mt-4 pb-4">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs font-black text-[#0F2A47]">{t('featuredStores')}</p>
-          <button onClick={() => setActiveTab('stores')} className="text-xs text-[#C8A951] font-bold active:opacity-70">
+          <p className="text-xs font-black text-[#0D1B4B]">{t('featuredStores')}</p>
+          <button onClick={() => setActiveTab('stores')} className="text-xs text-[#00C9A7] font-bold active:opacity-70">
             {t('viewAll')}
           </button>
         </div>
@@ -180,14 +180,14 @@ export default function MobileHome() {
             <button
               key={store.id}
               onClick={() => openStore(store)}
-              className="w-full bg-white rounded-xl overflow-hidden shadow-sm border border-[#E8E4DC] flex active:bg-[#FBF8F2] transition-all text-start"
+              className="w-full bg-white rounded-xl overflow-hidden shadow-sm border border-[#D0EDEA] flex active:bg-[#F0F9F8] transition-all text-start"
             >
               <div className="w-16 h-16 flex items-center justify-center text-2xl flex-shrink-0" style={{ backgroundColor: store.bg }}>
                 {store.emoji}
               </div>
               <div className="flex-1 p-3">
                 <div className="flex items-center justify-between">
-                  <p className="font-black text-[#0F2A47] text-xs">{isAr ? store.nameAr : store.nameEn}</p>
+                  <p className="font-black text-[#0D1B4B] text-xs">{isAr ? store.nameAr : store.nameEn}</p>
                   <button
                     onClick={e => { e.stopPropagation(); toggleWishlist(store.id) }}
                     className="p-1 active:scale-110"
@@ -197,7 +197,7 @@ export default function MobileHome() {
                 </div>
                 <div className="flex items-center gap-3 mt-1 flex-wrap">
                   <div className="flex items-center gap-0.5">
-                    <Star size={10} className="fill-[#C8A951] text-[#C8A951]" />
+                    <Star size={10} className="fill-[#00C9A7] text-[#00C9A7]" />
                     <span className="text-[10px] font-bold text-[#444]">{store.rating}</span>
                   </div>
                   <div className="flex items-center gap-0.5 text-[10px] text-[#666]">
@@ -220,9 +220,9 @@ export default function MobileHome() {
           <div className="absolute inset-0 bg-black/40" onClick={() => setNotifOpen(false)} />
           <div className="absolute bottom-0 start-0 end-0 bg-white rounded-t-3xl max-h-[75vh] flex flex-col shadow-2xl">
             <div className="flex items-center justify-between px-4 py-3.5 border-b border-[#F0ECE4]">
-              <p className="font-black text-sm text-[#0F2A47]">{isAr ? 'الإشعارات' : 'Notifications'}</p>
+              <p className="font-black text-sm text-[#0D1B4B]">{isAr ? 'الإشعارات' : 'Notifications'}</p>
               <div className="flex items-center gap-3">
-                <button onClick={markAllRead} className="text-[10px] text-[#C8A951] font-bold">
+                <button onClick={markAllRead} className="text-[10px] text-[#00C9A7] font-bold">
                   {isAr ? 'قراءة الكل' : 'Mark all read'}
                 </button>
                 <button onClick={() => setNotifOpen(false)}>
@@ -233,7 +233,7 @@ export default function MobileHome() {
             <div className="overflow-y-auto flex-1">
               {notifications.map(n => (
                 <div key={n.id} className={`px-4 py-3 border-b border-[#F0ECE4] flex gap-3 ${!n.read ? 'bg-[#FFFBF0]' : ''}`}>
-                  <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${!n.read ? 'bg-[#C8A951]' : 'bg-[#E8E4DC]'}`} />
+                  <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${!n.read ? 'bg-[#00C9A7]' : 'bg-[#D0EDEA]'}`} />
                   <div className="flex-1">
                     <p className="text-xs text-[#222]">{isAr ? n.ar : n.en}</p>
                     <p className="text-[10px] text-[#999] mt-0.5">{n.time}</p>

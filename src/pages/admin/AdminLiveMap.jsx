@@ -63,7 +63,7 @@ export default function AdminLiveMap() {
     <div className="p-6 space-y-5" dir={isAr ? "rtl" : "ltr"}>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#0F2A47]">{t("liveMap")}</h1>
+          <h1 className="text-2xl font-black text-[#0D1B4B]">{t("liveMap")}</h1>
           <p className="text-sm text-[#666]">{isAr ? "تتبع السائقين والطلبات في الوقت الفعلي" : "Real-time driver and order tracking"}</p>
         </div>
         <div className="flex items-center gap-2 text-sm">
@@ -73,14 +73,14 @@ export default function AdminLiveMap() {
       </div>
       <div className="grid grid-cols-4 gap-3">
         {stats.map(s => (
-          <div key={s.labelEn} className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E4DC] text-center">
+          <div key={s.labelEn} className="bg-white rounded-xl p-4 shadow-sm border border-[#D0EDEA] text-center">
             <p className="text-2xl font-black" style={{ color: s.color }}>{s.value}</p>
             <p className="text-xs text-[#666] mt-0.5">{isAr ? s.labelAr : s.labelEn}</p>
           </div>
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E8E4DC]">
+        <div className="lg:col-span-2 bg-white rounded-2xl overflow-hidden shadow-sm border border-[#D0EDEA]">
           <MapContainer
             center={[26.2235, 50.5876]}
             zoom={13}
@@ -100,14 +100,14 @@ export default function AdminLiveMap() {
             ))}
           </MapContainer>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC]">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#D0EDEA]">
           <div className="p-4 border-b border-[#F0ECE4]">
-            <h2 className="font-black text-[#0F2A47]">{isAr ? "السائقون" : "Drivers"}</h2>
+            <h2 className="font-black text-[#0D1B4B]">{isAr ? "السائقون" : "Drivers"}</h2>
           </div>
           <div className="p-3 space-y-2 overflow-y-auto" style={{ maxHeight: "520px" }}>
             {driversData.map(driver => (
               <button key={driver.id} onClick={() => { setSelected(driver); flyTo(driver.lat, driver.lng) }}
-                className={"w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-start " + (selected && selected.id === driver.id ? "border-[#0F2A47] bg-[#0F2A47]/5" : "border-[#F0ECE4] hover:border-[#C8A951]/30")}>
+                className={"w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-start " + (selected && selected.id === driver.id ? "border-[#0D1B4B] bg-[#0D1B4B]/5" : "border-[#F0ECE4] hover:border-[#00C9A7]/30")}>
                 <div className="w-9 h-9 rounded-full flex items-center justify-center text-white font-black text-sm" style={{ backgroundColor: getColor(driver.status) }}>
                   {(isAr ? driver.nameAr : driver.nameEn).charAt(0)}
                 </div>
@@ -125,7 +125,7 @@ export default function AdminLiveMap() {
             <div className="pt-3 mt-3 border-t border-[#F0ECE4]">
               <p className="text-xs font-black text-[#444] mb-2">{isAr ? "الطلبات النشطة" : "Active Orders"}</p>
               {orders_active.map(order => (
-                <div key={order.id} onClick={() => flyTo(order.lat, order.lng)} className="flex items-center gap-2 p-2.5 rounded-xl bg-[#FBF8F2] mb-2 cursor-pointer">
+                <div key={order.id} onClick={() => flyTo(order.lat, order.lng)} className="flex items-center gap-2 p-2.5 rounded-xl bg-[#F0F9F8] mb-2 cursor-pointer">
                   <div className="w-7 h-7 rounded-lg flex items-center justify-center text-sm bg-orange-50">📦</div>
                   <div className="flex-1">
                     <p className="text-xs font-black text-[#222]">{order.id}</p>

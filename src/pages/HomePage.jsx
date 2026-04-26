@@ -1,118 +1,215 @@
 import { Link } from 'react-router-dom'
-import { Smartphone, Monitor, Truck, Store, ShoppingBag, Car, MapPin, Star, Shield, Zap, Package, ArrowLeft, ArrowRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Smartphone, Monitor, Truck, Store, ShoppingBag, Car, MapPin, Star, Shield, Zap, Package, ArrowRight, Globe, ChevronDown } from 'lucide-react'
 import { useLang } from '../i18n/LangContext'
-import LangToggle from '../components/LangToggle'
+
+const LANG_LABELS = { en: 'EN', th: 'ไทย', lo: 'ລາວ', vi: 'VI', ar: 'ع' }
+
+function getL(lang, ar, en, th, lo, vi) {
+  if (lang==='ar') return ar
+  if (lang==='th') return th||en
+  if (lang==='lo') return lo||en
+  if (lang==='vi') return vi||en
+  return en
+}
 
 export default function HomePage() {
-  const { isAr } = useLang()
-  const dir = isAr ? 'rtl' : 'ltr'
+  const { lang, setLang } = useLang()
+  const [langOpen, setLangOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [tick, setTick] = useState(0)
 
-  const features = [
-    { icon: ShoppingBag, titleAr: 'تسوق بسهولة', titleEn: 'Shop Easily', descAr: 'آلاف المنتجات من أفضل المتاجر', descEn: 'Thousands of products from top stores', color: '#C8A951' },
-    { icon: Car, titleAr: 'تاكسي فوري', titleEn: 'Instant Taxi', descAr: 'احجز رحلتك في ثوانٍ', descEn: 'Book your ride in seconds', color: '#2ECC71' },
-    { icon: Package, titleAr: 'توصيل سريع', titleEn: 'Fast Delivery', descAr: 'نوصل طلبك لباب بيتك', descEn: 'We deliver to your doorstep', color: '#3498DB' },
-    { icon: Shield, titleAr: 'دفع آمن', titleEn: 'Secure Payment', descAr: 'جميع المدفوعات مشفرة 100%', descEn: 'All payments 100% encrypted', color: '#9B59B6' },
-    { icon: MapPin, titleAr: 'تتبع مباشر', titleEn: 'Live Tracking', descAr: 'تابع طلبك على الخريطة', descEn: 'Track your order on the map', color: '#E74C3C' },
-    { icon: Star, titleAr: 'تقييمات موثوقة', titleEn: 'Trusted Reviews', descAr: 'اختر بثقة بناءً على تقييمات حقيقية', descEn: 'Choose based on real reviews', color: '#F39C12' },
-  ]
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll)
+    const id = setInterval(() => setTick(t => t+1), 3000)
+    return () => { window.removeEventListener('scroll', onScroll); clearInterval(id) }
+  }, [])
 
-  const stats = [
-    { numAr: '+١٠٠٠', numEn: '1000+', labelAr: 'متجر نشط', labelEn: 'Active Stores' },
-    { numAr: '+٥٠٠٠', numEn: '5000+', labelAr: 'عميل سعيد', labelEn: 'Happy Customers' },
-    { numAr: '+٢٠٠', numEn: '200+', labelAr: 'سائق محترف', labelEn: 'Pro Drivers' },
-    { numAr: '٢٤/٧', numEn: '24/7', labelAr: 'دعم متواصل', labelEn: 'Support' },
-  ]
-
-  const portals = [
-    { icon: Monitor, labelAr: 'المنصة الإلكترونية', labelEn: 'Web Platform', descAr: 'تسوق وحجز تاكسي', descEn: 'Shop and book taxi', href: '/web', color: '#C8A951' },
-    { icon: Smartphone, labelAr: 'تطبيق الجوال', labelEn: 'Mobile App', descAr: 'تجربة جوال متكاملة', descEn: 'Complete mobile experience', href: '/mobile', color: '#2ECC71' },
-    { icon: Store, labelAr: 'بوابة المورد', labelEn: 'Vendor Portal', descAr: 'أدر متجرك بسهولة', descEn: 'Manage your store easily', href: '/vendor/login', color: '#9B59B6' },
-    { icon: Truck, labelAr: 'بوابة السائق', labelEn: 'Driver Portal', descAr: 'استقبل طلبات واكسب', descEn: 'Receive orders and earn', href: '/driver/login', color: '#E74C3C' },
-  ]
+  const words = ['Delivery', 'Taxi', 'Shopping', 'Doctors', 'Hotels', 'Flights']
+  const wordsLoc = {
+    th: ['จัดส่ง', 'แท็กซี่', 'ช้อปปิ้ง', 'แพทย์', 'โรงแรม', 'เที่ยวบิน'],
+    lo: ['ສົ່ງ', 'ແທັກຊີ', 'ຊື້ເຄື່ອງ', 'ທ່ານໝໍ', 'ໂຮງແຮມ', 'ສາຍການບິນ'],
+    vi: ['Giao hàng', 'Taxi', 'Mua sắm', 'Bác sĩ', 'Khách sạn', 'Chuyến bay'],
+    ar: ['توصيل', 'تاكسي', 'تسوق', 'أطباء', 'فنادق', 'طيران'],
+  }
+  const currentWords = wordsLoc[lang] || words
+  const currentWord = currentWords[tick % currentWords.length]
 
   return (
-    <div className="min-h-screen bg-[#0A1F3D] text-white" dir={dir}>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0A1F3D]/90 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-black text-[#C8A951]">سمو</span>
-            <span className="text-2xl font-black text-white">SUMU</span>
+    <div style={{ minHeight: '100vh', background: '#080F1E', color: '#fff', fontFamily: 'system-ui, sans-serif' }}>
+
+      {/* NAV */}
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: scrolled ? 'rgba(8,15,30,0.97)' : 'transparent', backdropFilter: scrolled ? 'blur(20px)' : undefined, borderBottom: scrolled ? '1px solid rgba(0,201,167,0.15)' : 'none', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', transition: 'all 0.3s' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #00C9A7, #0A3D8F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="20" height="20" viewBox="0 0 60 60" fill="none">
+              <path d="M10 8 L30 32 L50 8" stroke="white" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M30 32 L30 54" stroke="white" strokeWidth="7" strokeLinecap="round"/>
+              <path d="M4 30 L18 30" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.7"/>
+              <path d="M2 36 L14 36" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.4"/>
+            </svg>
           </div>
-          <div className="flex items-center gap-3">
-            <LangToggle />
-            <Link to="/login" className="text-sm text-white/70 hover:text-white transition px-3 py-1.5">{isAr ? 'دخول' : 'Login'}</Link>
-            <Link to="/web" className="bg-[#C8A951] text-[#0A1F3D] text-sm font-bold px-4 py-2 rounded-xl hover:bg-[#d4b55a] transition">{isAr ? 'ابدأ الآن' : 'Get Started'}</Link>
+          <span style={{ fontWeight: 900, fontSize: 22, letterSpacing: 3, color: '#fff' }}>YUTA</span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ position: 'relative' }}>
+            <button onClick={() => setLangOpen(v=>!v)}
+              style={{ background: 'rgba(0,201,167,0.1)', border: '1px solid rgba(0,201,167,0.3)', borderRadius: 8, color: '#00C9A7', fontSize: 12, fontWeight: 700, padding: '6px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 5 }}>
+              <Globe size={13} />{LANG_LABELS[lang]}<ChevronDown size={11} />
+            </button>
+            {langOpen && (
+              <div style={{ position: 'absolute', top: 38, right: 0, background: '#0D1B4B', border: '1px solid rgba(0,201,167,0.2)', borderRadius: 12, minWidth: 90, zIndex: 200, overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.4)' }}>
+                {Object.entries(LANG_LABELS).map(([code, label]) => (
+                  <button key={code} onClick={() => { setLang(code); setLangOpen(false) }}
+                    style={{ color: lang===code?'#00C9A7':'#aaa', background: lang===code?'rgba(0,201,167,0.1)':'transparent', fontSize: 13, fontWeight: 700, padding: '10px 16px', width: '100%', textAlign: 'start', border: 'none', cursor: 'pointer', display: 'block' }}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
+          <Link to="/web"
+            style={{ background: 'linear-gradient(135deg, #00C9A7, #0A3D8F)', color: '#fff', fontWeight: 800, fontSize: 13, padding: '8px 20px', borderRadius: 10, textDecoration: 'none' }}>
+            {getL(lang,'ابدأ الآن','Get Started','เริ่มเลย','ເລີ່ມ','Bắt đầu')}
+          </Link>
         </div>
       </nav>
 
-      <section className="pt-32 pb-20 px-4 text-center relative overflow-hidden">
-        <div className="absolute top-20 left-1/4 w-64 h-64 bg-[#C8A951]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-40 right-1/4 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="max-w-4xl mx-auto relative">
-          <div className="inline-flex items-center gap-2 bg-[#C8A951]/10 border border-[#C8A951]/30 rounded-full px-4 py-2 text-sm text-[#C8A951] mb-6">
-            <Zap size={14} />{isAr ? 'منصة الخليج المتكاملة' : 'The Gulf Integrated Platform'}
+      {/* HERO */}
+      <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 24px 60px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        {/* BG effects */}
+        <div style={{ position: 'absolute', top: '20%', left: '10%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,201,167,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '40%', right: '5%', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(10,61,143,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(0,201,167,0.03) 1px, transparent 1px)', backgroundSize: '40px 40px', pointerEvents: 'none' }} />
+
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 800 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,201,167,0.1)', border: '1px solid rgba(0,201,167,0.25)', borderRadius: 30, padding: '6px 16px', marginBottom: 32 }}>
+            <Zap size={13} style={{ color: '#00C9A7' }} />
+            <span style={{ color: '#00C9A7', fontSize: 12, fontWeight: 700, letterSpacing: 2 }}>
+              {getL(lang,'المنصة المتكاملة','THE ALL-IN-ONE PLATFORM','แพลตฟอร์มครบครัน','ແພລດຟອມຄົບວົງຈອນ','NỀN TẢNG TOÀN DIỆN')}
+            </span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">
-            <span className="text-[#C8A951]">{isAr ? 'سمو' : 'SUMU'}</span><br />
-            <span className="text-white text-3xl md:text-5xl font-bold">{isAr ? 'كل احتياجاتك في مكان واحد' : 'Everything You Need in One Place'}</span>
+
+          <h1 style={{ fontSize: 'clamp(48px, 8vw, 88px)', fontWeight: 900, lineHeight: 1.05, marginBottom: 8, letterSpacing: -2 }}>
+            <span style={{ color: '#fff' }}>YUTA</span>
           </h1>
-          <p className="text-white/60 text-lg mb-10 max-w-2xl mx-auto">{isAr ? 'مطاعم · سوبرماركت · تاكسي · توصيل' : 'Restaurants · Supermarket · Taxi · Delivery'}</p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link to="/web" className="bg-[#C8A951] text-[#0A1F3D] font-black px-8 py-4 rounded-2xl text-lg hover:bg-[#d4b55a] transition flex items-center gap-2">
-              {isAr ? 'ابدأ التسوق' : 'Start Shopping'}{isAr ? <ArrowLeft size={20} /> : <ArrowRight size={20} />}
-            </Link>
-            <Link to="/mobile" className="border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl text-lg hover:bg-white/5 transition">{isAr ? 'تطبيق الجوال' : 'Mobile App'}</Link>
+
+          <div style={{ fontSize: 'clamp(24px, 4vw, 42px)', fontWeight: 900, marginBottom: 24, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <span style={{ color: 'rgba(255,255,255,0.3)' }}>{getL(lang,'كل شيء','Everything','ทุกอย่าง','ທຸກຢ່າງ','Tất cả')}</span>
+            <span style={{ color: '#00C9A7', transition: 'opacity 0.5s', display: 'inline-block' }}>{currentWord}</span>
           </div>
+
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 18, marginBottom: 40, maxWidth: 520, margin: '0 auto 40px', lineHeight: 1.7 }}>
+            {getL(lang,
+              'مطاعم · تاكسي · فنادق · طيران · أطباء · صيدليات — كل شيء في مكان واحد',
+              'Restaurants · Taxi · Hotels · Flights · Doctors · Pharmacies — All in one place',
+              'ร้านอาหาร · แท็กซี่ · โรงแรม · เที่ยวบิน · แพทย์ · ร้านยา — ทุกอย่างในที่เดียว',
+              'ຮ້ານອາຫານ · ແທັກຊີ · ໂຮງແຮມ · ສາຍການບິນ · ທ່ານໝໍ — ທຸກຢ່າງໃນທີ່ດຽວ',
+              'Nhà hàng · Taxi · Khách sạn · Chuyến bay · Bác sĩ — Tất cả trong một nơi'
+            )}
+          </p>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
+            <Link to="/web"
+              style={{ background: 'linear-gradient(135deg, #00C9A7 0%, #0A3D8F 100%)', color: '#fff', fontWeight: 800, fontSize: 16, padding: '16px 36px', borderRadius: 16, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 8px 32px rgba(0,201,167,0.3)' }}>
+              {getL(lang,'ابدأ التسوق','Start Shopping','เริ่มช้อปปิ้ง','ເລີ່ມຊື້ເຄື່ອງ','Bắt đầu mua sắm')}
+              <ArrowRight size={18} />
+            </Link>
+            <Link to="/mobile"
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontWeight: 700, fontSize: 16, padding: '16px 32px', borderRadius: 16, textDecoration: 'none' }}>
+              {getL(lang,'تطبيق الجوال','Mobile App','แอปมือถือ','ແອັບ','Ứng dụng')}
+            </Link>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, opacity: 0.4 }}>
+          <div style={{ width: 1, height: 40, background: 'linear-gradient(to bottom, transparent, #00C9A7)' }} />
+          <ChevronDown size={16} style={{ color: '#00C9A7' }} />
         </div>
       </section>
 
-      <section className="py-12 px-4 border-y border-white/10">
-        <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          {stats.map((s, i) => (
+      {/* STATS */}
+      <section style={{ padding: '60px 24px', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(13,27,75,0.5)' }}>
+        <div style={{ maxWidth: 800, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24, textAlign: 'center' }}>
+          {[
+            { num: '500+', en: 'Stores', ar: 'متجر', th: 'ร้านค้า', lo: 'ຮ້ານ', vi: 'Cửa hàng' },
+            { num: '50K+', en: 'Customers', ar: 'عميل', th: 'ลูกค้า', lo: 'ລູກຄ້າ', vi: 'Khách hàng' },
+            { num: '200+', en: 'Drivers', ar: 'سائق', th: 'คนขับ', lo: 'ຄົນຂັບ', vi: 'Tài xế' },
+            { num: '24/7', en: 'Support', ar: 'دعم', th: 'บริการ', lo: 'ບໍລິການ', vi: 'Hỗ trợ' },
+          ].map((s, i) => (
             <div key={i}>
-              <div className="text-3xl font-black text-[#C8A951]">{isAr ? s.numAr : s.numEn}</div>
-              <div className="text-white/50 text-sm mt-1">{isAr ? s.labelAr : s.labelEn}</div>
+              <div style={{ fontSize: 36, fontWeight: 900, color: '#00C9A7', marginBottom: 6 }}>{s.num}</div>
+              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>{getL(lang,s.ar,s.en,s.th,s.lo,s.vi)}</div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-black text-white mb-3">{isAr ? 'لماذا سمو؟' : 'Why SUMU?'}</h2>
-            <p className="text-white/50">{isAr ? 'كل ما تحتاجه في منصة واحدة' : 'Everything you need in one platform'}</p>
+      {/* SERVICES */}
+      <section style={{ padding: '80px 24px' }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <div style={{ color: '#00C9A7', fontSize: 12, fontWeight: 800, letterSpacing: 3, marginBottom: 12 }}>SERVICES</div>
+            <h2 style={{ fontSize: 38, fontWeight: 900, margin: 0 }}>
+              {getL(lang,'خدماتنا','What We Offer','บริการของเรา','ການບໍລິການ','Dịch vụ')}
+            </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((f, i) => (
-              <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/8 transition">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: f.color + '20' }}>
-                  <f.icon size={24} style={{ color: f.color }} />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
+            {[
+              { icon: ShoppingBag, en: 'Shopping', ar: 'تسوق', th: 'ช้อปปิ้ง', lo: 'ຊື້ເຄື່ອງ', vi: 'Mua sắm', desc_en: 'Thousands of products', desc_ar: 'آلاف المنتجات', color: '#00C9A7' },
+              { icon: Car, en: 'Taxi', ar: 'تاكسي', th: 'แท็กซี่', lo: 'ແທັກຊີ', vi: 'Taxi', desc_en: 'Fast rides anywhere', desc_ar: 'رحلات سريعة', color: '#00E5CC' },
+              { icon: Package, en: 'Delivery', ar: 'توصيل', th: 'จัดส่ง', lo: 'ສົ່ງ', vi: 'Giao hàng', desc_en: 'To your doorstep', desc_ar: 'لباب بيتك', color: '#2ECC71' },
+              { icon: MapPin, en: 'Doctors', ar: 'أطباء', th: 'แพทย์', lo: 'ທ່ານໝໍ', vi: 'Bác sĩ', desc_en: 'Book appointments', desc_ar: 'احجز موعد', color: '#3498DB' },
+              { icon: Monitor, en: 'Hotels', ar: 'فنادق', th: 'โรงแรม', lo: 'ໂຮງແຮມ', vi: 'Khách sạn', desc_en: 'Best rates guaranteed', desc_ar: 'أفضل الأسعار', color: '#9B59B6' },
+              { icon: Zap, en: 'Flights', ar: 'طيران', th: 'เที่ยวบิน', lo: 'ສາຍການບິນ', vi: 'Chuyến bay', desc_en: 'Compare & book', desc_ar: 'قارن واحجز', color: '#E74C3C' },
+            ].map((s, i) => (
+              <Link key={i} to="/web"
+                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 20, padding: 24, textDecoration: 'none', display: 'block', transition: 'all 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.background='rgba(0,201,167,0.05)'; e.currentTarget.style.borderColor='rgba(0,201,167,0.2)' }}
+                onMouseLeave={e => { e.currentTarget.style.background='rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor='rgba(255,255,255,0.07)' }}>
+                <div style={{ width: 48, height: 48, borderRadius: 14, background: `${s.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                  <s.icon size={22} style={{ color: s.color }} />
                 </div>
-                <h3 className="font-bold text-white mb-2">{isAr ? f.titleAr : f.titleEn}</h3>
-                <p className="text-white/50 text-sm leading-relaxed">{isAr ? f.descAr : f.descEn}</p>
-              </div>
+                <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 16, margin: '0 0 6px' }}>{getL(lang,s.ar,s.en,s.th,s.lo,s.vi)}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: 0 }}>{lang==='ar'?s.desc_ar:s.desc_en}</p>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-white/3">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-black text-white mb-3">{isAr ? 'اختر منصتك' : 'Choose Your Platform'}</h2>
+      {/* PORTALS */}
+      <section style={{ padding: '80px 24px', background: 'rgba(13,27,75,0.3)' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <div style={{ color: '#00C9A7', fontSize: 12, fontWeight: 800, letterSpacing: 3, marginBottom: 12 }}>PLATFORMS</div>
+            <h2 style={{ fontSize: 36, fontWeight: 900, margin: 0 }}>
+              {getL(lang,'اختر منصتك','Choose Your Platform','เลือกแพลตฟอร์ม','ເລືອກ','Chọn nền tảng')}
+            </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {portals.map((p, i) => (
-              <Link key={i} to={p.href} className="bg-[#0F2A47] border border-white/10 rounded-2xl p-6 hover:border-[#C8A951]/50 transition">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: p.color + '20' }}>
-                  <p.icon size={28} style={{ color: p.color }} />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 16 }}>
+            {[
+              { icon: Monitor, en: 'Web Platform', ar: 'المنصة الإلكترونية', th: 'เว็บไซต์', lo: 'ເວັບໄຊ', vi: 'Website', desc_en: 'Shop and book services online', desc_ar: 'تسوق واحجز الخدمات', href: '/web', color: '#00C9A7' },
+              { icon: Smartphone, en: 'Mobile App', ar: 'تطبيق الجوال', th: 'แอปมือถือ', lo: 'ແອັບ', vi: 'Ứng dụng', desc_en: 'Download our mobile app', desc_ar: 'حمل تطبيقنا', href: '/mobile', color: '#2ECC71' },
+              { icon: Store, en: 'Vendor Portal', ar: 'بوابة المورد', th: 'พอร์ทัลร้านค้า', lo: 'ຜູ້ຂາຍ', vi: 'Nhà bán hàng', desc_en: 'Manage your store easily', desc_ar: 'أدر متجرك بسهولة', href: '/vendor/login', color: '#9B59B6' },
+              { icon: Truck, en: 'Driver Portal', ar: 'بوابة السائق', th: 'พอร์ทัลคนขับ', lo: 'ຄົນຂັບ', vi: 'Tài xế', desc_en: 'Receive orders and earn', desc_ar: 'استقبل طلبات واكسب', href: '/driver/login', color: '#E74C3C' },
+            ].map((p, i) => (
+              <Link key={i} to={p.href}
+                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: '28px 24px', textDecoration: 'none', display: 'flex', alignItems: 'flex-start', gap: 16 }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor=p.color+'40' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(255,255,255,0.08)' }}>
+                <div style={{ width: 52, height: 52, borderRadius: 16, background: `${p.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <p.icon size={24} style={{ color: p.color }} />
                 </div>
-                <h3 className="font-bold text-white mb-2">{isAr ? p.labelAr : p.labelEn}</h3>
-                <p className="text-white/50 text-sm mb-4">{isAr ? p.descAr : p.descEn}</p>
-                <div className="flex items-center gap-1 text-[#C8A951] text-sm font-semibold">
-                  {isAr ? 'فتح' : 'Open'}{isAr ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
+                <div>
+                  <h3 style={{ color: '#fff', fontWeight: 800, fontSize: 16, margin: '0 0 6px' }}>{getL(lang,p.ar,p.en,p.th,p.lo,p.vi)}</h3>
+                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: '0 0 12px' }}>{lang==='ar'?p.desc_ar:p.desc_en}</p>
+                  <div style={{ color: p.color, fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    {getL(lang,'فتح','Open','เปิด','ເປີດ','Mở')} <ArrowRight size={13} />
+                  </div>
                 </div>
               </Link>
             ))}
@@ -120,25 +217,46 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 px-4 text-center">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-black text-white mb-4">{isAr ? 'جاهز للبدء؟' : 'Ready to Start?'}</h2>
-          <p className="text-white/50 mb-8">{isAr ? 'انضم إلى آلاف العملاء الراضين' : 'Join thousands of satisfied customers'}</p>
-          <Link to="/web" className="bg-[#C8A951] text-[#0A1F3D] font-black px-10 py-4 rounded-2xl text-lg hover:bg-[#d4b55a] transition inline-flex items-center gap-2">
-            {isAr ? 'ابدأ مجاناً' : 'Start for Free'}{isAr ? <ArrowLeft size={20} /> : <ArrowRight size={20} />}
+      {/* CTA */}
+      <section style={{ padding: '100px 24px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, rgba(0,201,167,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h2 style={{ fontSize: 42, fontWeight: 900, marginBottom: 16 }}>
+            {getL(lang,'جاهز للبدء؟','Ready to Start?','พร้อมเริ่มต้น?','ພ້ອມເລີ່ມ?','Sẵn sàng bắt đầu?')}
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 16, marginBottom: 36 }}>
+            {getL(lang,'انضم إلى آلاف العملاء الراضين','Join thousands of happy customers','ร่วมกับลูกค้าหลายพันคน','ເຂົ້າຮ່ວມກັບລູກຄ້າ','Tham gia cùng hàng nghìn khách hàng')}
+          </p>
+          <Link to="/web"
+            style={{ background: 'linear-gradient(135deg, #00C9A7, #0A3D8F)', color: '#fff', fontWeight: 800, fontSize: 18, padding: '18px 48px', borderRadius: 18, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 10, boxShadow: '0 12px 40px rgba(0,201,167,0.25)' }}>
+            {getL(lang,'ابدأ مجاناً','Start for Free','เริ่มฟรี','ເລີ່ມຟຣີ','Bắt đầu miễn phí')}
+            <ArrowRight size={20} />
           </Link>
         </div>
       </section>
 
-      <footer className="border-t border-white/10 py-8 px-4 text-center">
-        <div className="flex flex-wrap items-center justify-center gap-4 text-white/40 text-sm mb-4">
-          <Link to="/web/privacy" className="hover:text-white transition">{isAr ? 'سياسة الخصوصية' : 'Privacy Policy'}</Link>
-          <span>·</span>
-          <Link to="/web/contact" className="hover:text-white transition">{isAr ? 'تواصل معنا' : 'Contact Us'}</Link>
-          <span>·</span>
-          <Link to="/admin/login" className="hover:text-white transition">{isAr ? 'لوحة الإدارة' : 'Admin'}</Link>
+      {/* FOOTER */}
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '32px 24px', textAlign: 'center' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16, marginBottom: 16 }}>
+          {[
+            { en: 'Privacy Policy', ar: 'سياسة الخصوصية', href: '/web/privacy' },
+            { en: 'Contact Us', ar: 'تواصل معنا', href: '/web/contact' },
+            { en: 'Admin', ar: 'الإدارة', href: '/admin/login' },
+          ].map((l, i) => (
+            <Link key={i} to={l.href} style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13, textDecoration: 'none' }}>
+              {lang==='ar'?l.ar:l.en}
+            </Link>
+          ))}
         </div>
-        <p className="text-white/20 text-xs">© 2026 سمو SUMU — {isAr ? 'جميع الحقوق محفوظة' : 'All rights reserved'}</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 8 }}>
+          <div style={{ width: 24, height: 24, borderRadius: 6, background: 'linear-gradient(135deg, #00C9A7, #0A3D8F)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="13" height="13" viewBox="0 0 60 60" fill="none">
+              <path d="M10 8 L30 32 L50 8" stroke="white" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M30 32 L30 54" stroke="white" strokeWidth="7" strokeLinecap="round"/>
+            </svg>
+          </div>
+          <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 12 }}>© 2026 YUTA — {getL(lang,'جميع الحقوق محفوظة','All rights reserved','สงวนลิขสิทธิ์','ສະຫງວນລິຂະສິດ','Bản quyền thuộc về YUTA')}</span>
+        </div>
       </footer>
     </div>
   )

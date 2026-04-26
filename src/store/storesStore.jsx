@@ -11,7 +11,7 @@ const storesMeta = {
 
 // Map API snake_case store → component-expected shape
 function mapStore(s) {
-  const meta = storesMeta[s.id] || { catId: 6, bg: '#FBF8F2', emoji: s.logo || '🏪', commission: 10, revenue: 0, orders: 0 }
+  const meta = storesMeta[s.id] || { catId: 6, bg: '#F0F9F8', emoji: s.logo || '🏪', commission: 10, revenue: 0, orders: 0 }
   return {
     ...s,
     // keep snake_case originals AND add camelCase aliases

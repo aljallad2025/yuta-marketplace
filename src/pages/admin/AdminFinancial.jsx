@@ -24,8 +24,8 @@ export default function AdminFinancial() {
   const { t, isAr } = useLang()
 
   const kpis = [
-    { labelEn: 'Total Revenue (Mar)', labelAr: 'إجمالي الإيرادات (مارس)', value: '268,000', icon: DollarSign, color: '#0F2A47', change: '+19.6%' },
-    { labelEn: 'Commission Earned', labelAr: 'العمولة المحققة', value: '26,800', icon: TrendingUp, color: '#C8A951', change: '+19.6%' },
+    { labelEn: 'Total Revenue (Mar)', labelAr: 'إجمالي الإيرادات (مارس)', value: '268,000', icon: DollarSign, color: '#0D1B4B', change: '+19.6%' },
+    { labelEn: 'Commission Earned', labelAr: 'العمولة المحققة', value: '26,800', icon: TrendingUp, color: '#00C9A7', change: '+19.6%' },
     { labelEn: 'Pending Payouts', labelAr: 'مدفوعات معلقة', value: '24,600', icon: ArrowDownCircle, color: '#E74C3C', changeEn: '12 requests', changeAr: '١٢ طلب' },
     { labelEn: 'Completed Payouts', labelAr: 'مدفوعات مكتملة', value: '142,000', icon: CheckCircle, color: '#2ECC71', changeEn: 'This month', changeAr: 'هذا الشهر' },
   ]
@@ -47,17 +47,17 @@ export default function AdminFinancial() {
     <div className="p-6 space-y-6" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#0F2A47]">{t('financial')}</h1>
+          <h1 className="text-2xl font-black text-[#0D1B4B]">{t('financial')}</h1>
           <p className="text-sm text-[#666]">{isAr ? 'الإيرادات والعمولات والمدفوعات' : 'Revenue, commissions & payouts overview'}</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2.5 bg-[#C8A951] text-[#0F2A47] text-sm font-black rounded-xl">
+        <button className="flex items-center gap-2 px-4 py-2.5 bg-[#00C9A7] text-[#0D1B4B] text-sm font-black rounded-xl">
           <Download size={15} /> {t('exportCSV')}
         </button>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {kpis.map(card => (
-          <div key={card.labelEn} className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DC]">
+          <div key={card.labelEn} className="bg-white rounded-2xl p-5 shadow-sm border border-[#D0EDEA]">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs text-[#666] font-semibold">{isAr ? card.labelAr : card.labelEn}</p>
@@ -74,14 +74,14 @@ export default function AdminFinancial() {
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DC]">
+      <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#D0EDEA]">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-black text-[#0F2A47]">
+          <h2 className="font-black text-[#0D1B4B]">
             {isAr ? 'الإيرادات مقابل العمولة (٦ أشهر)' : 'Revenue vs Commission (6 months)'}
           </h2>
           <div className="flex items-center gap-4 text-xs">
-            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#0F2A47] inline-block"></span> {isAr ? 'الإيرادات' : 'Revenue'}</span>
-            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#C8A951] inline-block"></span> {isAr ? 'العمولة' : 'Commission'}</span>
+            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#0D1B4B] inline-block"></span> {isAr ? 'الإيرادات' : 'Revenue'}</span>
+            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-[#00C9A7] inline-block"></span> {isAr ? 'العمولة' : 'Commission'}</span>
           </div>
         </div>
         <ResponsiveContainer width="100%" height={240}>
@@ -89,33 +89,33 @@ export default function AdminFinancial() {
             <CartesianGrid strokeDasharray="3 3" stroke="#F0ECE4" vertical={false} />
             <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#666' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 11, fill: '#666' }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #E8E4DC', fontSize: 12 }} />
-            <Bar dataKey="revenue" fill="#0F2A47" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="commission" fill="#C8A951" radius={[4, 4, 0, 0]} />
+            <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #D0EDEA', fontSize: 12 }} />
+            <Bar dataKey="revenue" fill="#0D1B4B" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="commission" fill="#00C9A7" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DC]">
-        <h2 className="font-black text-[#0F2A47] mb-4">
+      <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#D0EDEA]">
+        <h2 className="font-black text-[#0D1B4B] mb-4">
           {isAr ? 'إعدادات العمولة حسب القسم' : 'Commission Settings by Category'}
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {commissions.map(c => (
-            <div key={c.catEn} className="flex items-center justify-between p-3 bg-[#FBF8F2] rounded-xl">
+            <div key={c.catEn} className="flex items-center justify-between p-3 bg-[#F0F9F8] rounded-xl">
               <p className="text-sm font-black text-[#444]">{isAr ? c.catAr : c.catEn}</p>
               <div className="flex items-center gap-2">
-                <span className="font-black text-[#C8A951] text-sm">{c.rate}%</span>
-                <button className="text-xs text-[#0F2A47] underline">{isAr ? 'تعديل' : 'Edit'}</button>
+                <span className="font-black text-[#00C9A7] text-sm">{c.rate}%</span>
+                <button className="text-xs text-[#0D1B4B] underline">{isAr ? 'تعديل' : 'Edit'}</button>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#D0EDEA] overflow-hidden">
         <div className="p-4 border-b border-[#F0ECE4] flex items-center justify-between">
-          <h2 className="font-black text-[#0F2A47]">{isAr ? 'طلبات السحب' : 'Withdrawal Requests'}</h2>
+          <h2 className="font-black text-[#0D1B4B]">{isAr ? 'طلبات السحب' : 'Withdrawal Requests'}</h2>
           <span className="text-xs bg-[#E74C3C]/10 text-[#E74C3C] px-2 py-0.5 rounded-full font-black">
             {isAr ? '٢ معلق' : '2 pending'}
           </span>
@@ -123,7 +123,7 @@ export default function AdminFinancial() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-[#FBF8F2] border-b border-[#E8E4DC]">
+              <tr className="bg-[#F0F9F8] border-b border-[#D0EDEA]">
                 {wdHeaders.map(h => (
                   <th key={h} className="text-start px-4 py-3 text-xs font-black text-[#666] uppercase tracking-wide">{h}</th>
                 ))}
@@ -131,12 +131,12 @@ export default function AdminFinancial() {
             </thead>
             <tbody>
               {withdrawals.map((w, i) => (
-                <tr key={w.id} className={`${i < withdrawals.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#FBF8F2]`}>
-                  <td className="px-4 py-3.5 font-mono text-xs text-[#0F2A47] font-black">{w.id}</td>
+                <tr key={w.id} className={`${i < withdrawals.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#F0F9F8]`}>
+                  <td className="px-4 py-3.5 font-mono text-xs text-[#0D1B4B] font-black">{w.id}</td>
                   <td className="px-4 py-3.5 text-sm text-[#444]">{isAr ? w.nameAr : w.nameEn}</td>
                   <td className="px-4 py-3.5">
                     <span className={`text-xs px-2 py-0.5 rounded-full font-black ${
-                      w.typeEn === 'Driver' ? 'bg-[#0F2A47]/10 text-[#0F2A47]' : 'bg-[#C8A951]/15 text-[#a88b3a]'
+                      w.typeEn === 'Driver' ? 'bg-[#0D1B4B]/10 text-[#0D1B4B]' : 'bg-[#00C9A7]/15 text-[#a88b3a]'
                     }`}>{isAr ? w.typeAr : w.typeEn}</span>
                   </td>
                   <td className="px-4 py-3.5 font-black text-sm text-[#222]">{w.amount.toLocaleString()} {isAr ? 'د' : 'SAR'}</td>

@@ -25,9 +25,9 @@ export default function MobileOrderPlaced() {
   if (!order) return null
 
   return (
-    <div className="bg-[#FBF8F2] min-h-full flex flex-col" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="bg-[#F0F9F8] min-h-full flex flex-col" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Success Header */}
-      <div className="bg-[#0F2A47] px-4 pt-6 pb-8 flex flex-col items-center text-center">
+      <div className="bg-[#0D1B4B] px-4 pt-6 pb-8 flex flex-col items-center text-center">
         <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mb-3 shadow-lg animate-bounce">
           <CheckCircle size={32} className="text-white" />
         </div>
@@ -52,23 +52,23 @@ export default function MobileOrderPlaced() {
       </div>
 
       {/* Progress Steps */}
-      <div className="mx-3 mt-4 bg-white rounded-2xl p-4 border border-[#E8E4DC] shadow-sm">
-        <p className="font-black text-[#0F2A47] text-xs mb-4">{isAr ? 'حالة الطلب' : 'Order Status'}</p>
+      <div className="mx-3 mt-4 bg-white rounded-2xl p-4 border border-[#D0EDEA] shadow-sm">
+        <p className="font-black text-[#0D1B4B] text-xs mb-4">{isAr ? 'حالة الطلب' : 'Order Status'}</p>
         <div className="space-y-3">
           {STEPS.map((s, i) => (
             <div key={i} className="flex items-center gap-3">
               <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                i < step ? 'bg-emerald-500' : i === step ? 'bg-[#C8A951] animate-pulse' : 'bg-[#E8E4DC]'
+                i < step ? 'bg-emerald-500' : i === step ? 'bg-[#00C9A7] animate-pulse' : 'bg-[#D0EDEA]'
               }`}>
                 {i < step
                   ? <CheckCircle size={14} className="text-white" />
                   : <div className="w-2 h-2 rounded-full bg-white" />
                 }
               </div>
-              <p className={`text-xs font-bold ${i <= step ? 'text-[#0F2A47]' : 'text-[#ccc]'}`}>
+              <p className={`text-xs font-bold ${i <= step ? 'text-[#0D1B4B]' : 'text-[#ccc]'}`}>
                 {isAr ? s.ar : s.en}
               </p>
-              {i === step && <span className="text-[10px] text-[#C8A951] font-bold ms-auto">{isAr ? 'الآن' : 'Now'}</span>}
+              {i === step && <span className="text-[10px] text-[#00C9A7] font-bold ms-auto">{isAr ? 'الآن' : 'Now'}</span>}
             </div>
           ))}
         </div>
@@ -83,21 +83,21 @@ export default function MobileOrderPlaced() {
           {[0,30,60,90,120,130].map(y => (
             <line key={y} x1="0" y1={y} x2="350" y2={y} stroke="#94a3b8" strokeWidth="0.5"/>
           ))}
-          <path d="M50 110 C100 90, 160 70, 220 50 C270 35, 300 30, 310 25" stroke="#0F2A47" strokeWidth="3" fill="none" strokeDasharray="6,3"/>
+          <path d="M50 110 C100 90, 160 70, 220 50 C270 35, 300 30, 310 25" stroke="#0D1B4B" strokeWidth="3" fill="none" strokeDasharray="6,3"/>
           <circle cx="50" cy="110" r="6" fill="#2ECC71"/>
           <circle cx="310" cy="25" r="6" fill="#E74C3C"/>
-          <circle cx="180" cy="65" r="10" fill="#0F2A47"/>
+          <circle cx="180" cy="65" r="10" fill="#0D1B4B"/>
           <text x="180" y="70" textAnchor="middle" fill="white" fontSize="9">🛵</text>
         </svg>
-        <div className="absolute top-2 start-2 bg-white rounded-lg px-2 py-1 shadow text-[10px] font-black text-[#0F2A47]">
+        <div className="absolute top-2 start-2 bg-white rounded-lg px-2 py-1 shadow text-[10px] font-black text-[#0D1B4B]">
           <Clock size={9} className="inline me-1" />
           ~{order.eta} {isAr ? 'دقيقة' : 'min'}
         </div>
       </div>
 
       {/* Items */}
-      <div className="mx-3 mt-3 bg-white rounded-2xl p-4 border border-[#E8E4DC] shadow-sm">
-        <p className="font-black text-[#0F2A47] text-xs mb-3">{isAr ? 'تفاصيل الطلب' : 'Order Details'}</p>
+      <div className="mx-3 mt-3 bg-white rounded-2xl p-4 border border-[#D0EDEA] shadow-sm">
+        <p className="font-black text-[#0D1B4B] text-xs mb-3">{isAr ? 'تفاصيل الطلب' : 'Order Details'}</p>
         <div className="space-y-2">
           {(order.items || []).map((item, i) => (
             <div key={i} className="flex justify-between text-xs text-[#666]">
@@ -105,7 +105,7 @@ export default function MobileOrderPlaced() {
               <span>{item.price * item.qty} {isAr ? 'د' : 'AED'}</span>
             </div>
           ))}
-          <div className="border-t border-[#F0ECE4] pt-2 flex justify-between font-black text-[#0F2A47]">
+          <div className="border-t border-[#F0ECE4] pt-2 flex justify-between font-black text-[#0D1B4B]">
             <span>{isAr ? 'الإجمالي' : 'Total'}</span>
             <span>{order.total} {isAr ? 'د' : 'AED'}</span>
           </div>
@@ -116,13 +116,13 @@ export default function MobileOrderPlaced() {
       <div className="px-3 mt-4 pb-6 flex gap-2">
         <button
           onClick={() => setActiveTab('orders')}
-          className="flex-1 py-3 bg-[#0F2A47] text-white font-black text-xs rounded-2xl active:opacity-90"
+          className="flex-1 py-3 bg-[#0D1B4B] text-white font-black text-xs rounded-2xl active:opacity-90"
         >
           {isAr ? 'تتبع الطلب' : 'Track Order'}
         </button>
         <button
           onClick={() => setActiveTab('home')}
-          className="flex-1 py-3 bg-white text-[#0F2A47] font-black text-xs rounded-2xl border border-[#E8E4DC] active:bg-[#FBF8F2]"
+          className="flex-1 py-3 bg-white text-[#0D1B4B] font-black text-xs rounded-2xl border border-[#D0EDEA] active:bg-[#F0F9F8]"
         >
           {isAr ? 'الرئيسية' : 'Back Home'}
         </button>

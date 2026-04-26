@@ -4,7 +4,7 @@ import { useLang } from '../../i18n/LangContext'
 import { useMobile } from '../../store/mobileStore.jsx'
 
 const PAYMENT_METHODS = [
-  { id: 'wallet', iconComp: Wallet, labelAr: 'محفظة SUMU', labelEn: 'SUMU Wallet', subAr: null, subEn: null },
+  { id: 'wallet', iconComp: Wallet, labelAr: 'محفظة YUTA', labelEn: 'YUTA Wallet', subAr: null, subEn: null },
   { id: 'card',   iconComp: CreditCard, labelAr: 'بطاقة ائتمانية', labelEn: 'Credit Card', subAr: '•••• 4521', subEn: '•••• 4521' },
   { id: 'cash',   iconComp: DollarSign, labelAr: 'نقداً عند الاستلام', labelEn: 'Cash on Delivery', subAr: null, subEn: null },
 ]
@@ -37,8 +37,8 @@ export default function MobileCheckout() {
   }
 
   return (
-    <div className="bg-[#FBF8F2] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
-      <div className="bg-[#0F2A47] px-4 pt-2 pb-4 flex items-center gap-3">
+    <div className="bg-[#F0F9F8] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="bg-[#0D1B4B] px-4 pt-2 pb-4 flex items-center gap-3">
         <button onClick={goBack} className="p-2 bg-white/10 rounded-xl active:bg-white/20">
           <ArrowLeft size={16} className="text-white" style={{ transform: isAr ? 'rotate(180deg)' : undefined }} />
         </button>
@@ -47,10 +47,10 @@ export default function MobileCheckout() {
 
       <div className="p-3 space-y-3">
         {/* Delivery Address */}
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E4DC] shadow-sm">
+        <div className="bg-white rounded-2xl p-4 border border-[#D0EDEA] shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <p className="font-black text-[#0F2A47] text-xs flex items-center gap-1.5">
-              <MapPin size={13} className="text-[#C8A951]" /> {isAr ? 'عنوان التوصيل' : 'Delivery Address'}
+            <p className="font-black text-[#0D1B4B] text-xs flex items-center gap-1.5">
+              <MapPin size={13} className="text-[#00C9A7]" /> {isAr ? 'عنوان التوصيل' : 'Delivery Address'}
             </p>
           </div>
           <div className="space-y-2">
@@ -59,11 +59,11 @@ export default function MobileCheckout() {
                 key={addr.id}
                 onClick={() => setSelectedAddress(addr.id)}
                 className={`w-full flex items-center gap-3 p-3 rounded-xl border text-start transition-all ${
-                  selectedAddress === addr.id ? 'border-[#0F2A47] bg-[#0F2A47]/5' : 'border-[#F0ECE4]'
+                  selectedAddress === addr.id ? 'border-[#0D1B4B] bg-[#0D1B4B]/5' : 'border-[#F0ECE4]'
                 }`}
               >
                 <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                  selectedAddress === addr.id ? 'border-[#0F2A47] bg-[#0F2A47]' : 'border-[#ccc]'
+                  selectedAddress === addr.id ? 'border-[#0D1B4B] bg-[#0D1B4B]' : 'border-[#ccc]'
                 }`}>
                   {selectedAddress === addr.id && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                 </div>
@@ -77,9 +77,9 @@ export default function MobileCheckout() {
         </div>
 
         {/* Delivery Time */}
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E4DC] shadow-sm">
-          <p className="font-black text-[#0F2A47] text-xs flex items-center gap-1.5 mb-3">
-            <Clock size={13} className="text-[#C8A951]" /> {isAr ? 'وقت التوصيل' : 'Delivery Time'}
+        <div className="bg-white rounded-2xl p-4 border border-[#D0EDEA] shadow-sm">
+          <p className="font-black text-[#0D1B4B] text-xs flex items-center gap-1.5 mb-3">
+            <Clock size={13} className="text-[#00C9A7]" /> {isAr ? 'وقت التوصيل' : 'Delivery Time'}
           </p>
           <div className="flex gap-2">
             {[
@@ -89,7 +89,7 @@ export default function MobileCheckout() {
               <button
                 key={opt.id}
                 className={`flex-1 py-2 rounded-xl text-xs font-black border transition-all ${
-                  opt.id === 'asap' ? 'border-[#0F2A47] bg-[#0F2A47]/5 text-[#0F2A47]' : 'border-[#E8E4DC] text-[#999]'
+                  opt.id === 'asap' ? 'border-[#0D1B4B] bg-[#0D1B4B]/5 text-[#0D1B4B]' : 'border-[#D0EDEA] text-[#999]'
                 }`}
               >
                 {isAr ? opt.ar : opt.en}
@@ -102,9 +102,9 @@ export default function MobileCheckout() {
         </div>
 
         {/* Payment */}
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E4DC] shadow-sm">
-          <p className="font-black text-[#0F2A47] text-xs flex items-center gap-1.5 mb-3">
-            <CreditCard size={13} className="text-[#C8A951]" /> {isAr ? 'طريقة الدفع' : 'Payment Method'}
+        <div className="bg-white rounded-2xl p-4 border border-[#D0EDEA] shadow-sm">
+          <p className="font-black text-[#0D1B4B] text-xs flex items-center gap-1.5 mb-3">
+            <CreditCard size={13} className="text-[#00C9A7]" /> {isAr ? 'طريقة الدفع' : 'Payment Method'}
           </p>
           <div className="space-y-2">
             {PAYMENT_METHODS.map(pm => {
@@ -117,15 +117,15 @@ export default function MobileCheckout() {
                   onClick={() => setPayMethod(pm.id)}
                   disabled={insufficientFunds}
                   className={`w-full flex items-center gap-3 p-3 rounded-xl border text-start transition-all ${
-                    payMethod === pm.id ? 'border-[#0F2A47] bg-[#0F2A47]/5' : 'border-[#F0ECE4]'
+                    payMethod === pm.id ? 'border-[#0D1B4B] bg-[#0D1B4B]/5' : 'border-[#F0ECE4]'
                   } ${insufficientFunds ? 'opacity-50' : ''}`}
                 >
                   <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                    payMethod === pm.id ? 'border-[#0F2A47] bg-[#0F2A47]' : 'border-[#ccc]'
+                    payMethod === pm.id ? 'border-[#0D1B4B] bg-[#0D1B4B]' : 'border-[#ccc]'
                   }`}>
                     {payMethod === pm.id && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                   </div>
-                  <Icon size={14} className="text-[#0F2A47] flex-shrink-0" />
+                  <Icon size={14} className="text-[#0D1B4B] flex-shrink-0" />
                   <div className="flex-1">
                     <p className="text-xs font-black text-[#222]">{isAr ? pm.labelAr : pm.labelEn}</p>
                     {isWallet && (
@@ -142,8 +142,8 @@ export default function MobileCheckout() {
         </div>
 
         {/* Summary */}
-        <div className="bg-white rounded-2xl p-4 border border-[#E8E4DC] shadow-sm">
-          <p className="font-black text-[#0F2A47] text-xs mb-3">{isAr ? 'ملخص الطلب' : 'Order Summary'}</p>
+        <div className="bg-white rounded-2xl p-4 border border-[#D0EDEA] shadow-sm">
+          <p className="font-black text-[#0D1B4B] text-xs mb-3">{isAr ? 'ملخص الطلب' : 'Order Summary'}</p>
           <div className="space-y-2 text-xs text-[#666]">
             {cart.map(({ product, qty }) => (
               <div key={product.id} className="flex justify-between">
@@ -167,7 +167,7 @@ export default function MobileCheckout() {
                 <span>-{discount} {isAr ? 'د' : 'AED'}</span>
               </div>
             )}
-            <div className="border-t border-[#F0ECE4] pt-2 flex justify-between font-black text-[#0F2A47] text-sm">
+            <div className="border-t border-[#F0ECE4] pt-2 flex justify-between font-black text-[#0D1B4B] text-sm">
               <span>{isAr ? 'الإجمالي' : 'Total'}</span>
               <span>{finalTotal} {isAr ? 'درهم' : 'AED'}</span>
             </div>
@@ -177,7 +177,7 @@ export default function MobileCheckout() {
         <button
           onClick={handlePlace}
           disabled={placing || (payMethod === 'wallet' && walletBalance < finalTotal)}
-          className="w-full py-4 bg-[#0F2A47] text-white font-black text-sm rounded-2xl shadow-lg active:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2"
+          className="w-full py-4 bg-[#0D1B4B] text-white font-black text-sm rounded-2xl shadow-lg active:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2"
         >
           {placing ? (
             <span className="animate-pulse">{isAr ? 'جارٍ التأكيد...' : 'Placing order...'}</span>

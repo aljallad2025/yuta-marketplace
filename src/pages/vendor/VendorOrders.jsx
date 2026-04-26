@@ -44,7 +44,7 @@ export default function VendorOrders() {
   return (
     <div className="p-6" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="mb-6">
-        <h1 className="text-xl font-black text-[#0F2A47]">{isAr ? 'إدارة الطلبات' : 'Order Management'}</h1>
+        <h1 className="text-xl font-black text-[#0D1B4B]">{isAr ? 'إدارة الطلبات' : 'Order Management'}</h1>
         <p className="text-sm text-[#888] mt-0.5">{filtered.length} {isAr ? 'طلب' : 'orders'}</p>
       </div>
 
@@ -53,7 +53,7 @@ export default function VendorOrders() {
         {tabs.map(tab => (
           <button key={tab.key} onClick={() => setStatusFilter(tab.key)}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black whitespace-nowrap transition-all ${
-              statusFilter === tab.key ? 'bg-[#0F2A47] text-white' : 'bg-white border border-[#E8E4DC] text-[#666] hover:bg-[#FBF8F2]'
+              statusFilter === tab.key ? 'bg-[#0D1B4B] text-white' : 'bg-white border border-[#D0EDEA] text-[#666] hover:bg-[#F0F9F8]'
             }`}>
             {isAr ? tab.ar : tab.en}
             {tab.count > 0 && (
@@ -66,7 +66,7 @@ export default function VendorOrders() {
       </div>
 
       {/* Search */}
-      <div className="flex items-center bg-white border border-[#E8E4DC] rounded-xl px-3 py-2.5 gap-2 mb-4 max-w-sm">
+      <div className="flex items-center bg-white border border-[#D0EDEA] rounded-xl px-3 py-2.5 gap-2 mb-4 max-w-sm">
         <Search size={14} className="text-[#999]" />
         <input value={search} onChange={e => setSearch(e.target.value)}
           placeholder={isAr ? 'بحث باسم العميل أو رقم الطلب...' : 'Search by customer or order ID...'}
@@ -76,13 +76,13 @@ export default function VendorOrders() {
       {/* Orders list */}
       <div className="space-y-3">
         {filtered.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl border border-[#E8E4DC]">
+          <div className="text-center py-16 bg-white rounded-2xl border border-[#D0EDEA]">
             <div className="text-4xl mb-3">📋</div>
             <p className="font-black text-[#444]">{isAr ? 'لا توجد طلبات' : 'No orders found'}</p>
           </div>
         ) : filtered.map(order => (
           <div key={order.id} className={`bg-white rounded-2xl border-2 overflow-hidden transition-all ${
-            order.status === 'pending' ? 'border-amber-300' : 'border-[#E8E4DC]'
+            order.status === 'pending' ? 'border-amber-300' : 'border-[#D0EDEA]'
           }`}>
             {/* Order header */}
             <div className="p-4 flex items-center gap-3">
@@ -92,7 +92,7 @@ export default function VendorOrders() {
               )}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-black text-[#0F2A47] text-sm">{order.id}</span>
+                  <span className="font-black text-[#0D1B4B] text-sm">{order.id}</span>
                   <Badge variant={statusMap[order.status]?.color || 'pending'}>
                     {isAr ? statusMap[order.status]?.ar : statusMap[order.status]?.en}
                   </Badge>
@@ -107,29 +107,29 @@ export default function VendorOrders() {
                 </div>
               </div>
               <div className="text-end flex-shrink-0">
-                <p className="font-black text-[#0F2A47] text-lg">{order.total}</p>
+                <p className="font-black text-[#0D1B4B] text-lg">{order.total}</p>
                 <p className="text-xs text-[#888]">{isAr ? 'درهم' : 'AED'}</p>
               </div>
               <button onClick={() => setExpanded(expanded === order.id ? null : order.id)}
-                className="p-2 rounded-xl hover:bg-[#FBF8F2] text-[#888]">
+                className="p-2 rounded-xl hover:bg-[#F0F9F8] text-[#888]">
                 {expanded === order.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
             </div>
 
             {/* Expanded details */}
             {expanded === order.id && (
-              <div className="border-t border-[#F0ECE4] px-4 py-4 bg-[#FBF8F2]/50">
+              <div className="border-t border-[#F0ECE4] px-4 py-4 bg-[#F0F9F8]/50">
                 {/* Items */}
                 <div className="mb-4">
                   <p className="text-xs font-black text-[#666] uppercase mb-2">{isAr ? 'المنتجات' : 'Items'}</p>
                   <div className="space-y-2">
                     {order.items.map((item, i) => (
-                      <div key={i} className="flex items-center justify-between bg-white rounded-xl p-3 border border-[#E8E4DC]">
+                      <div key={i} className="flex items-center justify-between bg-white rounded-xl p-3 border border-[#D0EDEA]">
                         <div className="flex items-center gap-2">
-                          <span className="w-6 h-6 bg-[#0F2A47]/10 rounded-lg flex items-center justify-center text-xs font-black text-[#0F2A47]">{item.qty}x</span>
+                          <span className="w-6 h-6 bg-[#0D1B4B]/10 rounded-lg flex items-center justify-center text-xs font-black text-[#0D1B4B]">{item.qty}x</span>
                           <span className="text-sm font-black text-[#222]">{isAr ? item.nameAr : item.nameEn}</span>
                         </div>
-                        <span className="text-sm font-black text-[#C8A951]">{item.price * item.qty} {isAr ? 'د' : 'AED'}</span>
+                        <span className="text-sm font-black text-[#00C9A7]">{item.price * item.qty} {isAr ? 'د' : 'AED'}</span>
                       </div>
                     ))}
                   </div>
@@ -143,7 +143,7 @@ export default function VendorOrders() {
                       <span>{isAr ? 'رسوم التوصيل' : 'Delivery Fee'}</span>
                       <span className="font-black">{order.deliveryFee} {isAr ? 'د' : 'AED'}</span>
                     </div>
-                    <div className="flex justify-between text-sm font-black text-[#0F2A47] pt-1 border-t border-[#E8E4DC]">
+                    <div className="flex justify-between text-sm font-black text-[#0D1B4B] pt-1 border-t border-[#D0EDEA]">
                       <span>{isAr ? 'الإجمالي' : 'Total'}</span>
                       <span>{order.total} {isAr ? 'درهم' : 'AED'}</span>
                     </div>
@@ -152,7 +152,7 @@ export default function VendorOrders() {
 
                 {/* Customer info */}
                 <div className="grid grid-cols-2 gap-3 mb-4">
-                  <div className="bg-white rounded-xl p-3 border border-[#E8E4DC]">
+                  <div className="bg-white rounded-xl p-3 border border-[#D0EDEA]">
                     <p className="text-xs font-black text-[#666] mb-1">{isAr ? 'معلومات العميل' : 'Customer Info'}</p>
                     <p className="text-sm font-black text-[#222]">{isAr ? order.customerNameAr : order.customerNameEn}</p>
                     <div className="flex items-center gap-1 mt-1">
@@ -160,10 +160,10 @@ export default function VendorOrders() {
                       <span className="text-xs text-[#666]">{order.customerPhone}</span>
                     </div>
                   </div>
-                  <div className="bg-white rounded-xl p-3 border border-[#E8E4DC]">
+                  <div className="bg-white rounded-xl p-3 border border-[#D0EDEA]">
                     <p className="text-xs font-black text-[#666] mb-1">{isAr ? 'عنوان التوصيل' : 'Delivery Address'}</p>
                     <div className="flex items-start gap-1">
-                      <MapPin size={11} className="text-[#C8A951] mt-0.5 flex-shrink-0" />
+                      <MapPin size={11} className="text-[#00C9A7] mt-0.5 flex-shrink-0" />
                       <span className="text-xs text-[#444]">{isAr ? order.addressAr : order.addressEn}</span>
                     </div>
                   </div>
@@ -182,7 +182,7 @@ export default function VendorOrders() {
                   {order.status === 'pending' && (
                     <>
                       <button onClick={() => updateOrderStatus(order.id, 'preparing')}
-                        className="flex-1 py-2.5 bg-[#0F2A47] text-white text-sm font-black rounded-xl hover:bg-[#1a3a5c]">
+                        className="flex-1 py-2.5 bg-[#0D1B4B] text-white text-sm font-black rounded-xl hover:bg-[#0A3D8F]">
                         ✓ {isAr ? 'قبول وتحضير' : 'Accept & Prepare'}
                       </button>
                       <button onClick={() => updateOrderStatus(order.id, 'cancelled')}

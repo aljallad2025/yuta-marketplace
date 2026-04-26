@@ -41,18 +41,18 @@ export default function AdminUsers() {
     <div className="p-6 space-y-5" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#0F2A47]">{t('userManagement')}</h1>
+          <h1 className="text-2xl font-black text-[#0D1B4B]">{t('userManagement')}</h1>
           <p className="text-sm text-[#666]">
             {isAr ? `${users.length} مستخدم مسجل` : `${users.length} total users registered`}
           </p>
         </div>
-        <button className="px-4 py-2.5 bg-[#0F2A47] text-white text-sm font-black rounded-xl">
+        <button className="px-4 py-2.5 bg-[#0D1B4B] text-white text-sm font-black rounded-xl">
           {isAr ? '+ دعوة مستخدم' : '+ Invite User'}
         </button>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
-        <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-2.5 gap-2 shadow-sm border border-[#E8E4DC]">
+        <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-2.5 gap-2 shadow-sm border border-[#D0EDEA]">
           <Search size={16} className="text-[#999]" />
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder={isAr ? 'ابحث بالاسم أو البريد الإلكتروني...' : 'Search users by name or email...'}
@@ -63,7 +63,7 @@ export default function AdminUsers() {
           {Object.keys(filterLabels).map(f => (
             <button key={f} onClick={() => setFilter(f)}
               className={`px-4 py-2.5 rounded-xl text-sm font-black transition-all ${
-                filter === f ? 'bg-[#0F2A47] text-white' : 'bg-white text-[#444] border border-[#E8E4DC]'
+                filter === f ? 'bg-[#0D1B4B] text-white' : 'bg-white text-[#444] border border-[#D0EDEA]'
               }`}>
               {filterLabels[f]}
             </button>
@@ -71,11 +71,11 @@ export default function AdminUsers() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#D0EDEA] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-[#FBF8F2] border-b border-[#E8E4DC]">
+              <tr className="bg-[#F0F9F8] border-b border-[#D0EDEA]">
                 {headers.map(h => (
                   <th key={h} className="text-start px-5 py-3.5 text-xs font-black text-[#666] uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
@@ -83,10 +83,10 @@ export default function AdminUsers() {
             </thead>
             <tbody>
               {filtered.map((user, i) => (
-                <tr key={user.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#FBF8F2] transition-colors`}>
+                <tr key={user.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#F0F9F8] transition-colors`}>
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-[#0F2A47] rounded-full flex items-center justify-center text-white text-sm font-black">
+                      <div className="w-9 h-9 bg-[#0D1B4B] rounded-full flex items-center justify-center text-white text-sm font-black">
                         {(isAr ? user.nameAr : user.nameEn).charAt(0)}
                       </div>
                       <div>
@@ -109,8 +109,8 @@ export default function AdminUsers() {
                   <td className="px-5 py-4 text-xs text-[#666]">{user.joined}</td>
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-1">
-                      <button className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Eye size={14} /></button>
-                      <button className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Edit2 size={14} /></button>
+                      <button className="p-1.5 hover:bg-[#F0F9F8] rounded-lg text-[#666] hover:text-[#0D1B4B]"><Eye size={14} /></button>
+                      <button className="p-1.5 hover:bg-[#F0F9F8] rounded-lg text-[#666] hover:text-[#0D1B4B]"><Edit2 size={14} /></button>
                       {user.status === 'active' ? (
                         <button className="p-1.5 hover:bg-red-50 rounded-lg text-[#666] hover:text-red-600"><UserX size={14} /></button>
                       ) : (
@@ -127,7 +127,7 @@ export default function AdminUsers() {
           <span>{isAr ? `عرض ${filtered.length} من ${users.length} مستخدم` : `Showing ${filtered.length} of ${users.length} users`}</span>
           <div className="flex gap-1">
             {[1, 2, 3].map(p => (
-              <button key={p} className={`w-7 h-7 rounded-lg ${p === 1 ? 'bg-[#0F2A47] text-white' : 'hover:bg-[#FBF8F2] text-[#666]'}`}>{p}</button>
+              <button key={p} className={`w-7 h-7 rounded-lg ${p === 1 ? 'bg-[#0D1B4B] text-white' : 'hover:bg-[#F0F9F8] text-[#666]'}`}>{p}</button>
             ))}
           </div>
         </div>

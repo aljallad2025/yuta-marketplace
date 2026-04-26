@@ -6,6 +6,14 @@ import 'leaflet/dist/leaflet.css'
 import { useLang } from '../i18n/LangContext'
 import { useNavigate } from 'react-router-dom'
 
+function getL(lang, en, th, lo, vi) {
+  if (lang === 'th') return th || en
+  if (lang === 'lo') return lo || en
+  if (lang === 'vi') return vi || en
+  return en
+}
+
+
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
@@ -15,7 +23,7 @@ L.Icon.Default.mergeOptions({
 
 const mkDot=(c,s=14)=>L.divIcon({html:`<div style="width:${s}px;height:${s}px;border-radius:50%;background:${c};border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4)"></div>`,className:'',iconSize:[s,s],iconAnchor:[s/2,s/2]})
 const mkCar=(e,s=30)=>L.divIcon({html:`<div style="font-size:${s}px;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))">${e}</div>`,className:'',iconSize:[s,s],iconAnchor:[s/2,s/2]})
-const G=mkDot('#16A34A'), A=mkDot('#C8A951'), CAR=mkCar('🚖'), DRV=mkCar('🚗',22)
+const G=mkDot('#16A34A'), A=mkDot('#00C9A7'), CAR=mkCar('🚖'), DRV=mkCar('🚗',22)
 
 const CARS=[
   {id:'go',      e:'🚗', ar:'Go',       en:'Go',       s:4, base:1.5, eta:4,  dar:'اقتصادي يومي',    den:'Everyday rides'},
@@ -32,7 +40,7 @@ const DRVS=[
 
 const CTR=[26.2154,50.5832]
 const ff="'Cairo','Tajawal',sans-serif"
-const gold='#C8A951', navy='#0F2A47', navyDark='#0a1e33'
+const gold='#00C9A7', navy='#0D1B4B', navyDark='#0a1e33'
 
 function Clicker({cb}){useMapEvents({click:e=>cb(e.latlng)});return null}
 function Fitter({a,b}){
@@ -125,7 +133,7 @@ export default function WebTaxi(){
   )
 
   const card={background:'#fff',borderRadius:20,border:'1px solid #E5E7EB',boxShadow:'0 2px 12px rgba(0,0,0,.06)'}
-  const btn=(on)=>({width:'100%',padding:'16px 0',borderRadius:16,background:on?`linear-gradient(135deg,${navy},#1a3a5c)`:'#E5E7EB',color:on?'#fff':'#9CA3AF',fontWeight:900,fontSize:16,fontFamily:ff,border:'none',cursor:on?'pointer':'not-allowed',boxShadow:on?`0 6px 20px rgba(15,42,71,.35)`:'none',transition:'all .25s'})
+  const btn=(on)=>({width:'100%',padding:'16px 0',borderRadius:16,background:on?`linear-gradient(135deg,${navy},#0A3D8F)`:'#E5E7EB',color:on?'#fff':'#9CA3AF',fontWeight:900,fontSize:16,fontFamily:ff,border:'none',cursor:on?'pointer':'not-allowed',boxShadow:on?`0 6px 20px rgba(15,42,71,.35)`:'none',transition:'all .25s'})
   const hdr={background:`linear-gradient(135deg,${navyDark},${navy})`,padding:'18px 18px 24px',direction:dir,fontFamily:ff}
   const backBtn={background:'rgba(255,255,255,.15)',border:'none',borderRadius:12,width:38,height:38,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',color:'#fff',marginBottom:14}
 
@@ -151,11 +159,11 @@ export default function WebTaxi(){
       <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:10,background:'#fff',borderRadius:'24px 24px 0 0',boxShadow:'0 -6px 32px rgba(0,0,0,.14)',padding:'10px 18px 32px'}}>
         <div style={{width:36,height:4,borderRadius:99,background:'#E5E7EB',margin:'0 auto 16px'}}/>
 
-        {/* sumu header */}
+        {/* yuta header */}
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16}}>
           <div style={{width:44,height:44,borderRadius:14,background:`linear-gradient(135deg,${navyDark},${navy})`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22}}>🚖</div>
           <div>
-            <div style={{fontWeight:900,fontSize:18,color:navy}}>{T('سمو تاكسي','SUMU Taxi')}</div>
+            <div style={{fontWeight:900,fontSize:18,color:navy}}>{T('يوتا تاكسي','YUTA Taxi')}</div>
             <div style={{fontSize:12,color:'#9CA3AF'}}>{T('احجز رحلتك الآن','Book your ride now')}</div>
           </div>
         </div>
@@ -209,7 +217,7 @@ export default function WebTaxi(){
           <span style={{fontSize:22}}>🎁</span>
           <div>
             <div style={{fontWeight:800,fontSize:13,color:navy}}>{T('أول رحلة مجانية!','First Ride Free!')}</div>
-            <div style={{fontSize:11,color:'#92710A'}}>{T('استخدم كود SUMU1 عند الحجز','Use code SUMU1 at booking')}</div>
+            <div style={{fontSize:11,color:'#92710A'}}>{T('استخدم كود YUTA1 عند الحجز','Use code YUTA1 at booking')}</div>
           </div>
         </div>
 
@@ -395,7 +403,7 @@ export default function WebTaxi(){
     <div style={{minHeight:'calc(100vh - 64px)',background:'#F8FAFC',fontFamily:ff,direction:dir,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'40px 20px'}}>
       <div style={{width:96,height:96,borderRadius:'50%',background:'linear-gradient(135deg,#DCFCE7,#BBF7D0)',border:'3px solid #16A34A',display:'flex',alignItems:'center',justifyContent:'center',fontSize:46,marginBottom:18,boxShadow:'0 10px 36px rgba(22,163,74,.2)'}}>✅</div>
       <div style={{fontWeight:900,fontSize:24,color:'#111827',marginBottom:5,textAlign:'center'}}>{T('وصلت بسلامة!','Arrived Safely!')}</div>
-      <div style={{fontSize:13,color:'#6B7280',marginBottom:28,textAlign:'center'}}>{T('شكراً لاختيارك سمو تاكسي','Thanks for riding with SUMU Taxi')}</div>
+      <div style={{fontSize:13,color:'#6B7280',marginBottom:28,textAlign:'center'}}>{T('شكراً لاختيارك يوتا تاكسي','Thanks for riding with YUTA Taxi')}</div>
 
       <div style={{...card,padding:'22px 28px',marginBottom:18,textAlign:'center',width:'100%',maxWidth:320}}>
         <div style={{fontWeight:800,fontSize:14,color:'#374151',marginBottom:14}}>{T('قيّم رحلتك','Rate your trip')}</div>

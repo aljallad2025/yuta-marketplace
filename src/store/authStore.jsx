@@ -3,8 +3,8 @@ import { authAPI, usersAPI } from '../services/api.js'
 import { resetSocket } from '../hooks/useSocket.js'
 
 const AuthContext = createContext()
-const TOKEN_KEY = 'sumu_token'
-const USER_KEY = 'sumu_user'
+const TOKEN_KEY = 'yuta_token'
+const USER_KEY = 'yuta_user'
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(() => {

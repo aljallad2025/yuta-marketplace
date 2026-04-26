@@ -6,6 +6,14 @@ import 'leaflet/dist/leaflet.css'
 import { useLang } from '../../i18n/LangContext'
 import { useNavigate } from 'react-router-dom'
 
+function getL(lang, en, th, lo, vi) {
+  if (lang === 'th') return th || en
+  if (lang === 'lo') return lo || en
+  if (lang === 'vi') return vi || en
+  return en
+}
+
+
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
@@ -345,7 +353,7 @@ export default function TaxiPage(){
     <div style={{minHeight:'calc(100vh - 64px)',background:'#F8FAFC',fontFamily:ff,direction:dir,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'40px 20px'}}>
       <div style={{width:96,height:96,borderRadius:'50%',background:'linear-gradient(135deg,#DCFCE7,#BBF7D0)',border:'3px solid #16A34A',display:'flex',alignItems:'center',justifyContent:'center',fontSize:46,marginBottom:18,boxShadow:'0 10px 36px rgba(22,163,74,.2)'}}>✅</div>
       <div style={{fontWeight:900,fontSize:24,color:'#111827',marginBottom:5,textAlign:'center'}}>{T('وصلت بسلامة!','Arrived Safely!')}</div>
-      <div style={{fontSize:13,color:'#6B7280',marginBottom:28,textAlign:'center'}}>{T('شكراً لاختيارك سمو تاكسي','Thanks for riding with SUMU')}</div>
+      <div style={{fontSize:13,color:'#6B7280',marginBottom:28,textAlign:'center'}}>{T('شكراً لاختيارك يوتا تاكسي','Thanks for riding with YUTA')}</div>
       <div style={{...card,padding:'22px 28px',marginBottom:18,textAlign:'center',width:'100%',maxWidth:320}}>
         <div style={{fontWeight:800,fontSize:14,color:'#374151',marginBottom:14}}>{T('قيّم رحلتك','Rate your trip')}</div>
         <div style={{display:'flex',gap:6,justifyContent:'center',marginBottom:6}}>

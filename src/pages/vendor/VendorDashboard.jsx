@@ -44,7 +44,7 @@ export default function VendorDashboard() {
     { icon: ShoppingBag, labelAr: 'طلبات اليوم', labelEn: "Today's Orders", value: stats.todayOrders, color: '#3498DB', bg: '#EBF5FB' },
     { icon: CheckCircle, labelAr: 'طلبات مكتملة', labelEn: 'Completed', value: stats.completedOrders, color: '#2ECC71', bg: '#EAFAF1' },
     { icon: AlertCircle, labelAr: 'قيد التنفيذ', labelEn: 'In Progress', value: stats.pendingOrders, color: '#F39C12', bg: '#FEF9E7' },
-    { icon: DollarSign, labelAr: 'إجمالي الإيرادات', labelEn: 'Total Revenue', value: `${stats.revenue.toLocaleString()} ${isAr ? 'د' : 'AED'}`, color: '#C8A951', bg: '#FEF9EE' },
+    { icon: DollarSign, labelAr: 'إجمالي الإيرادات', labelEn: 'Total Revenue', value: `${stats.revenue.toLocaleString()} ${isAr ? 'د' : 'AED'}`, color: '#00C9A7', bg: '#FEF9EE' },
     { icon: Package, labelAr: 'المنتجات النشطة', labelEn: 'Active Products', value: products.filter(p => p.active).length, color: '#9B59B6', bg: '#F5EEF8' },
     { icon: Star, labelAr: 'التقييم', labelEn: 'Rating', value: `${store?.rating || 0} ⭐`, color: '#E67E22', bg: '#FEF0E7' },
   ]
@@ -54,14 +54,14 @@ export default function VendorDashboard() {
       {/* Welcome */}
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#0F2A47]">
+          <h1 className="text-2xl font-black text-[#0D1B4B]">
             {isAr ? `مرحباً، ${store?.ownerAr || 'المورد'}` : `Welcome, ${store?.ownerEn || 'Vendor'}`}
           </h1>
           <p className="text-[#888] text-sm mt-1">{isAr ? 'إليك ملخص متجرك اليوم' : "Here's your store summary today"}</p>
         </div>
-        <div className="flex items-center gap-2 bg-white border border-[#E8E4DC] rounded-xl px-3 py-2">
+        <div className="flex items-center gap-2 bg-white border border-[#D0EDEA] rounded-xl px-3 py-2">
           <div className={`w-2 h-2 rounded-full ${store?.active ? 'bg-emerald-500 animate-pulse' : 'bg-red-400'}`}></div>
-          <span className="text-sm font-black text-[#0F2A47]">
+          <span className="text-sm font-black text-[#0D1B4B]">
             {store?.active ? (isAr ? 'المتجر مفتوح' : 'Store is Open') : (isAr ? 'المتجر مغلق' : 'Store Closed')}
           </span>
         </div>
@@ -93,11 +93,11 @@ export default function VendorDashboard() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
         {statCards.map(card => (
-          <div key={card.labelEn} className="bg-white rounded-2xl border border-[#E8E4DC] p-4">
+          <div key={card.labelEn} className="bg-white rounded-2xl border border-[#D0EDEA] p-4">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-2" style={{ background: card.bg }}>
               <card.icon size={17} style={{ color: card.color }} />
             </div>
-            <p className="text-xl font-black text-[#0F2A47]">{card.value}</p>
+            <p className="text-xl font-black text-[#0D1B4B]">{card.value}</p>
             <p className="text-xs text-[#888] mt-0.5">{isAr ? card.labelAr : card.labelEn}</p>
           </div>
         ))}
@@ -105,22 +105,22 @@ export default function VendorDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Chart */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-[#E8E4DC] p-5">
-          <h2 className="font-black text-[#0F2A47] mb-4">{isAr ? 'الطلبات خلال الأسبوع' : 'Orders This Week'}</h2>
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-[#D0EDEA] p-5">
+          <h2 className="font-black text-[#0D1B4B] mb-4">{isAr ? 'الطلبات خلال الأسبوع' : 'Orders This Week'}</h2>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#F0ECE4" />
               <XAxis dataKey={isAr ? 'day' : 'day'} tick={{ fontSize: 11, fill: '#888' }} />
               <YAxis tick={{ fontSize: 11, fill: '#888' }} />
               <Tooltip />
-              <Line type="monotone" dataKey="orders" stroke="#C8A951" strokeWidth={2.5} dot={{ fill: '#C8A951', r: 4 }} />
+              <Line type="monotone" dataKey="orders" stroke="#00C9A7" strokeWidth={2.5} dot={{ fill: '#00C9A7', r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         {/* Quick actions */}
-        <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5">
-          <h2 className="font-black text-[#0F2A47] mb-4">{isAr ? 'إجراءات سريعة' : 'Quick Actions'}</h2>
+        <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5">
+          <h2 className="font-black text-[#0D1B4B] mb-4">{isAr ? 'إجراءات سريعة' : 'Quick Actions'}</h2>
           <div className="space-y-2">
             {[
               { labelAr: 'إضافة منتج جديد', labelEn: 'Add New Product', href: '/vendor/products', icon: '➕', color: '#3498DB' },
@@ -129,9 +129,9 @@ export default function VendorDashboard() {
               { labelAr: 'إعدادات المتجر', labelEn: 'Store Settings', href: '/vendor/settings', icon: '⚙️', color: '#9B59B6' },
             ].map(action => (
               <a key={action.labelEn} href={action.href}
-                className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#FBF8F2] transition-colors border border-[#E8E4DC]">
+                className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#F0F9F8] transition-colors border border-[#D0EDEA]">
                 <span className="text-xl">{action.icon}</span>
-                <span className="flex-1 text-sm font-black text-[#0F2A47]">{isAr ? action.labelAr : action.labelEn}</span>
+                <span className="flex-1 text-sm font-black text-[#0D1B4B]">{isAr ? action.labelAr : action.labelEn}</span>
                 {action.badge > 0 && (
                   <span className="w-5 h-5 bg-[#E74C3C] text-white text-[10px] font-black rounded-full flex items-center justify-center">{action.badge}</span>
                 )}
@@ -142,14 +142,14 @@ export default function VendorDashboard() {
       </div>
 
       {/* Recent orders */}
-      <div className="mt-4 bg-white rounded-2xl border border-[#E8E4DC] overflow-hidden">
+      <div className="mt-4 bg-white rounded-2xl border border-[#D0EDEA] overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#F0ECE4]">
-          <h2 className="font-black text-[#0F2A47]">{isAr ? 'آخر الطلبات' : 'Recent Orders'}</h2>
-          <a href="/vendor/orders" className="text-xs font-black text-[#C8A951] hover:underline">{isAr ? 'عرض الكل' : 'View All'}</a>
+          <h2 className="font-black text-[#0D1B4B]">{isAr ? 'آخر الطلبات' : 'Recent Orders'}</h2>
+          <a href="/vendor/orders" className="text-xs font-black text-[#00C9A7] hover:underline">{isAr ? 'عرض الكل' : 'View All'}</a>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-[#FBF8F2]">
+            <thead className="bg-[#F0F9F8]">
               <tr>
                 {[
                   isAr ? 'رقم الطلب' : 'Order ID',
@@ -167,8 +167,8 @@ export default function VendorDashboard() {
               {recentOrders.length === 0 ? (
                 <tr><td colSpan={6} className="text-center py-8 text-[#999] text-sm">{isAr ? 'لا توجد طلبات' : 'No orders yet'}</td></tr>
               ) : recentOrders.map(order => (
-                <tr key={order.id} className="hover:bg-[#FBF8F2]">
-                  <td className="px-4 py-3 font-black text-[#0F2A47] text-sm">{order.id}</td>
+                <tr key={order.id} className="hover:bg-[#F0F9F8]">
+                  <td className="px-4 py-3 font-black text-[#0D1B4B] text-sm">{order.id}</td>
                   <td className="px-4 py-3 text-sm text-[#444]">{isAr ? order.customerNameAr : order.customerNameEn}</td>
                   <td className="px-4 py-3 font-black text-[#222] text-sm">{order.total} {isAr ? 'د' : 'AED'}</td>
                   <td className="px-4 py-3">
@@ -183,7 +183,7 @@ export default function VendorDashboard() {
                     {order.status === 'pending' && (
                       <button
                         onClick={() => updateOrderStatus(order.id, 'preparing')}
-                        className="px-3 py-1.5 bg-[#0F2A47] text-white text-xs font-black rounded-lg hover:bg-[#1a3a5c]"
+                        className="px-3 py-1.5 bg-[#0D1B4B] text-white text-xs font-black rounded-lg hover:bg-[#0A3D8F]"
                       >
                         {isAr ? 'قبول' : 'Accept'}
                       </button>

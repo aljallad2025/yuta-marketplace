@@ -11,7 +11,7 @@ export default function WebLayout() {
       <footer className="bg-white border-t border-gray-200 py-4 text-center text-sm text-gray-500">
         <Link to="/privacy" className="hover:text-gray-800 transition">سياسة الخصوصية</Link>
         <span className="mx-2">·</span>
-        <span>© 2026 سمو SUMU</span>
+        <span>© 2026 يوتا YUTA</span>
       </footer>
     </div>
   )

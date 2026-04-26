@@ -3,7 +3,7 @@ import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom'
 import { LayoutDashboard, Users, Store, Car, Package, Navigation, Map, DollarSign,
   Tag, Settings, Bell, Search, Menu, Wallet, BarChart3, LogOut, Shield, CheckSquare
 } from 'lucide-react'
-import SumuLogo from '../../components/SumuLogo'
+import YutaLogo from '../../components/YutaLogo'
 import LangToggle from '../../components/LangToggle'
 import { useLang } from '../../i18n/LangContext'
 import { useAuth } from '../../store/authStore'
@@ -63,14 +63,14 @@ export default function AdminLayout() {
   ]
 
   return (
-    <div className="flex h-screen bg-[#FBF8F2] overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="flex h-screen bg-[#F0F9F8] overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-60' : 'w-16'} bg-[#0F2A47] flex flex-col flex-shrink-0 overflow-hidden transition-all duration-200`}>
+      <aside className={`${sidebarOpen ? 'w-60' : 'w-16'} bg-[#0D1B4B] flex flex-col flex-shrink-0 overflow-hidden transition-all duration-200`}>
         <div className="flex items-center gap-3 px-4 py-4 border-b border-white/10 flex-shrink-0">
-          <SumuLogo size={30} variant="icon" />
+          <YutaLogo size={30} variant="icon" />
           {sidebarOpen && (
             <div>
-              <p className="text-[#C8A951] font-black text-sm tracking-widest">سمو SUMU</p>
+              <p className="text-[#00C9A7] font-black text-sm tracking-widest">يوتا YUTA</p>
               <p className="text-white/40 text-[10px]">{t('adminPanel')}</p>
             </div>
           )}
@@ -88,12 +88,12 @@ export default function AdminLayout() {
                 return (
                   <Link key={item.href} to={item.href}
                     className={`flex items-center gap-3 px-3 py-2.5 mx-2 rounded-xl mb-0.5 transition-all ${
-                      isActive ? 'bg-[#C8A951] text-[#0F2A47]' : 'text-white/70 hover:bg-white/10 hover:text-white'
+                      isActive ? 'bg-[#00C9A7] text-[#0D1B4B]' : 'text-white/70 hover:bg-white/10 hover:text-white'
                     }`}>
                     <item.icon size={16} className="flex-shrink-0" />
                     {sidebarOpen && <span className="text-sm font-bold flex-1">{item.label}</span>}
                     {item.badge && (
-                      <span className={`w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center flex-shrink-0 ${isActive ? 'bg-[#0F2A47] text-[#C8A951]' : 'bg-[#E74C3C] text-white'}`}>
+                      <span className={`w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center flex-shrink-0 ${isActive ? 'bg-[#0D1B4B] text-[#00C9A7]' : 'bg-[#E74C3C] text-white'}`}>
                         {item.badge}
                       </span>
                     )}
@@ -107,12 +107,12 @@ export default function AdminLayout() {
         <div className="border-t border-white/10 p-3 flex-shrink-0">
           {sidebarOpen && (
             <div className="flex items-center gap-2 mb-3 px-2">
-              <div className="w-7 h-7 bg-[#C8A951] rounded-full flex items-center justify-center flex-shrink-0">
-                <Shield size={12} className="text-[#0F2A47]" />
+              <div className="w-7 h-7 bg-[#00C9A7] rounded-full flex items-center justify-center flex-shrink-0">
+                <Shield size={12} className="text-[#0D1B4B]" />
               </div>
               <div className="min-w-0">
                 <p className="text-white text-xs font-black truncate">{currentUser?.nameAr || t('superAdmin')}</p>
-                <p className="text-white/40 text-[9px] truncate">{currentUser?.email || 'admin@sumu.ae'}</p>
+                <p className="text-white/40 text-[9px] truncate">{currentUser?.email || 'admin@yuta.ae'}</p>
               </div>
             </div>
           )}
@@ -125,24 +125,24 @@ export default function AdminLayout() {
 
       {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <header className="bg-white border-b border-[#E8E4DC] px-4 py-3 flex items-center gap-3 flex-shrink-0">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg hover:bg-[#FBF8F2] text-[#666]">
+        <header className="bg-white border-b border-[#D0EDEA] px-4 py-3 flex items-center gap-3 flex-shrink-0">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg hover:bg-[#F0F9F8] text-[#666]">
             <Menu size={17} />
           </button>
-          <div className="flex items-center bg-[#FBF8F2] rounded-xl px-3 py-2 gap-2 flex-1 max-w-sm">
+          <div className="flex items-center bg-[#F0F9F8] rounded-xl px-3 py-2 gap-2 flex-1 max-w-sm">
             <Search size={14} className="text-[#999]" />
             <input placeholder={isAr ? 'بحث...' : 'Search...'} className="flex-1 outline-none text-sm bg-transparent text-[#222] font-medium" dir={isAr ? 'rtl' : 'ltr'} />
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <LangToggle className="border-[#E8E4DC]" />
-            <Link to="/admin/approvals" className="relative p-2 rounded-lg hover:bg-[#FBF8F2] text-[#666]">
+            <LangToggle className="border-[#D0EDEA]" />
+            <Link to="/admin/approvals" className="relative p-2 rounded-lg hover:bg-[#F0F9F8] text-[#666]">
               <Bell size={17} />
               {pendingCount > 0 && (
                 <span className="absolute top-1 right-1 w-4 h-4 bg-[#E74C3C] rounded-full text-[9px] text-white font-black flex items-center justify-center">{pendingCount}</span>
               )}
             </Link>
-            <div className="w-8 h-8 bg-[#0F2A47] rounded-full flex items-center justify-center">
-              <Shield size={13} className="text-[#C8A951]" />
+            <div className="w-8 h-8 bg-[#0D1B4B] rounded-full flex items-center justify-center">
+              <Shield size={13} className="text-[#00C9A7]" />
             </div>
           </div>
         </header>

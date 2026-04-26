@@ -13,7 +13,7 @@ function Stars({ rating }) {
   return (
     <div className="flex gap-0.5">
       {[1,2,3,4,5].map(s => (
-        <Star key={s} size={14} fill={s <= rating ? '#C8A951' : 'none'} stroke={s <= rating ? '#C8A951' : '#ddd'} />
+        <Star key={s} size={14} fill={s <= rating ? '#00C9A7' : 'none'} stroke={s <= rating ? '#00C9A7' : '#ddd'} />
       ))}
     </div>
   )
@@ -28,28 +28,28 @@ export default function VendorReviews() {
   return (
     <div className="p-6" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="mb-6">
-        <h1 className="text-xl font-black text-[#0F2A47]">{isAr ? 'التقييمات والمراجعات' : 'Ratings & Reviews'}</h1>
+        <h1 className="text-xl font-black text-[#0D1B4B]">{isAr ? 'التقييمات والمراجعات' : 'Ratings & Reviews'}</h1>
         <p className="text-sm text-[#888] mt-0.5">{reviews.length} {isAr ? 'تقييم' : 'reviews'}</p>
       </div>
 
       {/* Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {/* Overall rating */}
-        <div className="bg-[#0F2A47] rounded-2xl p-5 text-center">
-          <p className="text-6xl font-black text-[#C8A951]">{avgRating.toFixed(1)}</p>
+        <div className="bg-[#0D1B4B] rounded-2xl p-5 text-center">
+          <p className="text-6xl font-black text-[#00C9A7]">{avgRating.toFixed(1)}</p>
           <Stars rating={Math.round(avgRating)} />
           <p className="text-white/60 text-sm mt-2">{isAr ? 'من 5' : 'out of 5'}</p>
         </div>
         {/* Distribution */}
-        <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5">
-          <p className="font-black text-[#0F2A47] mb-3 text-sm">{isAr ? 'توزيع التقييمات' : 'Rating Distribution'}</p>
+        <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5">
+          <p className="font-black text-[#0D1B4B] mb-3 text-sm">{isAr ? 'توزيع التقييمات' : 'Rating Distribution'}</p>
           <div className="space-y-2">
             {dist.map(d => (
               <div key={d.rating} className="flex items-center gap-2">
                 <span className="text-xs font-black text-[#666] w-4">{d.rating}</span>
-                <Star size={11} fill="#C8A951" stroke="#C8A951" />
+                <Star size={11} fill="#00C9A7" stroke="#00C9A7" />
                 <div className="flex-1 h-2 bg-[#F0ECE4] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#C8A951] rounded-full transition-all"
+                  <div className="h-full bg-[#00C9A7] rounded-full transition-all"
                     style={{ width: `${reviews.length > 0 ? (d.count / reviews.length) * 100 : 0}%` }}></div>
                 </div>
                 <span className="text-xs text-[#888] w-4">{d.count}</span>
@@ -58,8 +58,8 @@ export default function VendorReviews() {
           </div>
         </div>
         {/* Quick stats */}
-        <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5">
-          <p className="font-black text-[#0F2A47] mb-3 text-sm">{isAr ? 'الملخص' : 'Summary'}</p>
+        <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5">
+          <p className="font-black text-[#0D1B4B] mb-3 text-sm">{isAr ? 'الملخص' : 'Summary'}</p>
           <div className="space-y-3">
             {[
               { labelAr: 'تقييمات 5 نجوم', labelEn: '5-Star Reviews', value: reviews.filter(r => r.rating === 5).length, icon: '⭐' },
@@ -68,7 +68,7 @@ export default function VendorReviews() {
             ].map(s => (
               <div key={s.labelEn} className="flex items-center justify-between">
                 <span className="text-sm text-[#666]">{s.icon} {isAr ? s.labelAr : s.labelEn}</span>
-                <span className="font-black text-[#0F2A47] text-sm">{s.value}</span>
+                <span className="font-black text-[#0D1B4B] text-sm">{s.value}</span>
               </div>
             ))}
           </div>
@@ -78,10 +78,10 @@ export default function VendorReviews() {
       {/* Reviews list */}
       <div className="space-y-3">
         {reviews.map(r => (
-          <div key={r.id} className="bg-white rounded-2xl border border-[#E8E4DC] p-4">
+          <div key={r.id} className="bg-white rounded-2xl border border-[#D0EDEA] p-4">
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-[#0F2A47] rounded-full flex items-center justify-center text-sm font-black text-[#C8A951]">
+                <div className="w-9 h-9 bg-[#0D1B4B] rounded-full flex items-center justify-center text-sm font-black text-[#00C9A7]">
                   {(isAr ? r.customerAr : r.customerEn)[0]}
                 </div>
                 <div>
@@ -96,10 +96,10 @@ export default function VendorReviews() {
             </div>
             <p className="text-sm text-[#444] leading-relaxed">{isAr ? r.commentAr : r.commentEn}</p>
             <div className="flex items-center gap-2 mt-3">
-              <button className="flex items-center gap-1 text-xs text-[#888] hover:text-[#C8A951] font-black">
+              <button className="flex items-center gap-1 text-xs text-[#888] hover:text-[#00C9A7] font-black">
                 <ThumbsUp size={12} /> {r.likes} {isAr ? 'مفيد' : 'Helpful'}
               </button>
-              <button className="text-xs text-[#C8A951] font-black hover:underline">
+              <button className="text-xs text-[#00C9A7] font-black hover:underline">
                 {isAr ? 'الرد على التقييم' : 'Reply'}
               </button>
             </div>

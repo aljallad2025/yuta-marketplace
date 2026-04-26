@@ -60,10 +60,10 @@ export default function VendorLogin() {
 
   if (registered) {
     return (
-      <div className="min-h-screen bg-[#0F2A47] flex items-center justify-center p-4" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="min-h-screen bg-[#0D1B4B] flex items-center justify-center p-4" dir={isAr ? 'rtl' : 'ltr'}>
         <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl">
           <div className="text-6xl mb-4">⏳</div>
-          <h2 className="font-black text-[#0F2A47] text-xl mb-2">
+          <h2 className="font-black text-[#0D1B4B] text-xl mb-2">
             {isAr ? 'تم إرسال طلبك!' : 'Application Submitted!'}
           </h2>
           <p className="text-[#666] text-sm mb-4">
@@ -77,7 +77,7 @@ export default function VendorLogin() {
             </p>
           </div>
           <button onClick={() => { setRegistered(false); setMode('login') }}
-            className="w-full py-3 bg-[#0F2A47] text-white font-black rounded-xl text-sm">
+            className="w-full py-3 bg-[#0D1B4B] text-white font-black rounded-xl text-sm">
             {isAr ? 'العودة لتسجيل الدخول' : 'Back to Login'}
           </button>
         </div>
@@ -86,7 +86,7 @@ export default function VendorLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0F2A47] flex items-center justify-center p-4" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-[#0D1B4B] flex items-center justify-center p-4" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="absolute top-4 end-4">
         <LangToggle className="border-white/20 bg-white/10 text-white" />
       </div>
@@ -98,9 +98,9 @@ export default function VendorLogin() {
             <Store size={36} className="text-[#9B59B6]" />
           </div>
           <div className="flex items-center justify-center gap-2 mb-1">
-            <span className="text-2xl font-black text-[#C8A951]">سمو</span>
+            <span className="text-2xl font-black text-[#00C9A7]">يوتا</span>
             <span className="text-white/30">·</span>
-            <span className="text-2xl font-black text-white tracking-widest">SUMU</span>
+            <span className="text-2xl font-black text-white tracking-widest">YUTA</span>
           </div>
           <p className="text-white/50 text-sm">{isAr ? 'بوابة الموردين والمتاجر' : 'Vendor & Store Portal'}</p>
         </div>
@@ -112,7 +112,7 @@ export default function VendorLogin() {
             { key: 'register', ar: 'طلب انضمام', en: 'Apply Now' },
           ].map(tab => (
             <button key={tab.key} onClick={() => { setMode(tab.key); setLoginError(''); setRegError('') }}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-black transition-all ${mode === tab.key ? 'bg-white text-[#0F2A47]' : 'text-white/60 hover:text-white'}`}>
+              className={`flex-1 py-2.5 rounded-xl text-sm font-black transition-all ${mode === tab.key ? 'bg-white text-[#0D1B4B]' : 'text-white/60 hover:text-white'}`}>
               {isAr ? tab.ar : tab.en}
             </button>
           ))}
@@ -122,7 +122,7 @@ export default function VendorLogin() {
         <div className="bg-white rounded-3xl p-6 shadow-2xl">
           {mode === 'login' ? (
             <>
-              <h1 className="font-black text-[#0F2A47] text-xl mb-1">{isAr ? 'دخول المورد' : 'Vendor Login'}</h1>
+              <h1 className="font-black text-[#0D1B4B] text-xl mb-1">{isAr ? 'دخول المورد' : 'Vendor Login'}</h1>
               <p className="text-sm text-[#888] mb-5">{isAr ? 'ادخل بيانات حسابك المعتمد' : 'Enter your approved account credentials'}</p>
 
               {loginError && errorMsgs[loginError] && (
@@ -139,16 +139,16 @@ export default function VendorLogin() {
                   <div className="relative">
                     <User size={15} className={`absolute top-1/2 -translate-y-1/2 text-[#aaa] ${isAr ? 'right-3' : 'left-3'}`} />
                     <input value={form.username} onChange={e => { setForm(f => ({ ...f, username: e.target.value })); setLoginError('') }}
-                      className={`w-full border-2 border-[#E8E4DC] rounded-xl py-3 text-sm outline-none focus:border-[#9B59B6] ${isAr ? 'pr-9 pl-3' : 'pl-9 pr-3'}`}
+                      className={`w-full border-2 border-[#D0EDEA] rounded-xl py-3 text-sm outline-none focus:border-[#9B59B6] ${isAr ? 'pr-9 pl-3' : 'pl-9 pr-3'}`}
                       required dir="ltr" placeholder={isAr ? 'اسم المستخدم' : 'username'} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-black text-[#666] mb-1.5">{isAr ? 'كلمة المرور' : 'Password'}</label>
+                  <label className="block text-xs font-black text-[#666] mb-1.5">{getL(lang,'Password','รหัสผ่าน','ລະຫັດ','Mật khẩu')}</label>
                   <div className="relative">
                     <Lock size={15} className={`absolute top-1/2 -translate-y-1/2 text-[#aaa] ${isAr ? 'right-3' : 'left-3'}`} />
                     <input type={showPass ? 'text' : 'password'} value={form.password} onChange={e => { setForm(f => ({ ...f, password: e.target.value })); setLoginError('') }}
-                      className={`w-full border-2 border-[#E8E4DC] rounded-xl py-3 text-sm outline-none focus:border-[#9B59B6] ${isAr ? 'pr-9 pl-10' : 'pl-9 pr-10'}`}
+                      className={`w-full border-2 border-[#D0EDEA] rounded-xl py-3 text-sm outline-none focus:border-[#9B59B6] ${isAr ? 'pr-9 pl-10' : 'pl-9 pr-10'}`}
                       required dir="ltr" placeholder="••••••••" />
                     <button type="button" onClick={() => setShowPass(!showPass)}
                       className={`absolute top-1/2 -translate-y-1/2 text-[#aaa] ${isAr ? 'left-3' : 'right-3'}`}>
@@ -162,7 +162,7 @@ export default function VendorLogin() {
                 </button>
               </form>
 
-              <div className="mt-4 bg-[#FBF8F2] rounded-xl p-3 space-y-1 text-center">
+              <div className="mt-4 bg-[#F0F9F8] rounded-xl p-3 space-y-1 text-center">
                 <p className="text-xs text-[#888] font-black">{isAr ? 'حسابات تجريبية:' : 'Demo accounts:'}</p>
                 <p className="text-xs text-[#666]">baharat / baharat123</p>
                 <p className="text-xs text-[#666]">burgetino / burger123</p>
@@ -170,7 +170,7 @@ export default function VendorLogin() {
             </>
           ) : (
             <>
-              <h1 className="font-black text-[#0F2A47] text-xl mb-1">{isAr ? 'طلب انضمام كمورد' : 'Apply as Vendor'}</h1>
+              <h1 className="font-black text-[#0D1B4B] text-xl mb-1">{isAr ? 'طلب انضمام كمورد' : 'Apply as Vendor'}</h1>
               <p className="text-sm text-[#888] mb-5">{isAr ? 'سيتم مراجعة طلبك من قبل الإدارة' : 'Your application will be reviewed by admin'}</p>
 
               {regError && (
@@ -182,24 +182,24 @@ export default function VendorLogin() {
                   <div>
                     <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'اسم المتجر (ع)' : 'Store Name (AR)'}</label>
                     <input value={form.nameAr} onChange={e => setForm(f => ({ ...f, nameAr: e.target.value }))}
-                      className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="rtl" />
+                      className="w-full border-2 border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="rtl" />
                   </div>
                   <div>
                     <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'اسم المتجر (إ)' : 'Store Name (EN)'}</label>
                     <input value={form.nameEn} onChange={e => setForm(f => ({ ...f, nameEn: e.target.value }))}
-                      className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" />
+                      className="w-full border-2 border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'اسم المستخدم' : 'Username'}</label>
                   <input value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value }))}
-                    className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" />
+                    className="w-full border-2 border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" />
                 </div>
                 <div>
-                  <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'كلمة المرور' : 'Password'}</label>
+                  <label className="block text-xs font-black text-[#666] mb-1">{getL(lang,'Password','รหัสผ่าน','ລະຫັດ','Mật khẩu')}</label>
                   <div className="relative">
                     <input type={showPass ? 'text' : 'password'} value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
-                      className={`w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6] ${isAr ? 'pl-9' : 'pr-9'}`} dir="ltr" />
+                      className={`w-full border-2 border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6] ${isAr ? 'pl-9' : 'pr-9'}`} dir="ltr" />
                     <button type="button" onClick={() => setShowPass(!showPass)}
                       className={`absolute top-1/2 -translate-y-1/2 text-[#aaa] ${isAr ? 'left-3' : 'right-3'}`}>
                       {showPass ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -207,14 +207,14 @@ export default function VendorLogin() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'البريد الإلكتروني' : 'Email'}</label>
+                  <label className="block text-xs font-black text-[#666] mb-1">{getL(lang,'Email','อีเมล','ອີເມວ','Email')}</label>
                   <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                    className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" />
+                    className="w-full border-2 border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" />
                 </div>
                 <div>
-                  <label className="block text-xs font-black text-[#666] mb-1">{isAr ? 'رقم الهاتف' : 'Phone'}</label>
+                  <label className="block text-xs font-black text-[#666] mb-1">{getL(lang,'Phone','โทรศัพท์','ໂທ','Điện thoại')}</label>
                   <input type="tel" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                    className="w-full border-2 border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" placeholder="+971..." />
+                    className="w-full border-2 border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#9B59B6]" dir="ltr" placeholder="+971..." />
                 </div>
                 <button type="submit" disabled={loading}
                   className="w-full py-3.5 bg-[#9B59B6] text-white font-black rounded-xl text-sm hover:bg-purple-700 disabled:opacity-60 flex items-center justify-center gap-2">

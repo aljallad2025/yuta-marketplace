@@ -21,12 +21,12 @@ const revenueData = [
 ]
 
 const categoryData = [
-  { nameEn: 'Restaurants', nameAr: 'المطاعم', value: 42, color: '#0F2A47' },
-  { nameEn: 'Supermarket', nameAr: 'السوبرماركت', value: 18, color: '#C8A951' },
+  { nameEn: 'Restaurants', nameAr: 'المطاعم', value: 42, color: '#0D1B4B' },
+  { nameEn: 'Supermarket', nameAr: 'السوبرماركت', value: 18, color: '#00C9A7' },
   { nameEn: 'Pharmacy', nameAr: 'الصيدليات', value: 14, color: '#2ECC71' },
   { nameEn: 'Beauty', nameAr: 'التجميل', value: 12, color: '#9B59B6' },
   { nameEn: 'Rida Clean', nameAr: 'ريدا كلين', value: 8, color: '#3498DB' },
-  { nameEn: 'Other', nameAr: 'أخرى', value: 6, color: '#E8E4DC' },
+  { nameEn: 'Other', nameAr: 'أخرى', value: 6, color: '#D0EDEA' },
 ]
 
 const recentOrders = [
@@ -65,16 +65,16 @@ export default function AdminDashboard() {
     <div className="p-6 space-y-6" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#0F2A47]">{t('dashboard')}</h1>
+          <h1 className="text-2xl font-black text-[#0D1B4B]">{t('dashboard')}</h1>
           <p className="text-[#666] text-sm mt-0.5">{isAr ? 'الثلاثاء، ١ أبريل ٢٠٢٦' : 'Tuesday, 1 April 2026'}</p>
         </div>
         <div className="flex items-center gap-3">
-          <LangToggle className="border-[#E8E4DC]" />
-          <select className="text-sm border border-[#E8E4DC] rounded-xl px-4 py-2.5 bg-white text-[#222] outline-none shadow-sm font-semibold">
+          <LangToggle className="border-[#D0EDEA]" />
+          <select className="text-sm border border-[#D0EDEA] rounded-xl px-4 py-2.5 bg-white text-[#222] outline-none shadow-sm font-semibold">
             <option>{isAr ? 'آخر ٧ أيام' : 'Last 7 days'}</option>
             <option>{isAr ? 'آخر ٣٠ يوم' : 'Last 30 days'}</option>
           </select>
-          <button className="px-4 py-2.5 bg-[#0F2A47] text-white text-sm font-bold rounded-xl shadow-sm">
+          <button className="px-4 py-2.5 bg-[#0D1B4B] text-white text-sm font-bold rounded-xl shadow-sm">
             {t('exportReport')}
           </button>
         </div>
@@ -82,27 +82,27 @@ export default function AdminDashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label={t('totalUsers')} value={stats.totalCustomers?.toLocaleString() || "—"} icon={Users} color="#0F2A47" />
-        <StatCard label={t('activeStores')} value={stats.totalStores?.toLocaleString() || "—"} icon={Store} color="#C8A951" />
+        <StatCard label={t('totalUsers')} value={stats.totalCustomers?.toLocaleString() || "—"} icon={Users} color="#0D1B4B" />
+        <StatCard label={t('activeStores')} value={stats.totalStores?.toLocaleString() || "—"} icon={Store} color="#00C9A7" />
         <StatCard label={t('activeDrivers')} value={`${stats.activeDrivers || 0} / ${stats.totalDrivers || 0}`} icon={Car} color="#2ECC71" />
         <StatCard label={t('ordersToday')} value={stats.todayOrders?.toLocaleString() || "—"} icon={Package} color="#3498DB" />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label={t('revenueToday')} value={`${stats.totalRevenue?.toFixed(0) || 0} SAR`} icon={DollarSign} color="#C8A951" />
+        <StatCard label={t('revenueToday')} value={`${stats.totalRevenue?.toFixed(0) || 0} SAR`} icon={DollarSign} color="#00C9A7" />
         <StatCard label={t('activeRides')} value="38" change="+2" changeType="up" icon={Zap} color="#9B59B6" />
-        <StatCard label={t('avgDelivery')} value={isAr ? '٢٢ دقيقة' : '22 min'} change="-3 min" changeType="up" icon={Clock} color="#0F2A47" />
+        <StatCard label={t('avgDelivery')} value={isAr ? '٢٢ دقيقة' : '22 min'} change="-3 min" changeType="up" icon={Clock} color="#0D1B4B" />
         <StatCard label={t('commission')} value={`${((stats.totalRevenue||0)*0.12).toFixed(0)} SAR`} icon={TrendingUp} color="#E74C3C" />
       </div>
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DC]">
+        <div className="lg:col-span-2 bg-white rounded-2xl p-5 shadow-sm border border-[#D0EDEA]">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="font-black text-[#0F2A47]">{isAr ? 'الإيرادات والطلبات' : 'Revenue & Orders'}</h2>
+            <h2 className="font-black text-[#0D1B4B]">{isAr ? 'الإيرادات والطلبات' : 'Revenue & Orders'}</h2>
             <div className="flex items-center gap-3 text-xs font-semibold">
-              <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#0F2A47] inline-block rounded"></span> {isAr ? 'الإيرادات' : 'Revenue'}</span>
-              <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#C8A951] inline-block rounded"></span> {isAr ? 'الطلبات' : 'Orders'}</span>
+              <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#0D1B4B] inline-block rounded"></span> {isAr ? 'الإيرادات' : 'Revenue'}</span>
+              <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#00C9A7] inline-block rounded"></span> {isAr ? 'الطلبات' : 'Orders'}</span>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={220}>
@@ -110,15 +110,15 @@ export default function AdminDashboard() {
               <CartesianGrid strokeDasharray="3 3" stroke="#F0ECE4" />
               <XAxis dataKey="dayLabel" tick={{ fontSize: 11, fill: '#666' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: '#666' }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #E8E4DC', fontSize: 12 }} />
-              <Line type="monotone" dataKey="revenue" stroke="#0F2A47" strokeWidth={2.5} dot={false} />
-              <Line type="monotone" dataKey="orders" stroke="#C8A951" strokeWidth={2.5} dot={false} />
+              <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #D0EDEA', fontSize: 12 }} />
+              <Line type="monotone" dataKey="revenue" stroke="#0D1B4B" strokeWidth={2.5} dot={false} />
+              <Line type="monotone" dataKey="orders" stroke="#00C9A7" strokeWidth={2.5} dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DC]">
-          <h2 className="font-black text-[#0F2A47] mb-5">{isAr ? 'الطلبات حسب القسم' : 'Orders by Category'}</h2>
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#D0EDEA]">
+          <h2 className="font-black text-[#0D1B4B] mb-5">{isAr ? 'الطلبات حسب القسم' : 'Orders by Category'}</h2>
           <ResponsiveContainer width="100%" height={140}>
             <PieChart>
               <Pie data={categoryData} cx="50%" cy="50%" innerRadius={38} outerRadius={62} dataKey="value" paddingAngle={3}>
@@ -141,15 +141,15 @@ export default function AdminDashboard() {
 
       {/* Tables */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC] overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#D0EDEA] overflow-hidden">
           <div className="p-4 border-b border-[#F0ECE4] flex items-center justify-between">
-            <h2 className="font-black text-[#0F2A47]">{isAr ? 'آخر الطلبات' : 'Recent Orders'}</h2>
-            <a href="/admin/orders" className="text-xs text-[#C8A951] font-black">{t('viewAll')} →</a>
+            <h2 className="font-black text-[#0D1B4B]">{isAr ? 'آخر الطلبات' : 'Recent Orders'}</h2>
+            <a href="/admin/orders" className="text-xs text-[#00C9A7] font-black">{t('viewAll')} →</a>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-[#FBF8F2]">
+                <tr className="bg-[#F0F9F8]">
                   {[isAr ? 'رقم الطلب' : 'Order', isAr ? 'العميل' : 'Customer', isAr ? 'المتجر' : 'Store', isAr ? 'الإجمالي' : 'Total', isAr ? 'الحالة' : 'Status'].map(h => (
                     <th key={h} className="text-right px-4 py-2.5 text-xs font-black text-[#666] whitespace-nowrap">{h}</th>
                   ))}
@@ -157,8 +157,8 @@ export default function AdminDashboard() {
               </thead>
               <tbody>
                 {recentOrders.map((order, i) => (
-                  <tr key={order.id} className={`${i < recentOrders.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#FBF8F2]`}>
-                    <td className="px-4 py-3 text-xs font-mono font-black text-[#0F2A47]">{order.id}</td>
+                  <tr key={order.id} className={`${i < recentOrders.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#F0F9F8]`}>
+                    <td className="px-4 py-3 text-xs font-mono font-black text-[#0D1B4B]">{order.id}</td>
                     <td className="px-4 py-3 text-xs text-[#444] font-semibold">{isAr ? order.customerAr : order.customerEn}</td>
                     <td className="px-4 py-3 text-xs text-[#666]">{isAr ? order.storeAr : order.storeEn}</td>
                     <td className="px-4 py-3 text-xs font-black text-[#222]">{order.total} {isAr ? 'د' : 'SAR'}</td>
@@ -170,15 +170,15 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC] overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#D0EDEA] overflow-hidden">
           <div className="p-4 border-b border-[#F0ECE4] flex items-center justify-between">
-            <h2 className="font-black text-[#0F2A47]">{isAr ? 'السائقون النشطون' : 'Active Drivers'}</h2>
-            <a href="/admin/drivers" className="text-xs text-[#C8A951] font-black">{t('viewAll')} →</a>
+            <h2 className="font-black text-[#0D1B4B]">{isAr ? 'السائقون النشطون' : 'Active Drivers'}</h2>
+            <a href="/admin/drivers" className="text-xs text-[#00C9A7] font-black">{t('viewAll')} →</a>
           </div>
           <div className="p-4 space-y-2.5">
             {activeDrivers.map(driver => (
-              <div key={driver.nameEn} className="flex items-center gap-3 p-3 bg-[#FBF8F2] rounded-xl">
-                <div className="w-9 h-9 bg-[#0F2A47] rounded-full flex items-center justify-center text-white text-sm font-black">
+              <div key={driver.nameEn} className="flex items-center gap-3 p-3 bg-[#F0F9F8] rounded-xl">
+                <div className="w-9 h-9 bg-[#0D1B4B] rounded-full flex items-center justify-center text-white text-sm font-black">
                   {(isAr ? driver.nameAr : driver.nameEn).charAt(0)}
                 </div>
                 <div className="flex-1">

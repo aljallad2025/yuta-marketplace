@@ -159,7 +159,7 @@ export default function ReactNativePage() {
           {t('رجوع', 'Back')}
         </Link>
         <div className="flex items-center gap-2 text-sm">
-          <span className="text-[#00D4FF] font-black">سومو</span>
+          <span className="text-[#00D4FF] font-black">يوتا</span>
           <span className="text-white/20">·</span>
           <span className="text-white/40">React Native</span>
         </div>
@@ -175,7 +175,7 @@ export default function ReactNativePage() {
             Expo SDK 52 · React Navigation · EAS Build
           </div>
           <h1 className="text-3xl md:text-4xl font-black mb-3">
-            {t('تطبيق سومو — React Native', 'Sumu App — React Native')}
+            {t('تطبيق يوتا — React Native', 'Yuta App — React Native')}
           </h1>
           <p className="text-white/50 max-w-xl mx-auto text-sm">
             {t(
@@ -241,7 +241,7 @@ export default function ReactNativePage() {
               </h3>
               <div className="space-y-2">
                 {[
-                  { cmd: 'cd sumu-mobile', descAr: 'الدخول لمجلد التطبيق', descEn: 'Enter app directory' },
+                  { cmd: 'cd yuta-mobile', descAr: 'الدخول لمجلد التطبيق', descEn: 'Enter app directory' },
                   { cmd: 'npm install', descAr: 'تثبيت المكتبات', descEn: 'Install dependencies' },
                   { cmd: 'npm install -g eas-cli', descAr: 'تثبيت أداة EAS', descEn: 'Install EAS CLI globally' },
                   { cmd: 'eas login', descAr: 'تسجيل الدخول (احتاج حساب expo.dev مجاني)', descEn: 'Login (needs free expo.dev account)' },
@@ -294,7 +294,7 @@ export default function ReactNativePage() {
                   </ul>
                 </div>
               </div>
-              <div className="mt-4 bg-[#C8A951]/10 border border-[#C8A951]/30 rounded-xl p-3 text-sm text-[#C8A951]">
+              <div className="mt-4 bg-[#00C9A7]/10 border border-[#00C9A7]/30 rounded-xl p-3 text-sm text-[#00C9A7]">
                 💡 {t(
                   'التوصية: استخدم APK للاختبار، وAAB عند الرفع على Google Play Store.',
                   'Recommendation: Use APK for testing, AAB when submitting to Google Play Store.'
@@ -361,12 +361,12 @@ export default function ReactNativePage() {
         {activeTab === 'structure' && (
           <div className="space-y-4">
             <div className="bg-[#0F1629] border border-white/10 rounded-2xl p-6 font-mono text-sm">
-              <div className="text-[#00D4FF] mb-3 font-bold">sumu-mobile/</div>
+              <div className="text-[#00D4FF] mb-3 font-bold">yuta-mobile/</div>
               {[
                 { l: 1, n: 'App.jsx', c: '#00D4FF', note: t('نقطة الدخول', 'Entry point') },
                 { l: 1, n: 'index.js', c: '#00D4FF', note: t('تسجيل التطبيق', 'App registration') },
-                { l: 1, n: 'app.json', c: '#C8A951', note: t('إعدادات Expo (اسم + أيقونة + bundle ID)', 'Expo config (name + icon + bundle ID)') },
-                { l: 1, n: 'eas.json', c: '#C8A951', note: t('إعدادات البناء (APK + AAB + IPA)', 'Build profiles (APK + AAB + IPA)') },
+                { l: 1, n: 'app.json', c: '#00C9A7', note: t('إعدادات Expo (اسم + أيقونة + bundle ID)', 'Expo config (name + icon + bundle ID)') },
+                { l: 1, n: 'eas.json', c: '#00C9A7', note: t('إعدادات البناء (APK + AAB + IPA)', 'Build profiles (APK + AAB + IPA)') },
                 { l: 1, n: 'babel.config.js', c: '#6B7280', note: '' },
                 { l: 1, n: 'src/', c: '#fff', note: '' },
                 { l: 2, n: 'context/AppContext.js', c: '#A78BFA', note: t('السلة + الطلبات + المستخدم', 'Cart + orders + user') },
@@ -399,8 +399,8 @@ export default function ReactNativePage() {
               <h3 className="font-black mb-3 text-sm">{t('📍 مسار المشروع', '📍 Project Path')}</h3>
               <div className="flex items-center bg-black/40 rounded-lg px-4 py-2.5 font-mono text-sm text-white/60">
                 <span className="text-white/20 me-2">📁</span>
-                /home/user/app/sumu-mobile/
-                <CopyButton text="cd /home/user/app/sumu-mobile" />
+                /home/user/app/yuta-mobile/
+                <CopyButton text="cd /home/user/app/yuta-mobile" />
               </div>
             </div>
           </div>

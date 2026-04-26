@@ -5,7 +5,7 @@ let socketInstance = null
 
 export function getSocket() {
   if (!socketInstance) {
-    const token = localStorage.getItem('sumu_token')
+    const token = localStorage.getItem('yuta_token')
     socketInstance = io('/', {
       auth: { token },
       transports: ['websocket', 'polling'],

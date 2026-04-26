@@ -2,16 +2,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
 @theme {
-  --color-royal: #0F2A47;
-  --color-royal-light: #1a3a5c;
+  --color-royal: #0D1B4B;
+  --color-royal-light: #0A3D8F;
   --color-royal-dark: #081d33;
-  --color-gold: #C8A951;
+  --color-gold: #00C9A7;
   --color-gold-light: #d9bf77;
   --color-gold-dark: #a88b3a;
-  --color-cream: #FBF8F2;
+  --color-cream: #F0F9F8;
   --color-ink: #1a1a1a;
   --color-muted: #666666;
-  --color-border: #E8E4DC;
+  --color-border: #D0EDEA;
   --color-success: #2ECC71;
   --color-warning: #F39C12;
   --color-danger: #E74C3C;
@@ -21,7 +21,7 @@
 
 body {
   font-family: 'Tajawal', 'Inter', system-ui, sans-serif;
-  background-color: #FBF8F2;
+  background-color: #F0F9F8;
   color: #1a1a1a;
   margin: 0;
   padding: 0;
@@ -32,11 +32,11 @@ body {
 [dir="rtl"] { text-align: right; }
 
 ::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: #FBF8F2; }
-::-webkit-scrollbar-thumb { background: #C8A951; border-radius: 3px; }
+::-webkit-scrollbar-track { background: #F0F9F8; }
+::-webkit-scrollbar-thumb { background: #00C9A7; border-radius: 3px; }
 
 .gold-gradient {
-  background: linear-gradient(135deg, #C8A951 0%, #e8d08a 50%, #a88b3a 100%);
+  background: linear-gradient(135deg, #00C9A7 0%, #e8d08a 50%, #a88b3a 100%);
 }
 
 .royal-card {

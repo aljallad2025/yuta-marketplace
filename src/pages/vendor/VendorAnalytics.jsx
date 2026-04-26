@@ -19,7 +19,7 @@ const weeklyData = [
 ]
 
 const categoryData = [
-  { name: 'مشويات', nameEn: 'Grills', value: 45, color: '#C8A951' },
+  { name: 'مشويات', nameEn: 'Grills', value: 45, color: '#00C9A7' },
   { name: 'مشروبات', nameEn: 'Drinks', value: 20, color: '#3498DB' },
   { name: 'أرز', nameEn: 'Rice', value: 20, color: '#2ECC71' },
   { name: 'مقبلات', nameEn: 'Starters', value: 15, color: '#E74C3C' },
@@ -42,7 +42,7 @@ export default function VendorAnalytics() {
 
   const kpis = [
     { icon: ShoppingBag, labelAr: 'إجمالي الطلبات', labelEn: 'Total Orders', value: stats.totalOrders, color: '#3498DB', change: '+12%' },
-    { icon: DollarSign, labelAr: 'الإيرادات', labelEn: 'Revenue', value: `${stats.revenue.toLocaleString()} AED`, color: '#C8A951', change: '+8%' },
+    { icon: DollarSign, labelAr: 'الإيرادات', labelEn: 'Revenue', value: `${stats.revenue.toLocaleString()} AED`, color: '#00C9A7', change: '+8%' },
     { icon: TrendingUp, labelAr: 'معدل الإكمال', labelEn: 'Completion Rate', value: `${completionRate}%`, color: '#2ECC71', change: '+2%' },
     { icon: Star, labelAr: 'التقييم', labelEn: 'Rating', value: `${store?.rating || 0} / 5`, color: '#E67E22', change: 'Stable' },
   ]
@@ -50,21 +50,21 @@ export default function VendorAnalytics() {
   return (
     <div className="p-6" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="mb-6">
-        <h1 className="text-xl font-black text-[#0F2A47]">{isAr ? 'الإحصائيات والتقارير' : 'Analytics & Reports'}</h1>
+        <h1 className="text-xl font-black text-[#0D1B4B]">{isAr ? 'الإحصائيات والتقارير' : 'Analytics & Reports'}</h1>
         <p className="text-sm text-[#888] mt-0.5">{isAr ? 'بيانات أداء متجرك' : 'Your store performance data'}</p>
       </div>
 
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {kpis.map(kpi => (
-          <div key={kpi.labelEn} className="bg-white rounded-2xl border border-[#E8E4DC] p-4">
+          <div key={kpi.labelEn} className="bg-white rounded-2xl border border-[#D0EDEA] p-4">
             <div className="flex items-center justify-between mb-3">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: kpi.color + '20' }}>
                 <kpi.icon size={16} style={{ color: kpi.color }} />
               </div>
               <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{kpi.change}</span>
             </div>
-            <p className="text-2xl font-black text-[#0F2A47]">{kpi.value}</p>
+            <p className="text-2xl font-black text-[#0D1B4B]">{kpi.value}</p>
             <p className="text-xs text-[#888] mt-0.5">{isAr ? kpi.labelAr : kpi.labelEn}</p>
           </div>
         ))}
@@ -72,29 +72,29 @@ export default function VendorAnalytics() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
         {/* Weekly orders */}
-        <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5">
-          <h2 className="font-black text-[#0F2A47] mb-4">{isAr ? 'الطلبات اليومية - هذا الأسبوع' : 'Daily Orders - This Week'}</h2>
+        <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5">
+          <h2 className="font-black text-[#0D1B4B] mb-4">{isAr ? 'الطلبات اليومية - هذا الأسبوع' : 'Daily Orders - This Week'}</h2>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={weeklyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#F0ECE4" />
               <XAxis dataKey={isAr ? 'day' : 'dayEn'} tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip />
-              <Bar dataKey="orders" fill="#0F2A47" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="orders" fill="#0D1B4B" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Revenue chart */}
-        <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5">
-          <h2 className="font-black text-[#0F2A47] mb-4">{isAr ? 'الإيرادات اليومية (د.إ)' : 'Daily Revenue (AED)'}</h2>
+        <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5">
+          <h2 className="font-black text-[#0D1B4B] mb-4">{isAr ? 'الإيرادات اليومية (د.إ)' : 'Daily Revenue (AED)'}</h2>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={weeklyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#F0ECE4" />
               <XAxis dataKey={isAr ? 'day' : 'dayEn'} tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip />
-              <Line type="monotone" dataKey="revenue" stroke="#C8A951" strokeWidth={2.5} dot={{ r: 4, fill: '#C8A951' }} />
+              <Line type="monotone" dataKey="revenue" stroke="#00C9A7" strokeWidth={2.5} dot={{ r: 4, fill: '#00C9A7' }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -102,8 +102,8 @@ export default function VendorAnalytics() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Category breakdown */}
-        <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5">
-          <h2 className="font-black text-[#0F2A47] mb-4">{isAr ? 'المبيعات حسب الفئة' : 'Sales by Category'}</h2>
+        <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5">
+          <h2 className="font-black text-[#0D1B4B] mb-4">{isAr ? 'المبيعات حسب الفئة' : 'Sales by Category'}</h2>
           <div className="flex items-center gap-4">
             <ResponsiveContainer width={160} height={160}>
               <PieChart>
@@ -129,8 +129,8 @@ export default function VendorAnalytics() {
         </div>
 
         {/* Performance summary */}
-        <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5">
-          <h2 className="font-black text-[#0F2A47] mb-4">{isAr ? 'ملخص الأداء' : 'Performance Summary'}</h2>
+        <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5">
+          <h2 className="font-black text-[#0D1B4B] mb-4">{isAr ? 'ملخص الأداء' : 'Performance Summary'}</h2>
           <div className="space-y-3">
             {[
               { labelAr: 'متوسط قيمة الطلب', labelEn: 'Avg Order Value', value: stats.totalOrders > 0 ? `${Math.round(stats.revenue / stats.totalOrders)} AED` : '0 AED' },
@@ -142,7 +142,7 @@ export default function VendorAnalytics() {
             ].map(item => (
               <div key={item.labelEn} className="flex items-center justify-between py-2.5 border-b border-[#F0ECE4] last:border-0">
                 <span className="text-sm text-[#666]">{isAr ? item.labelAr : item.labelEn}</span>
-                <span className="font-black text-[#0F2A47] text-sm">{item.value}</span>
+                <span className="font-black text-[#0D1B4B] text-sm">{item.value}</span>
               </div>
             ))}
           </div>

@@ -23,7 +23,7 @@ export default function MobileTaxi() {
   const canBook = from.trim() || to.trim()
 
   if (booked) return (
-    <div className="bg-[#FBF8F2] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="bg-[#F0F9F8] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Map */}
       <div className="relative bg-[#d4edda] h-56 flex items-center justify-center overflow-hidden">
         <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 390 230">
@@ -33,13 +33,13 @@ export default function MobileTaxi() {
           {[0,30,60,90,120,150,180,210,230].map(y=>(
             <line key={y} x1="0" y1={y} x2="390" y2={y} stroke="#94a3b8" strokeWidth="0.5"/>
           ))}
-          <path d="M60 200 C110 170, 170 140, 230 100 C290 60, 330 45, 340 30" stroke="#0F2A47" strokeWidth="3" fill="none" strokeDasharray="7,4"/>
+          <path d="M60 200 C110 170, 170 140, 230 100 C290 60, 330 45, 340 30" stroke="#0D1B4B" strokeWidth="3" fill="none" strokeDasharray="7,4"/>
           <circle cx="60" cy="200" r="8" fill="#2ECC71"/>
           <circle cx="340" cy="30" r="8" fill="#E74C3C"/>
-          <circle cx="200" cy="118" r="14" fill="#0F2A47"/>
+          <circle cx="200" cy="118" r="14" fill="#0D1B4B"/>
           <text x="200" y="124" textAnchor="middle" fill="white" fontSize="11">{ride.emoji}</text>
         </svg>
-        <div className="absolute top-3 start-3 bg-white rounded-xl px-3 py-1.5 shadow text-xs font-black text-[#0F2A47]">
+        <div className="absolute top-3 start-3 bg-white rounded-xl px-3 py-1.5 shadow text-xs font-black text-[#0D1B4B]">
           {isAr ? `السائق على بُعد ${ride.etaAr}` : `Driver ${ride.etaEn} away`}
         </div>
         <button
@@ -52,9 +52,9 @@ export default function MobileTaxi() {
 
       {/* Driver Card */}
       <div className="p-3">
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DC]">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#D0EDEA]">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-[#FBF8F2] rounded-full flex items-center justify-center text-2xl border border-[#E8E4DC]">
+            <div className="w-12 h-12 bg-[#F0F9F8] rounded-full flex items-center justify-center text-2xl border border-[#D0EDEA]">
               👨‍✈️
             </div>
             <div className="flex-1">
@@ -62,26 +62,26 @@ export default function MobileTaxi() {
               <p className="text-xs text-[#666]">⭐ 4.94 · {isAr ? 'تويوتا كامري' : 'Toyota Camry'}</p>
             </div>
             <div className="text-end">
-              <p className="font-black text-[#0F2A47] text-base">{ride.fare}</p>
+              <p className="font-black text-[#0D1B4B] text-base">{ride.fare}</p>
               <p className="text-[10px] text-[#999]">{isAr ? 'درهم' : 'AED'}</p>
             </div>
           </div>
-          <div className="bg-[#0F2A47] text-white text-center rounded-xl py-2 mt-3 text-sm font-black tracking-widest">
+          <div className="bg-[#0D1B4B] text-white text-center rounded-xl py-2 mt-3 text-sm font-black tracking-widest">
             DXB 3421
           </div>
           {/* Animated progress */}
-          <div className="mt-3 h-1.5 bg-[#E8E4DC] rounded-full overflow-hidden">
-            <div className="h-full bg-[#0F2A47] rounded-full animate-pulse" style={{ width: '40%' }} />
+          <div className="mt-3 h-1.5 bg-[#D0EDEA] rounded-full overflow-hidden">
+            <div className="h-full bg-[#0D1B4B] rounded-full animate-pulse" style={{ width: '40%' }} />
           </div>
           <p className="text-[10px] text-[#999] mt-1 text-center">{isAr ? 'السائق في الطريق إليك' : 'Driver is on the way'}</p>
           <div className="flex gap-2 mt-3">
             <button
               onClick={() => setCallModal(true)}
-              className="flex-1 py-2.5 bg-[#FBF8F2] text-[#0F2A47] text-xs rounded-xl border border-[#E8E4DC] font-black flex items-center justify-center gap-1.5 active:bg-[#F0ECE4]"
+              className="flex-1 py-2.5 bg-[#F0F9F8] text-[#0D1B4B] text-xs rounded-xl border border-[#D0EDEA] font-black flex items-center justify-center gap-1.5 active:bg-[#F0ECE4]"
             >
               <Phone size={13} /> {isAr ? 'اتصال' : 'Call'}
             </button>
-            <button className="flex-1 py-2.5 bg-[#FBF8F2] text-[#0F2A47] text-xs rounded-xl border border-[#E8E4DC] font-black flex items-center justify-center gap-1.5 active:bg-[#F0ECE4]">
+            <button className="flex-1 py-2.5 bg-[#F0F9F8] text-[#0D1B4B] text-xs rounded-xl border border-[#D0EDEA] font-black flex items-center justify-center gap-1.5 active:bg-[#F0ECE4]">
               <MessageCircle size={13} /> {isAr ? 'رسالة' : 'Message'}
             </button>
           </div>
@@ -94,7 +94,7 @@ export default function MobileTaxi() {
           <div className="absolute inset-0 bg-black/50" onClick={() => setCallModal(false)} />
           <div className="relative bg-white rounded-3xl p-6 mx-6 text-center shadow-2xl">
             <div className="text-4xl mb-3">📞</div>
-            <p className="font-black text-[#0F2A47]">{isAr ? 'أحمد الراشدي' : 'Ahmed Al Rashidi'}</p>
+            <p className="font-black text-[#0D1B4B]">{isAr ? 'أحمد الراشدي' : 'Ahmed Al Rashidi'}</p>
             <p className="text-sm text-[#666] mt-1 mb-6">+971 50 123 4567</p>
             <div className="flex gap-3">
               <button
@@ -117,8 +117,8 @@ export default function MobileTaxi() {
   )
 
   return (
-    <div className="bg-[#FBF8F2] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
-      <div className="bg-[#0F2A47] px-4 pt-2 pb-4">
+    <div className="bg-[#F0F9F8] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="bg-[#0D1B4B] px-4 pt-2 pb-4">
         <h2 className="text-white font-black text-base">{isAr ? 'احجز رحلة' : 'Book a Ride'}</h2>
         <p className="text-white/50 text-xs mt-0.5">{isAr ? 'رحلات سريعة وآمنة' : 'Fast, safe rides across UAE'}</p>
       </div>
@@ -134,16 +134,16 @@ export default function MobileTaxi() {
           ))}
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <p className="text-xs text-[#0F2A47] font-black">📍 {isAr ? 'أدخل المواقع أدناه' : 'Enter locations below'}</p>
+          <p className="text-xs text-[#0D1B4B] font-black">📍 {isAr ? 'أدخل المواقع أدناه' : 'Enter locations below'}</p>
         </div>
-        <button className="absolute top-2 end-2 bg-white rounded-lg px-2 py-1 text-[10px] font-black text-[#0F2A47] shadow">
+        <button className="absolute top-2 end-2 bg-white rounded-lg px-2 py-1 text-[10px] font-black text-[#0D1B4B] shadow">
           {isAr ? 'الموقع الحالي' : 'My location'}
         </button>
       </div>
 
       {/* Location Inputs */}
       <div className="px-3 mt-3 space-y-2">
-        <div className="flex items-center gap-3 bg-white rounded-xl px-3 py-3 shadow-sm border border-[#E8E4DC]">
+        <div className="flex items-center gap-3 bg-white rounded-xl px-3 py-3 shadow-sm border border-[#D0EDEA]">
           <div className="w-3 h-3 rounded-full bg-emerald-500 flex-shrink-0" />
           <input
             value={from}
@@ -153,11 +153,11 @@ export default function MobileTaxi() {
             dir={isAr ? 'rtl' : 'ltr'}
           />
           <button onClick={() => setFrom(isAr ? 'دبي مارينا' : 'Dubai Marina')} className="active:opacity-70">
-            <Navigation size={13} className="text-[#C8A951]" />
+            <Navigation size={13} className="text-[#00C9A7]" />
           </button>
         </div>
-        <div className="flex items-center gap-3 bg-white rounded-xl px-3 py-3 shadow-sm border border-[#E8E4DC]">
-          <div className="w-3 h-3 rounded-full bg-[#0F2A47] flex-shrink-0" />
+        <div className="flex items-center gap-3 bg-white rounded-xl px-3 py-3 shadow-sm border border-[#D0EDEA]">
+          <div className="w-3 h-3 rounded-full bg-[#0D1B4B] flex-shrink-0" />
           <input
             value={to}
             onChange={e => setTo(e.target.value)}
@@ -183,7 +183,7 @@ export default function MobileTaxi() {
             <button
               key={dest.en}
               onClick={() => setTo(isAr ? dest.ar : dest.en)}
-              className="flex items-center gap-1.5 bg-white rounded-xl px-3 py-2 text-[10px] font-black text-[#0F2A47] border border-[#E8E4DC] whitespace-nowrap active:bg-[#FBF8F2] flex-shrink-0"
+              className="flex items-center gap-1.5 bg-white rounded-xl px-3 py-2 text-[10px] font-black text-[#0D1B4B] border border-[#D0EDEA] whitespace-nowrap active:bg-[#F0F9F8] flex-shrink-0"
             >
               <span>{dest.emoji}</span>
               <span>{isAr ? dest.ar : dest.en}</span>
@@ -194,14 +194,14 @@ export default function MobileTaxi() {
 
       {/* Ride Types */}
       <div className="px-3 mt-3">
-        <p className="text-xs font-black text-[#0F2A47] mb-2">{isAr ? 'اختر نوع الرحلة' : 'Choose Ride'}</p>
+        <p className="text-xs font-black text-[#0D1B4B] mb-2">{isAr ? 'اختر نوع الرحلة' : 'Choose Ride'}</p>
         <div className="grid grid-cols-2 gap-2">
           {RIDE_TYPES.map(rt => (
             <button
               key={rt.id}
               onClick={() => setSelected(rt.id)}
               className={"p-3 rounded-xl border text-start transition-all " +
-                (selected === rt.id ? 'border-[#0F2A47] bg-[#0F2A47]/5' : 'border-[#E8E4DC] bg-white')}
+                (selected === rt.id ? 'border-[#0D1B4B] bg-[#0D1B4B]/5' : 'border-[#D0EDEA] bg-white')}
             >
               <span className="text-2xl">{rt.emoji}</span>
               <p className="font-black text-xs text-[#222] mt-1">{isAr ? rt.labelAr : rt.labelEn}</p>
@@ -209,7 +209,7 @@ export default function MobileTaxi() {
                 <span className="text-[10px] text-[#666] flex items-center gap-0.5">
                   <Clock size={9}/> {isAr ? rt.etaAr : rt.etaEn}
                 </span>
-                <span className="text-xs font-black text-[#0F2A47]">{rt.fare} {isAr ? 'د' : 'AED'}</span>
+                <span className="text-xs font-black text-[#0D1B4B]">{rt.fare} {isAr ? 'د' : 'AED'}</span>
               </div>
             </button>
           ))}
@@ -218,16 +218,16 @@ export default function MobileTaxi() {
 
       {/* Wallet info */}
       <div className="px-3 mt-3">
-        <div className="bg-[#0F2A47]/5 rounded-xl px-3 py-2 flex items-center justify-between">
-          <span className="text-xs text-[#0F2A47]">💳 {isAr ? 'محفظة SUMU' : 'SUMU Wallet'}</span>
-          <span className="text-xs font-black text-[#0F2A47]">{walletBalance} {isAr ? 'د' : 'AED'}</span>
+        <div className="bg-[#0D1B4B]/5 rounded-xl px-3 py-2 flex items-center justify-between">
+          <span className="text-xs text-[#0D1B4B]">💳 {isAr ? 'محفظة YUTA' : 'YUTA Wallet'}</span>
+          <span className="text-xs font-black text-[#0D1B4B]">{walletBalance} {isAr ? 'د' : 'AED'}</span>
         </div>
       </div>
 
       <div className="px-3 mt-4 pb-4">
         <button
           onClick={() => { if (canBook || true) setBooked(true) }}
-          className="w-full py-3.5 bg-[#0F2A47] text-white font-black text-sm rounded-2xl shadow-lg active:opacity-90"
+          className="w-full py-3.5 bg-[#0D1B4B] text-white font-black text-sm rounded-2xl shadow-lg active:opacity-90"
         >
           {isAr ? `تأكيد الرحلة — ${ride.fare} درهم` : `Confirm Ride — ${ride.fare} AED`}
         </button>

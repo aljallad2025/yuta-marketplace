@@ -5,6 +5,14 @@ import { useLang } from '../i18n/LangContext'
 import { useAuth } from '../store/authStore'
 import { ordersAPI } from '../services/api'
 
+function getL(lang, en, th, lo, vi) {
+  if (lang === 'th') return th || en
+  if (lang === 'lo') return lo || en
+  if (lang === 'vi') return vi || en
+  return en
+}
+
+
 export default function WebCheckout() {
   const [payment, setPayment] = useState('cash')
   const [deliveryTime, setDeliveryTime] = useState(0)
@@ -12,7 +20,7 @@ export default function WebCheckout() {
   const [promoApplied, setPromoApplied] = useState(false)
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
-  const { t, isAr } = useLang()
+  const { t, isAr, lang } = useLang()
   const { currentUser } = useAuth()
   const navigate = useNavigate()
 
@@ -26,7 +34,7 @@ export default function WebCheckout() {
 
   const paymentMethods = [
     { id: 'card', label: t('creditCard'), icon: CreditCard, sub: '**** **** **** 4892' },
-    { id: 'wallet', label: t('wallet'), icon: Wallet, sub: `${t('balance')}: 150.00 ${isAr ? 'ريال' : 'SAR'}` },
+    { id: 'wallet', label: t('wallet'), icon: Wallet, sub: `${t('balance')}: 150.00 ${getL(lang,'SAR','บาท','ກີບ','VND')}` },
     { id: 'cash', label: t('cash'), icon: Banknote, sub: t('payWhenDelivered') },
   ]
 
@@ -41,7 +49,7 @@ export default function WebCheckout() {
     if (!address) { alert(isAr ? 'أدخل عنوان التوصيل' : 'Enter delivery address'); return }
     setLoading(true)
     try {
-      const token = localStorage.getItem('sumu_token')
+      const token = localStorage.getItem('yuta_token')
       await ordersAPI.create({
         store_id: parseInt(storeId) || 1,
         customer_phone: currentUser?.phone || '+966500000000',
@@ -66,18 +74,18 @@ export default function WebCheckout() {
   }
 
   if (cart.length === 0) return (
-    <div className="min-h-screen bg-[#FBF8F2] flex flex-col items-center justify-center" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-[#F0F9F8] flex flex-col items-center justify-center" dir={isAr ? 'rtl' : 'ltr'}>
       <ShoppingBag size={48} className="text-gray-300 mb-4" />
       <p className="text-gray-500 font-semibold mb-4">{isAr ? 'السلة فارغة' : 'Cart is empty'}</p>
-      <Link to="/web/marketplace" className="bg-[#C8A951] text-white font-bold px-6 py-3 rounded-xl">
+      <Link to="/web/marketplace" className="bg-[#00C9A7] text-white font-bold px-6 py-3 rounded-xl">
         {isAr ? 'تسوق الآن' : 'Shop Now'}
       </Link>
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-[#FBF8F2]" dir={isAr ? 'rtl' : 'ltr'}>
-      <div className="bg-[#0F2A47] py-5 px-4">
+    <div className="min-h-screen bg-[#F0F9F8]" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="bg-[#0D1B4B] py-5 px-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
           <Link to="/web/marketplace" className="text-white/60 hover:text-white">
             <ArrowLeft size={20} style={{ transform: isAr ? 'rotate(180deg)' : undefined }} />
@@ -88,26 +96,26 @@ export default function WebCheckout() {
 
       <div className="max-w-2xl mx-auto px-4 py-5 space-y-4">
         {/* العنوان */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DC]">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#D0EDEA]">
           <div className="flex items-center gap-2 mb-3">
-            <MapPin size={18} className="text-[#C8A951]" />
-            <p className="font-black text-[#0F2A47]">{isAr ? 'عنوان التوصيل' : 'Delivery Address'}</p>
+            <MapPin size={18} className="text-[#00C9A7]" />
+            <p className="font-black text-[#0D1B4B]">{isAr ? 'عنوان التوصيل' : 'Delivery Address'}</p>
           </div>
           <input value={address} onChange={e => setAddress(e.target.value)}
             placeholder={isAr ? 'أدخل عنوانك...' : 'Enter your address...'}
-            className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#C8A951]" />
+            className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#00C9A7]" />
         </div>
 
         {/* وقت التوصيل */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DC]">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#D0EDEA]">
           <div className="flex items-center gap-2 mb-3">
-            <Clock size={18} className="text-[#C8A951]" />
-            <p className="font-black text-[#0F2A47]">{t('deliveryTime')}</p>
+            <Clock size={18} className="text-[#00C9A7]" />
+            <p className="font-black text-[#0D1B4B]">{t('deliveryTime')}</p>
           </div>
           <div className="flex gap-2 flex-wrap">
             {deliveryTimes.map((time, i) => (
               <button key={i} onClick={() => setDeliveryTime(i)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${deliveryTime === i ? 'bg-[#0F2A47] text-white border-[#0F2A47]' : 'border-[#E8E4DC] text-[#555]'}`}>
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${deliveryTime === i ? 'bg-[#0D1B4B] text-white border-[#0D1B4B]' : 'border-[#D0EDEA] text-[#555]'}`}>
                 {time}
               </button>
             ))}
@@ -115,51 +123,51 @@ export default function WebCheckout() {
         </div>
 
         {/* المنتجات */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DC]">
-          <p className="font-black text-[#0F2A47] mb-3">{isAr ? 'طلبك' : 'Your Order'}</p>
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#D0EDEA]">
+          <p className="font-black text-[#0D1B4B] mb-3">{isAr ? 'طلبك' : 'Your Order'}</p>
           <div className="space-y-2">
             {cart.map((item, i) => (
               <div key={i} className="flex items-center justify-between text-sm">
                 <span className="text-[#555] font-semibold">{isAr ? item.nameAr : item.nameEn} ×{item.qty}</span>
-                <span className="font-black text-[#0F2A47]">{item.price * item.qty} {isAr ? 'ريال' : 'SAR'}</span>
+                <span className="font-black text-[#0D1B4B]">{item.price * item.qty} {getL(lang,'SAR','บาท','ກີບ','VND')}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* طريقة الدفع */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DC]">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#D0EDEA]">
           <div className="flex items-center gap-2 mb-3">
-            <CreditCard size={18} className="text-[#C8A951]" />
-            <p className="font-black text-[#0F2A47]">{t('paymentMethod')}</p>
+            <CreditCard size={18} className="text-[#00C9A7]" />
+            <p className="font-black text-[#0D1B4B]">{t('paymentMethod')}</p>
           </div>
           <div className="space-y-2">
             {paymentMethods.map(m => (
               <button key={m.id} onClick={() => setPayment(m.id)}
-                className={`w-full flex items-center gap-3 p-3 rounded-xl border transition ${payment === m.id ? 'border-[#C8A951] bg-[#FBF8F2]' : 'border-[#E8E4DC]'}`}>
-                <m.icon size={18} className={payment === m.id ? 'text-[#C8A951]' : 'text-[#999]'} />
+                className={`w-full flex items-center gap-3 p-3 rounded-xl border transition ${payment === m.id ? 'border-[#00C9A7] bg-[#F0F9F8]' : 'border-[#D0EDEA]'}`}>
+                <m.icon size={18} className={payment === m.id ? 'text-[#00C9A7]' : 'text-[#999]'} />
                 <div className="flex-1 text-right">
                   <p className="font-black text-sm text-[#222]">{m.label}</p>
                   <p className="text-xs text-[#888]">{m.sub}</p>
                 </div>
-                {payment === m.id && <Check size={16} className="text-[#C8A951]" />}
+                {payment === m.id && <Check size={16} className="text-[#00C9A7]" />}
               </button>
             ))}
           </div>
         </div>
 
         {/* الملخص */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DC] space-y-2">
-          <div className="flex justify-between text-sm"><span className="text-[#666]">{t('subtotal')}</span><span className="font-bold">{subtotal} {isAr ? 'ريال' : 'SAR'}</span></div>
-          <div className="flex justify-between text-sm"><span className="text-[#666]">{t('delivery')}</span><span className="font-bold">{delivery} {isAr ? 'ريال' : 'SAR'}</span></div>
-          {promoApplied && <div className="flex justify-between text-sm text-green-600"><span>{t('discount')}</span><span>-{discount} {isAr ? 'ريال' : 'SAR'}</span></div>}
-          <div className="border-t border-[#E8E4DC] pt-2 flex justify-between font-black text-[#0F2A47]">
-            <span>{t('total')}</span><span>{total} {isAr ? 'ريال' : 'SAR'}</span>
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#D0EDEA] space-y-2">
+          <div className="flex justify-between text-sm"><span className="text-[#666]">{t('subtotal')}</span><span className="font-bold">{subtotal} {getL(lang,'SAR','บาท','ກີບ','VND')}</span></div>
+          <div className="flex justify-between text-sm"><span className="text-[#666]">{t('delivery')}</span><span className="font-bold">{delivery} {getL(lang,'SAR','บาท','ກີບ','VND')}</span></div>
+          {promoApplied && <div className="flex justify-between text-sm text-green-600"><span>{t('discount')}</span><span>-{discount} {getL(lang,'SAR','บาท','ກີບ','VND')}</span></div>}
+          <div className="border-t border-[#D0EDEA] pt-2 flex justify-between font-black text-[#0D1B4B]">
+            <span>{t('total')}</span><span>{total} {getL(lang,'SAR','บาท','ກີບ','VND')}</span>
           </div>
         </div>
 
         <button onClick={handleOrder} disabled={loading}
-          className="w-full bg-[#C8A951] text-[#0F2A47] font-black py-4 rounded-2xl text-lg hover:bg-[#d4b55a] transition disabled:opacity-50">
+          className="w-full bg-[#00C9A7] text-[#0D1B4B] font-black py-4 rounded-2xl text-lg hover:bg-[#d4b55a] transition disabled:opacity-50">
           {loading ? '...' : isAr ? `تأكيد الطلب — ${total} ريال` : `Place Order — ${total} SAR`}
         </button>
       </div>

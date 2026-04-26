@@ -98,7 +98,7 @@ export function AppProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    const token = localStorage.getItem('sumu_token')
+    const token = localStorage.getItem('yuta_token')
     if (token) loadAll()
   }, [loadAll])
 

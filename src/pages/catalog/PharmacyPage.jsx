@@ -3,8 +3,16 @@ import { Search, Star, Clock, ArrowLeft, ChevronRight, MapPin } from 'lucide-rea
 import { useLang } from '../../i18n/LangContext'
 import { useNavigate } from 'react-router-dom'
 
+function getL(lang, en, th, lo, vi) {
+  if (lang === 'th') return th || en
+  if (lang === 'lo') return lo || en
+  if (lang === 'vi') return vi || en
+  return en
+}
+
+
 export default function PharmacyPage() {
-  const { isAr } = useLang()
+  const { isAr, lang } = useLang()
   const navigate = useNavigate()
   const [stores, setStores] = useState([])
   const [search, setSearch] = useState('')
@@ -22,12 +30,12 @@ export default function PharmacyPage() {
   )
 
   return (
-    <div className="min-h-screen bg-[#FBF8F2]" dir={isAr ? 'rtl' : 'ltr'}>
-      <div className="bg-gradient-to-br from-[#0F2A47] to-[#1a4a6b] px-4 pt-8 pb-6">
+    <div className="min-h-screen bg-[#F0F9F8]" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="bg-gradient-to-br from-[#0D1B4B] to-[#0A3D8F] px-4 pt-8 pb-6">
         <div className="max-w-3xl mx-auto">
           <button onClick={() => navigate('/web')} className="mb-4 flex items-center gap-2 text-white/60 text-sm">
             <ArrowLeft size={16} style={{ transform: isAr ? 'rotate(180deg)' : undefined }} />
-            {isAr ? 'الرئيسية' : 'Home'}
+            {getL(lang,'Home','หน้าแรก','ໜ້າຫຼັກ','Trang chủ')}
           </button>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-2xl">{'💊'}</div>
@@ -48,7 +56,7 @@ export default function PharmacyPage() {
       <div className="max-w-3xl mx-auto px-4 py-5">
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="w-8 h-8 border-4 border-[#C8A951] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-[#00C9A7] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20 text-gray-400">
@@ -59,17 +67,17 @@ export default function PharmacyPage() {
           <div className="space-y-3">
             {filtered.map(store => (
               <button key={store.id} onClick={() => navigate('/web/store?id=' + store.id)}
-                className="w-full bg-white rounded-2xl border border-[#E8E4DC] p-4 flex items-center gap-4 hover:shadow-md transition text-start">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#0F2A47] to-[#1a4a6b] rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 overflow-hidden">
+                className="w-full bg-white rounded-2xl border border-[#D0EDEA] p-4 flex items-center gap-4 hover:shadow-md transition text-start">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#0D1B4B] to-[#0A3D8F] rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 overflow-hidden">
                   {store.logo?.startsWith('/') || store.logo?.startsWith('http')
                     ? <img src={store.logo} className="w-full h-full object-cover rounded-2xl" />
                     : store.logo || '💊'}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-black text-[#0F2A47] text-base">{isAr ? store.name_ar : store.name_en}</h3>
+                  <h3 className="font-black text-[#0D1B4B] text-base">{isAr ? store.name_ar : store.name_en}</h3>
                   <div className="flex items-center gap-3 mt-1 flex-wrap">
                     <span className="flex items-center gap-1 text-xs text-gray-400">
-                      <Star size={11} className="fill-[#C8A951] text-[#C8A951]" />{store.rating || '4.5'}
+                      <Star size={11} className="fill-[#00C9A7] text-[#00C9A7]" />{store.rating || '4.5'}
                     </span>
                     <span className="flex items-center gap-1 text-xs text-gray-400">
                       <Clock size={11} />{store.delivery_time || '30'} {isAr ? 'دق' : 'min'}
@@ -82,7 +90,7 @@ export default function PharmacyPage() {
                   </div>
                   <div className="flex items-center gap-2 mt-2">
                     <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${store.is_open ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                      {store.is_open ? (isAr ? 'مفتوح' : 'Open') : (isAr ? 'مغلق' : 'Closed')}
+                      {store.is_open ? (getL(lang,'Open','เปิด','ເປີດ','Mở cửa')) : (getL(lang,'Closed','ปิด','ປິດ','Đóng cửa'))}
                     </span>
                     {store.delivery_fee === 0
                       ? <span className="text-xs bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-bold">{isAr ? 'توصيل مجاني' : 'Free delivery'}</span>

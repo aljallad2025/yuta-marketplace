@@ -61,17 +61,17 @@ export default function AdminDrivers() {
     <div className="p-6 space-y-5" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#0F2A47]">{t('driverManagement')}</h1>
+          <h1 className="text-2xl font-black text-[#0D1B4B]">{t('driverManagement')}</h1>
           <p className="text-sm text-[#666]">{isAr ? '١٤٢ سائق نشط على المنصة' : '142 active drivers on platform'}</p>
         </div>
-        <button className="px-4 py-2.5 bg-[#0F2A47] text-white text-sm font-black rounded-xl">
+        <button className="px-4 py-2.5 bg-[#0D1B4B] text-white text-sm font-black rounded-xl">
           {isAr ? '+ إضافة سائق' : '+ Add Driver'}
         </button>
       </div>
 
       <div className="grid grid-cols-4 gap-3">
         {stats.map(s => (
-          <div key={s.labelEn} className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E4DC] text-center">
+          <div key={s.labelEn} className="bg-white rounded-xl p-4 shadow-sm border border-[#D0EDEA] text-center">
             <p className="text-2xl font-black" style={{ color: s.color }}>{s.count}</p>
             <p className="text-xs text-[#666] mt-0.5">{isAr ? s.labelAr : s.labelEn}</p>
           </div>
@@ -79,7 +79,7 @@ export default function AdminDrivers() {
       </div>
 
       <div className="flex gap-3">
-        <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-2.5 gap-2 shadow-sm border border-[#E8E4DC]">
+        <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-2.5 gap-2 shadow-sm border border-[#D0EDEA]">
           <Search size={16} className="text-[#999]" />
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder={isAr ? 'ابحث عن السائقين...' : 'Search drivers...'}
@@ -89,16 +89,16 @@ export default function AdminDrivers() {
         {Object.keys(filterLabels).map(f => (
           <button key={f} onClick={() => setFilter(f)}
             className={`px-4 py-2.5 rounded-xl text-sm font-black ${
-              filter === f ? 'bg-[#0F2A47] text-white' : 'bg-white text-[#444] border border-[#E8E4DC]'
+              filter === f ? 'bg-[#0D1B4B] text-white' : 'bg-white text-[#444] border border-[#D0EDEA]'
             }`}>{filterLabels[f]}</button>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#D0EDEA] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-[#FBF8F2] border-b border-[#E8E4DC]">
+              <tr className="bg-[#F0F9F8] border-b border-[#D0EDEA]">
                 {headers.map(h => (
                   <th key={h} className="text-start px-4 py-3.5 text-xs font-black text-[#666] uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
@@ -106,10 +106,10 @@ export default function AdminDrivers() {
             </thead>
             <tbody>
               {filtered.map((driver, i) => (
-                <tr key={driver.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#FBF8F2]`}>
+                <tr key={driver.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#F0F9F8]`}>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-[#0F2A47] rounded-full flex items-center justify-center text-white font-black text-sm">
+                      <div className="w-9 h-9 bg-[#0D1B4B] rounded-full flex items-center justify-center text-white font-black text-sm">
                         {(isAr ? driver.nameAr : driver.nameEn).charAt(0)}
                       </div>
                       <div>
@@ -122,20 +122,20 @@ export default function AdminDrivers() {
                   <td className="px-4 py-4"><Badge status={getStatusBadge(driver.status)} label={getStatusLabel(driver.status)} /></td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-1">
-                      <Star size={12} className="fill-[#C8A951] text-[#C8A951]" />
+                      <Star size={12} className="fill-[#00C9A7] text-[#00C9A7]" />
                       <span className="text-sm font-black text-[#222]">{driver.rating}</span>
                     </div>
                   </td>
                   <td className="px-4 py-4 text-sm font-black text-[#222]">{driver.trips}</td>
-                  <td className="px-4 py-4 text-sm text-[#0F2A47] font-black">{driver.earnings.toLocaleString()} {isAr ? 'د' : 'SAR'}</td>
+                  <td className="px-4 py-4 text-sm text-[#0D1B4B] font-black">{driver.earnings.toLocaleString()} {isAr ? 'د' : 'SAR'}</td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-1 text-xs text-[#666]">
-                      <MapPin size={11} className="text-[#C8A951]" /> {isAr ? driver.locationAr : driver.locationEn}
+                      <MapPin size={11} className="text-[#00C9A7]" /> {isAr ? driver.locationAr : driver.locationEn}
                     </div>
                   </td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-1">
-                      <button className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Eye size={13} /></button>
+                      <button className="p-1.5 hover:bg-[#F0F9F8] rounded-lg text-[#666] hover:text-[#0D1B4B]"><Eye size={13} /></button>
                       {!driver.approved ? (
                         <button className="p-1.5 hover:bg-green-50 rounded-lg text-green-600"><UserCheck size={13} /></button>
                       ) : (

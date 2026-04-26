@@ -25,7 +25,7 @@ export default function AdminApprovals() {
   return (
     <div className="p-6" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="mb-6">
-        <h1 className="text-2xl font-black text-[#0F2A47]">{isAr ? 'إدارة الطلبات والموافقات' : 'Approvals Management'}</h1>
+        <h1 className="text-2xl font-black text-[#0D1B4B]">{isAr ? 'إدارة الطلبات والموافقات' : 'Approvals Management'}</h1>
         <p className="text-sm text-[#666] mt-0.5">{isAr ? 'مراجعة طلبات الموردين والسائقين' : 'Review vendor and driver applications'}</p>
       </div>
 
@@ -49,12 +49,12 @@ export default function AdminApprovals() {
           { labelAr: 'مرفوض', labelEn: 'Rejected', count: rejectedAll.length, color: '#E74C3C', icon: XCircle },
           { labelAr: 'موقوف', labelEn: 'Suspended', count: suspendedAll.length, color: '#E67E22', icon: Ban },
         ].map(s => (
-          <div key={s.labelEn} className="bg-white rounded-2xl border border-[#E8E4DC] p-4 flex items-center gap-3">
+          <div key={s.labelEn} className="bg-white rounded-2xl border border-[#D0EDEA] p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: s.color + '20' }}>
               <s.icon size={18} style={{ color: s.color }} />
             </div>
             <div>
-              <p className="text-xl font-black text-[#0F2A47]">{s.count}</p>
+              <p className="text-xl font-black text-[#0D1B4B]">{s.count}</p>
               <p className="text-xs text-[#888]">{isAr ? s.labelAr : s.labelEn}</p>
             </div>
           </div>
@@ -70,7 +70,7 @@ export default function AdminApprovals() {
           { key: 'suspended', ar: 'موقوفون', en: 'Suspended', count: suspendedAll.length },
         ].map(t => (
           <button key={t.key} onClick={() => setTab(t.key)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-black whitespace-nowrap transition-all ${tab === t.key ? 'bg-[#0F2A47] text-white' : 'bg-white border border-[#E8E4DC] text-[#666]'}`}>
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-black whitespace-nowrap transition-all ${tab === t.key ? 'bg-[#0D1B4B] text-white' : 'bg-white border border-[#D0EDEA] text-[#666]'}`}>
             {isAr ? t.ar : t.en}
             {t.count > 0 && (
               <span className={`w-5 h-5 rounded-full text-[10px] font-black flex items-center justify-center ${tab === t.key ? 'bg-white/20 text-white' : 'bg-[#F0ECE4] text-[#666]'}`}>{t.count}</span>
@@ -82,22 +82,22 @@ export default function AdminApprovals() {
       {/* List */}
       <div className="space-y-3">
         {list.length === 0 ? (
-          <div className="text-center py-14 bg-white rounded-2xl border border-[#E8E4DC]">
+          <div className="text-center py-14 bg-white rounded-2xl border border-[#D0EDEA]">
             <div className="text-4xl mb-3">{tab === 'pending' ? '✅' : '📋'}</div>
             <p className="font-black text-[#444]">{isAr ? 'لا توجد طلبات' : 'No applications'}</p>
           </div>
         ) : list.map(u => (
-          <div key={u.id} className={`bg-white rounded-2xl border-2 overflow-hidden transition-all ${u.status === 'pending' ? 'border-amber-300' : 'border-[#E8E4DC]'}`}>
+          <div key={u.id} className={`bg-white rounded-2xl border-2 overflow-hidden transition-all ${u.status === 'pending' ? 'border-amber-300' : 'border-[#D0EDEA]'}`}>
             <div className="p-4 flex items-center gap-4">
               {/* Avatar */}
-              <div className="w-12 h-12 bg-[#FBF8F2] rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 border border-[#E8E4DC]">
+              <div className="w-12 h-12 bg-[#F0F9F8] rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 border border-[#D0EDEA]">
                 {u.avatar || (u.role === 'vendor' ? '🏪' : '🚗')}
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-black text-[#0F2A47] text-sm">{isAr ? u.nameAr : u.nameEn}</span>
+                  <span className="font-black text-[#0D1B4B] text-sm">{isAr ? u.nameAr : u.nameEn}</span>
                   <Badge
                     variant={u.role === 'vendor' ? 'blue' : 'gold'}
                     label={u.role === 'vendor' ? (isAr ? 'مورد' : 'Vendor') : (isAr ? 'سائق' : 'Driver')}
@@ -145,7 +145,7 @@ export default function AdminApprovals() {
                   </button>
                 )}
                 <button onClick={() => setDetail(detail?.id === u.id ? null : u)}
-                  className="p-2 border border-[#E8E4DC] rounded-xl hover:bg-[#FBF8F2] text-[#888]">
+                  className="p-2 border border-[#D0EDEA] rounded-xl hover:bg-[#F0F9F8] text-[#888]">
                   <Eye size={14} />
                 </button>
               </div>
@@ -153,7 +153,7 @@ export default function AdminApprovals() {
 
             {/* Expanded detail */}
             {detail?.id === u.id && (
-              <div className="border-t border-[#F0ECE4] px-4 py-3 bg-[#FBF8F2]/50">
+              <div className="border-t border-[#F0ECE4] px-4 py-3 bg-[#F0F9F8]/50">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <div><p className="text-[10px] font-black text-[#666] uppercase">{isAr ? 'الاسم الكامل' : 'Full Name'}</p><p className="text-sm font-black text-[#222] mt-0.5">{isAr ? u.nameAr : u.nameEn}</p></div>
                   <div><p className="text-[10px] font-black text-[#666] uppercase">{isAr ? 'اسم المستخدم' : 'Username'}</p><p className="text-sm text-[#444] mt-0.5 font-mono">@{u.username}</p></div>

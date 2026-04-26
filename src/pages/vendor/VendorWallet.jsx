@@ -41,7 +41,7 @@ export default function VendorWallet() {
   return (
     <div className="p-6" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="mb-6">
-        <h1 className="text-xl font-black text-[#0F2A47]">{isAr ? 'المحفظة والمالية' : 'Wallet & Finance'}</h1>
+        <h1 className="text-xl font-black text-[#0D1B4B]">{isAr ? 'المحفظة والمالية' : 'Wallet & Finance'}</h1>
         <p className="text-sm text-[#888] mt-0.5">{isAr ? 'تتبع إيراداتك وسحب أموالك' : 'Track your earnings and withdraw funds'}</p>
       </div>
 
@@ -54,13 +54,13 @@ export default function VendorWallet() {
 
       {/* Balance cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-[#0F2A47] rounded-2xl p-5 col-span-1 md:col-span-2">
+        <div className="bg-[#0D1B4B] rounded-2xl p-5 col-span-1 md:col-span-2">
           <p className="text-white/60 text-sm">{isAr ? 'الرصيد المتاح للسحب' : 'Available Balance'}</p>
-          <p className="text-4xl font-black text-[#C8A951] mt-2">{balance.toFixed(0).toLocaleString()}</p>
+          <p className="text-4xl font-black text-[#00C9A7] mt-2">{balance.toFixed(0).toLocaleString()}</p>
           <p className="text-white/60 text-sm">{isAr ? 'درهم إماراتي' : 'AED'}</p>
           <div className="flex gap-3 mt-4">
             <button onClick={() => setShowWithdraw(true)}
-              className="flex-1 py-2.5 bg-[#C8A951] text-[#0F2A47] text-sm font-black rounded-xl flex items-center justify-center gap-2">
+              className="flex-1 py-2.5 bg-[#00C9A7] text-[#0D1B4B] text-sm font-black rounded-xl flex items-center justify-center gap-2">
               <ArrowUpRight size={16} /> {isAr ? 'سحب الأموال' : 'Withdraw'}
             </button>
             <button className="px-4 py-2.5 bg-white/10 text-white text-sm font-black rounded-xl">
@@ -70,19 +70,19 @@ export default function VendorWallet() {
         </div>
 
         <div className="space-y-3">
-          <div className="bg-white rounded-2xl border border-[#E8E4DC] p-4">
+          <div className="bg-white rounded-2xl border border-[#D0EDEA] p-4">
             <div className="flex items-center gap-2 mb-1">
               <Clock size={14} className="text-amber-500" />
               <p className="text-xs font-black text-[#666]">{isAr ? 'قيد المعالجة' : 'Pending'}</p>
             </div>
-            <p className="text-xl font-black text-[#0F2A47]">{pending.toFixed(0)} <span className="text-sm font-normal text-[#888]">{isAr ? 'د' : 'AED'}</span></p>
+            <p className="text-xl font-black text-[#0D1B4B]">{pending.toFixed(0)} <span className="text-sm font-normal text-[#888]">{isAr ? 'د' : 'AED'}</span></p>
           </div>
-          <div className="bg-white rounded-2xl border border-[#E8E4DC] p-4">
+          <div className="bg-white rounded-2xl border border-[#D0EDEA] p-4">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp size={14} className="text-emerald-500" />
               <p className="text-xs font-black text-[#666]">{isAr ? 'إجمالي الإيرادات' : 'Total Revenue'}</p>
             </div>
-            <p className="text-xl font-black text-[#0F2A47]">{stats.revenue.toLocaleString()} <span className="text-sm font-normal text-[#888]">{isAr ? 'د' : 'AED'}</span></p>
+            <p className="text-xl font-black text-[#0D1B4B]">{stats.revenue.toLocaleString()} <span className="text-sm font-normal text-[#888]">{isAr ? 'د' : 'AED'}</span></p>
           </div>
         </div>
       </div>
@@ -103,9 +103,9 @@ export default function VendorWallet() {
       </div>
 
       {/* Transactions */}
-      <div className="bg-white rounded-2xl border border-[#E8E4DC] overflow-hidden">
+      <div className="bg-white rounded-2xl border border-[#D0EDEA] overflow-hidden">
         <div className="px-5 py-4 border-b border-[#F0ECE4]">
-          <h2 className="font-black text-[#0F2A47]">{isAr ? 'سجل المعاملات' : 'Transaction History'}</h2>
+          <h2 className="font-black text-[#0D1B4B]">{isAr ? 'سجل المعاملات' : 'Transaction History'}</h2>
         </div>
         <div className="divide-y divide-[#F0ECE4]">
           {transactions.map(txn => (
@@ -137,26 +137,26 @@ export default function VendorWallet() {
       {showWithdraw && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-3xl w-full max-w-sm shadow-2xl p-6">
-            <h2 className="font-black text-[#0F2A47] text-lg mb-1">{isAr ? 'سحب الأموال' : 'Withdraw Funds'}</h2>
+            <h2 className="font-black text-[#0D1B4B] text-lg mb-1">{isAr ? 'سحب الأموال' : 'Withdraw Funds'}</h2>
             <p className="text-sm text-[#888] mb-4">{isAr ? `الرصيد المتاح: ${balance.toFixed(0)} درهم` : `Available: ${balance.toFixed(0)} AED`}</p>
             <div className="mb-4">
               <label className="block text-xs font-black text-[#666] mb-1.5">{isAr ? 'المبلغ (درهم)' : 'Amount (AED)'}</label>
               <input type="number" value={withdrawAmount} onChange={e => setWithdrawAmount(e.target.value)}
                 placeholder="0.00"
-                className="w-full border-2 border-[#E8E4DC] rounded-xl px-4 py-3 text-lg font-black outline-none focus:border-[#C8A951]" />
+                className="w-full border-2 border-[#D0EDEA] rounded-xl px-4 py-3 text-lg font-black outline-none focus:border-[#00C9A7]" />
             </div>
-            <div className="bg-[#FBF8F2] rounded-xl p-3 mb-4">
+            <div className="bg-[#F0F9F8] rounded-xl p-3 mb-4">
               <p className="text-xs font-black text-[#666]">{isAr ? 'الحساب البنكي' : 'Bank Account'}</p>
-              <p className="text-sm font-black text-[#0F2A47] mt-1">IBAN: AE07 0331 2345 6789 0123 456</p>
+              <p className="text-sm font-black text-[#0D1B4B] mt-1">IBAN: AE07 0331 2345 6789 0123 456</p>
               <p className="text-xs text-[#888]">Emirates NBD</p>
             </div>
             <div className="flex gap-3">
               <button onClick={() => setShowWithdraw(false)}
-                className="flex-1 py-3 border border-[#E8E4DC] text-[#666] font-black rounded-xl text-sm">
+                className="flex-1 py-3 border border-[#D0EDEA] text-[#666] font-black rounded-xl text-sm">
                 {isAr ? 'إلغاء' : 'Cancel'}
               </button>
               <button onClick={handleWithdraw}
-                className="flex-1 py-3 bg-[#0F2A47] text-white font-black rounded-xl text-sm">
+                className="flex-1 py-3 bg-[#0D1B4B] text-white font-black rounded-xl text-sm">
                 {isAr ? 'تأكيد السحب' : 'Confirm Withdrawal'}
               </button>
             </div>

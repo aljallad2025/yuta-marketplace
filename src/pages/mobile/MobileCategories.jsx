@@ -18,8 +18,8 @@ export default function MobileCategories() {
   })
 
   return (
-    <div className="bg-[#FBF8F2] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
-      <div className="bg-[#0F2A47] px-4 pt-2 pb-4">
+    <div className="bg-[#F0F9F8] min-h-full" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="bg-[#0D1B4B] px-4 pt-2 pb-4">
         <h2 className="text-white font-black text-base mb-3">{isAr ? 'المتاجر' : 'Stores'}</h2>
         <div className="flex items-center bg-white rounded-xl px-3 py-2.5 gap-2">
           <Search size={13} className="text-[#999] flex-shrink-0" />
@@ -41,7 +41,7 @@ export default function MobileCategories() {
           <button
             onClick={() => setActiveCat(null)}
             className={"flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border transition-all whitespace-nowrap " +
-              (!activeCat ? 'bg-[#0F2A47] text-white border-[#0F2A47]' : 'bg-white text-[#444] border-[#E8E4DC]')}
+              (!activeCat ? 'bg-[#0D1B4B] text-white border-[#0D1B4B]' : 'bg-white text-[#444] border-[#D0EDEA]')}
           >
             {isAr ? 'الكل' : 'All'}
           </button>
@@ -50,7 +50,7 @@ export default function MobileCategories() {
               key={cat.id}
               onClick={() => setActiveCat(activeCat === cat.id ? null : cat.id)}
               className={"flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border transition-all whitespace-nowrap " +
-                (activeCat === cat.id ? 'bg-[#0F2A47] text-white border-[#0F2A47]' : 'bg-white text-[#444] border-[#E8E4DC]')}
+                (activeCat === cat.id ? 'bg-[#0D1B4B] text-white border-[#0D1B4B]' : 'bg-white text-[#444] border-[#D0EDEA]')}
             >
               <span>{cat.emoji}</span>
               <span>{isAr ? cat.labelAr : cat.labelEn}</span>
@@ -71,7 +71,7 @@ export default function MobileCategories() {
               <button
                 key={store.id}
                 onClick={() => openStore(store)}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E8E4DC] active:bg-[#FBF8F2] text-start transition-all"
+                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-[#D0EDEA] active:bg-[#F0F9F8] text-start transition-all"
               >
                 <div className="h-20 flex items-center justify-center text-4xl relative" style={{ backgroundColor: store.bg }}>
                   {store.emoji}
@@ -90,10 +90,10 @@ export default function MobileCategories() {
                   )}
                 </div>
                 <div className="p-2.5">
-                  <p className="font-black text-[#0F2A47] text-xs leading-tight">{isAr ? store.nameAr : store.nameEn}</p>
+                  <p className="font-black text-[#0D1B4B] text-xs leading-tight">{isAr ? store.nameAr : store.nameEn}</p>
                   <div className="flex items-center gap-2 mt-1 flex-wrap">
                     <div className="flex items-center gap-0.5">
-                      <Star size={9} className="fill-[#C8A951] text-[#C8A951]" />
+                      <Star size={9} className="fill-[#00C9A7] text-[#00C9A7]" />
                       <span className="text-[9px] text-[#666]">{store.rating}</span>
                     </div>
                     <div className="flex items-center gap-0.5 text-[9px] text-[#999]">
@@ -102,7 +102,7 @@ export default function MobileCategories() {
                     </div>
                   </div>
                   {store.tagAr && (
-                    <span className="mt-1.5 inline-block text-[9px] bg-[#0F2A47]/10 text-[#0F2A47] px-1.5 py-0.5 rounded-full font-bold">
+                    <span className="mt-1.5 inline-block text-[9px] bg-[#0D1B4B]/10 text-[#0D1B4B] px-1.5 py-0.5 rounded-full font-bold">
                       {isAr ? store.tagAr : store.tagEn}
                     </span>
                   )}

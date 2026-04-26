@@ -17,7 +17,7 @@ export function CategoriesProvider({ children }) {
   const toggleCategory = async (id) => {
     const cat = categories.find(c => c.id === id)
     if (!cat) return
-    const token = localStorage.getItem('sumu_token')
+    const token = localStorage.getItem('yuta_token')
     await fetch('/api/categories/' + id, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
@@ -27,7 +27,7 @@ export function CategoriesProvider({ children }) {
   }
 
   const updateCategory = async (id, updates) => {
-    const token = localStorage.getItem('sumu_token')
+    const token = localStorage.getItem('yuta_token')
     await fetch('/api/categories/' + id, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },

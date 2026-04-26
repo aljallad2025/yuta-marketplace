@@ -6,8 +6,16 @@ import { useLang } from '../i18n/LangContext'
 import LangToggle from '../components/LangToggle'
 import api from '../services/api'
 
+function getL(lang, en, th, lo, vi) {
+  if (lang === 'th') return th || en
+  if (lang === 'lo') return lo || en
+  if (lang === 'vi') return vi || en
+  return en
+}
+
+
 export default function WebAccount() {
-  const { t, isAr } = useLang()
+  const { t, isAr, lang } = useLang()
   const navigate = useNavigate()
   const { logout, currentUser } = useAuth()
   const [user, setUser] = useState(null)
@@ -18,7 +26,7 @@ export default function WebAccount() {
     if (!currentUser) { navigate('/login'); return }
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('sumu_token')
+        const token = localStorage.getItem('yuta_token')
         const res = await api.get(`/api/users/${currentUser.id}`, { headers: { Authorization: `Bearer ${token}` } })
         setUser(res.data)
         const ordRes = await api.get(`/api/orders?customer_id=${currentUser.id}`, { headers: { Authorization: `Bearer ${token}` } })
@@ -30,9 +38,9 @@ export default function WebAccount() {
   }, [currentUser])
 
   const menuItems = [
-    { icon: Package, label: t('orderHistory'), desc: isAr ? `${orders.length} طلب` : `${orders.length} orders`, color: '#3498DB', href: '/web/orders' },
-    { icon: MapPin, label: t('savedAddresses'), desc: isAr ? 'عناوين محفوظة' : 'Saved addresses', color: '#0F2A47', href: '#' },
-    { icon: CreditCard, label: t('paymentMethods'), desc: isAr ? 'طرق الدفع' : 'Payment methods', color: '#C8A951', href: '#' },
+    { icon: Package, label: t('orderHistory'), desc: getL(lang, `${orders.length} orders`, `${orders.length} รายการ`, `${orders.length} ລາຍການ`, `${orders.length} đơn`), color: '#3498DB', href: '/web/orders' },
+    { icon: MapPin, label: t('savedAddresses'), desc: isAr ? 'عناوين محفوظة' : 'Saved addresses', color: '#0D1B4B', href: '#' },
+    { icon: CreditCard, label: t('paymentMethods'), desc: isAr ? 'طرق الدفع' : 'Payment methods', color: '#00C9A7', href: '#' },
     { icon: Wallet, label: t('myWallet'), desc: isAr ? 'محفظتي' : 'My wallet', color: '#2ECC71', href: '#' },
     { icon: Car, label: t('rideHistory'), desc: isAr ? 'رحلاتي' : 'My rides', color: '#9B59B6', href: '#' },
     { icon: Bell, label: t('notifications'), desc: isAr ? 'الإشعارات' : 'Notifications', color: '#E74C3C', href: '#' },
@@ -40,27 +48,27 @@ export default function WebAccount() {
   ]
 
   if (loading) return (
-    <div className="min-h-screen bg-[#FBF8F2] flex items-center justify-center">
-      <div className="w-8 h-8 border-4 border-[#C8A951] border-t-transparent rounded-full animate-spin" />
+    <div className="min-h-screen bg-[#F0F9F8] flex items-center justify-center">
+      <div className="w-8 h-8 border-4 border-[#00C9A7] border-t-transparent rounded-full animate-spin" />
     </div>
   )
 
   const displayName = isAr ? (user?.name_ar || user?.username) : (user?.name_en || user?.username)
 
   return (
-    <div className="min-h-screen bg-[#FBF8F2]" dir={isAr ? 'rtl' : 'ltr'}>
-      <div className="bg-[#0F2A47] px-4 pb-8 pt-8">
+    <div className="min-h-screen bg-[#F0F9F8]" dir={isAr ? 'rtl' : 'ltr'}>
+      <div className="bg-[#0D1B4B] px-4 pb-8 pt-8">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-[#C8A951] rounded-full flex items-center justify-center shadow-lg text-2xl">
-              {user?.avatar || <User size={28} className="text-[#0F2A47]" />}
+            <div className="w-16 h-16 bg-[#00C9A7] rounded-full flex items-center justify-center shadow-lg text-2xl">
+              {user?.avatar || <User size={28} className="text-[#0D1B4B]" />}
             </div>
             <div className="flex-1">
               <h1 className="text-xl font-black text-white">{displayName}</h1>
               <p className="text-white/50 text-sm">{user?.email || user?.phone}</p>
               <div className="flex items-center gap-2 mt-1">
-                <Star size={12} className="fill-[#C8A951] text-[#C8A951]" />
-                <span className="text-[#C8A951] text-xs font-black">{t('goldMember')}</span>
+                <Star size={12} className="fill-[#00C9A7] text-[#00C9A7]" />
+                <span className="text-[#00C9A7] text-xs font-black">{t('goldMember')}</span>
               </div>
             </div>
             <LangToggle className="border-white/20 bg-white/10 hover:bg-white/20" />
@@ -82,10 +90,10 @@ export default function WebAccount() {
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-5 space-y-4">
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC] overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#D0EDEA] overflow-hidden">
           {menuItems.map((item, i) => (
             <Link key={item.label} to={item.href}
-              className={`flex items-center gap-4 px-4 py-4 hover:bg-[#FBF8F2] transition-colors ${i < menuItems.length - 1 ? 'border-b border-[#F0ECE4]' : ''}`}>
+              className={`flex items-center gap-4 px-4 py-4 hover:bg-[#F0F9F8] transition-colors ${i < menuItems.length - 1 ? 'border-b border-[#F0ECE4]' : ''}`}>
               <div className="p-2.5 rounded-xl" style={{ backgroundColor: item.color + '15' }}>
                 <item.icon size={18} style={{ color: item.color }} />
               </div>
@@ -93,7 +101,7 @@ export default function WebAccount() {
                 <p className="font-black text-[#222] text-sm">{item.label}</p>
                 <p className="text-xs text-[#666]">{item.desc}</p>
               </div>
-              <ChevronRight size={16} className="text-[#C8A951]" style={{ transform: isAr ? 'rotate(180deg)' : undefined }} />
+              <ChevronRight size={16} className="text-[#00C9A7]" style={{ transform: isAr ? 'rotate(180deg)' : undefined }} />
             </Link>
           ))}
         </div>

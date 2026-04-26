@@ -5,7 +5,7 @@ import axios from 'axios'
 
 const api = axios.create({ baseURL: '/api' })
 api.interceptors.request.use(c => {
-  const t = localStorage.getItem('sumu_token')
+  const t = localStorage.getItem('yuta_token')
   if (t) c.headers.Authorization = `Bearer ${t}`
   return c
 })
@@ -178,10 +178,10 @@ export default function AdminCatalog() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#0F2A47]">{isAr ? 'إدارة الكاتالوج' : 'Catalog Management'}</h1>
+          <h1 className="text-2xl font-black text-[#0D1B4B]">{isAr ? 'إدارة الكاتالوج' : 'Catalog Management'}</h1>
           <p className="text-sm text-[#666]">{isAr ? `${filtered.length} عنصر` : `${filtered.length} items`}</p>
         </div>
-        <button onClick={() => setShowAdd(true)} className="flex items-center gap-2 px-4 py-2.5 bg-[#0F2A47] text-white text-sm font-black rounded-xl">
+        <button onClick={() => setShowAdd(true)} className="flex items-center gap-2 px-4 py-2.5 bg-[#0D1B4B] text-white text-sm font-black rounded-xl">
           <Plus size={14} /> {isAr ? 'إضافة' : 'Add'}
         </button>
       </div>
@@ -190,7 +190,7 @@ export default function AdminCatalog() {
       <div className="flex gap-2 flex-wrap">
         {TABS.map(t => (
           <button key={t.key} onClick={() => setTab(t.key)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-black transition-all ${tab === t.key ? 'bg-[#0F2A47] text-white' : 'bg-white border border-[#E8E4DC] text-[#444] hover:border-[#0F2A47]'}`}>
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-black transition-all ${tab === t.key ? 'bg-[#0D1B4B] text-white' : 'bg-white border border-[#D0EDEA] text-[#444] hover:border-[#0D1B4B]'}`}>
             <span>{t.emoji}</span>
             <span>{isAr ? t.labelAr : t.labelEn}</span>
           </button>
@@ -199,10 +199,10 @@ export default function AdminCatalog() {
 
       {/* Add Form */}
       {showAdd && (
-        <div className="bg-white rounded-2xl border-2 border-[#C8A951] p-5 space-y-4">
+        <div className="bg-white rounded-2xl border-2 border-[#00C9A7] p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-black text-[#0F2A47]">{isAr ? `إضافة ${currentTab?.labelAr}` : `Add ${currentTab?.labelEn}`}</h3>
-            <button onClick={() => setShowAdd(false)} className="p-1 rounded-lg hover:bg-[#FBF8F2] text-[#999]"><X size={16} /></button>
+            <h3 className="font-black text-[#0D1B4B]">{isAr ? `إضافة ${currentTab?.labelAr}` : `Add ${currentTab?.labelEn}`}</h3>
+            <button onClick={() => setShowAdd(false)} className="p-1 rounded-lg hover:bg-[#F0F9F8] text-[#999]"><X size={16} /></button>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {fields.map(f => (
@@ -210,13 +210,13 @@ export default function AdminCatalog() {
                 <label className="text-xs font-black text-[#444] block mb-1">{isAr ? f.labelAr : f.labelEn}</label>
                 <input type={f.type} value={form[f.key] || ''} dir={f.dir || 'ltr'}
                   onChange={e => setForm(p => ({ ...p, [f.key]: f.type === 'number' ? +e.target.value : e.target.value }))}
-                  className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951]" />
+                  className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#00C9A7]" />
               </div>
             ))}
           </div>
           <div className="flex gap-2 justify-end pt-2">
-            <button onClick={() => setShowAdd(false)} className="px-4 py-2 text-sm text-[#666] border border-[#E8E4DC] rounded-xl font-black">{isAr ? 'إلغاء' : 'Cancel'}</button>
-            <button onClick={handleAdd} disabled={saving} className="px-5 py-2 bg-[#C8A951] text-[#0F2A47] text-sm font-black rounded-xl disabled:opacity-60">
+            <button onClick={() => setShowAdd(false)} className="px-4 py-2 text-sm text-[#666] border border-[#D0EDEA] rounded-xl font-black">{isAr ? 'إلغاء' : 'Cancel'}</button>
+            <button onClick={handleAdd} disabled={saving} className="px-5 py-2 bg-[#00C9A7] text-[#0D1B4B] text-sm font-black rounded-xl disabled:opacity-60">
               {saving ? (isAr ? 'جارٍ الحفظ...' : 'Saving...') : (isAr ? 'إضافة' : 'Add')}
             </button>
           </div>
@@ -224,7 +224,7 @@ export default function AdminCatalog() {
       )}
 
       {/* Search */}
-      <div className="flex items-center bg-white rounded-xl px-4 py-2.5 gap-2 shadow-sm border border-[#E8E4DC]">
+      <div className="flex items-center bg-white rounded-xl px-4 py-2.5 gap-2 shadow-sm border border-[#D0EDEA]">
         <Search size={16} className="text-[#999]" />
         <input value={search} onChange={e => setSearch(e.target.value)}
           placeholder={isAr ? 'بحث...' : 'Search...'}
@@ -241,37 +241,37 @@ export default function AdminCatalog() {
           <p className="text-sm mt-1">{isAr ? 'أضف أول عنصر بالضغط على زر الإضافة' : 'Add your first item using the Add button'}</p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC] overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#D0EDEA] overflow-hidden">
           {filtered.map((item, i) => (
             <div key={item.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''}`}>
               {editId === item.id ? (
-                <div className="p-4 space-y-3 bg-[#FBF8F2]">
+                <div className="p-4 space-y-3 bg-[#F0F9F8]">
                   <div className="grid grid-cols-2 gap-3">
                     {fields.filter(f => f.key !== 'store_id').map(f => (
                       <div key={f.key}>
                         <label className="text-xs font-black text-[#444] block mb-1">{isAr ? f.labelAr : f.labelEn}</label>
                         <input type={f.type} value={editForm[f.key] ?? ''} dir={f.dir || 'ltr'}
                           onChange={e => setEditForm(p => ({ ...p, [f.key]: f.type === 'number' ? +e.target.value : e.target.value }))}
-                          className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#C8A951] bg-white" />
+                          className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2 text-sm outline-none focus:border-[#00C9A7] bg-white" />
                       </div>
                     ))}
                   </div>
                   <div className="flex gap-2">
                     <button onClick={() => handleEdit(item.id)} disabled={saving} className="flex items-center gap-1.5 px-4 py-2 bg-emerald-500 text-white text-xs font-black rounded-xl disabled:opacity-60"><Check size={13} /> {isAr ? 'حفظ' : 'Save'}</button>
-                    <button onClick={() => setEditId(null)} className="flex items-center gap-1.5 px-4 py-2 border border-[#E8E4DC] text-[#666] text-xs font-black rounded-xl"><X size={13} /> {isAr ? 'إلغاء' : 'Cancel'}</button>
+                    <button onClick={() => setEditId(null)} className="flex items-center gap-1.5 px-4 py-2 border border-[#D0EDEA] text-[#666] text-xs font-black rounded-xl"><X size={13} /> {isAr ? 'إلغاء' : 'Cancel'}</button>
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center justify-between px-4 py-3.5 hover:bg-[#FBF8F2]">
+                <div className="flex items-center justify-between px-4 py-3.5 hover:bg-[#F0F9F8]">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-[#C8A951]/15 rounded-xl flex items-center justify-center text-lg">{currentTab?.emoji}</div>
+                    <div className="w-9 h-9 bg-[#00C9A7]/15 rounded-xl flex items-center justify-center text-lg">{currentTab?.emoji}</div>
                     <div>
                       <p className="font-black text-sm text-[#222]">{getLabel(item, tab, isAr)}</p>
                       <p className="text-xs text-[#999]">{getSubLabel(item, tab, isAr)} <span className="text-[#CCC]">• #{item.id}</span></p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => { setEditId(item.id); setEditForm({...item}) }} className="p-1.5 hover:bg-white rounded-lg text-[#666] hover:text-[#0F2A47]"><Edit2 size={13} /></button>
+                    <button onClick={() => { setEditId(item.id); setEditForm({...item}) }} className="p-1.5 hover:bg-white rounded-lg text-[#666] hover:text-[#0D1B4B]"><Edit2 size={13} /></button>
                     <button onClick={() => handleDelete(item.id)} className="p-1.5 hover:bg-red-50 rounded-lg text-red-400"><Trash2 size={13} /></button>
                   </div>
                 </div>

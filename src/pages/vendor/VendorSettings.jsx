@@ -72,12 +72,12 @@ export default function VendorSettings() {
     setSaving(false)
   }
 
-  if (!store) return <div className="p-6 flex justify-center"><div className="w-8 h-8 border-4 border-[#C8A951] border-t-transparent rounded-full animate-spin" /></div>
+  if (!store) return <div className="p-6 flex justify-center"><div className="w-8 h-8 border-4 border-[#00C9A7] border-t-transparent rounded-full animate-spin" /></div>
 
   return (
     <div className="p-6 max-w-2xl" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="mb-6">
-        <h1 className="text-xl font-black text-[#0F2A47]">{isAr ? 'إعدادات المتجر' : 'Store Settings'}</h1>
+        <h1 className="text-xl font-black text-[#0D1B4B]">{isAr ? 'إعدادات المتجر' : 'Store Settings'}</h1>
         <p className="text-sm text-[#888] mt-0.5">{isAr ? 'تعديل معلومات وإعدادات متجرك' : 'Edit your store information'}</p>
       </div>
 
@@ -88,9 +88,9 @@ export default function VendorSettings() {
       {error && <div className="mb-4 bg-red-50 border border-red-200 rounded-2xl p-4 text-red-700 text-sm font-bold">{error}</div>}
 
       {/* صورة الغلاف */}
-      <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5 mb-4">
-        <h2 className="font-black text-[#0F2A47] mb-4 flex items-center gap-2"><Image size={16} />{isAr ? 'صورة الغلاف' : 'Cover Image'}</h2>
-        <div className="relative h-36 bg-gradient-to-br from-[#0F2A47] to-[#1a3a5c] rounded-xl overflow-hidden mb-3 flex items-center justify-center cursor-pointer"
+      <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5 mb-4">
+        <h2 className="font-black text-[#0D1B4B] mb-4 flex items-center gap-2"><Image size={16} />{isAr ? 'صورة الغلاف' : 'Cover Image'}</h2>
+        <div className="relative h-36 bg-gradient-to-br from-[#0D1B4B] to-[#0A3D8F] rounded-xl overflow-hidden mb-3 flex items-center justify-center cursor-pointer"
           onClick={() => bgRef.current.click()}>
           {form.cover_image
             ? <img src={form.cover_image} className="w-full h-full object-cover" />
@@ -98,14 +98,14 @@ export default function VendorSettings() {
           {uploadingBg && <div className="absolute inset-0 bg-black/50 flex items-center justify-center"><div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" /></div>}
         </div>
         <input ref={bgRef} type="file" accept="image/*" className="hidden" onChange={e => e.target.files[0] && uploadImage(e.target.files[0], 'cover_image', setUploadingBg)} />
-        <button onClick={() => bgRef.current.click()} className="text-xs text-[#C8A951] font-bold flex items-center gap-1"><Upload size={12} />{isAr ? 'رفع صورة غلاف' : 'Upload cover image'}</button>
+        <button onClick={() => bgRef.current.click()} className="text-xs text-[#00C9A7] font-bold flex items-center gap-1"><Upload size={12} />{isAr ? 'رفع صورة غلاف' : 'Upload cover image'}</button>
       </div>
 
       {/* الشعار */}
-      <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5 mb-4">
-        <h2 className="font-black text-[#0F2A47] mb-4 flex items-center gap-2"><Store size={16} />{isAr ? 'شعار المتجر' : 'Store Logo'}</h2>
+      <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5 mb-4">
+        <h2 className="font-black text-[#0D1B4B] mb-4 flex items-center gap-2"><Store size={16} />{isAr ? 'شعار المتجر' : 'Store Logo'}</h2>
         <div className="flex items-center gap-4">
-          <div className="w-20 h-20 bg-[#FBF8F2] rounded-2xl border-2 border-dashed border-[#E8E4DC] flex items-center justify-center overflow-hidden cursor-pointer flex-shrink-0"
+          <div className="w-20 h-20 bg-[#F0F9F8] rounded-2xl border-2 border-dashed border-[#D0EDEA] flex items-center justify-center overflow-hidden cursor-pointer flex-shrink-0"
             onClick={() => logoRef.current.click()}>
             {form.logo?.startsWith('/') || form.logo?.startsWith('http')
               ? <img src={form.logo} className="w-full h-full object-cover" />
@@ -114,16 +114,16 @@ export default function VendorSettings() {
           </div>
           <div>
             <input ref={logoRef} type="file" accept="image/*" className="hidden" onChange={e => e.target.files[0] && uploadImage(e.target.files[0], 'logo', setUploadingLogo)} />
-            <button onClick={() => logoRef.current.click()} className="bg-[#0F2A47] text-white text-xs font-black px-4 py-2 rounded-xl mb-2 flex items-center gap-1"><Upload size={12} />{isAr ? 'رفع شعار' : 'Upload logo'}</button>
+            <button onClick={() => logoRef.current.click()} className="bg-[#0D1B4B] text-white text-xs font-black px-4 py-2 rounded-xl mb-2 flex items-center gap-1"><Upload size={12} />{isAr ? 'رفع شعار' : 'Upload logo'}</button>
             <p className="text-xs text-gray-400">{isAr ? 'أو استخدم إيموجي:' : 'Or use emoji:'}</p>
             <input value={form.logo} onChange={e => setForm(f => ({ ...f, logo: e.target.value }))}
-              className="border border-[#E8E4DC] rounded-xl px-3 py-1.5 text-sm outline-none w-24 mt-1" placeholder="🏪" />
+              className="border border-[#D0EDEA] rounded-xl px-3 py-1.5 text-sm outline-none w-24 mt-1" placeholder="🏪" />
           </div>
         </div>
       </div>
 
       {/* حالة المتجر */}
-      <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5 mb-4">
+      <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5 mb-4">
         <div className="flex items-center justify-between">
           <div>
             <p className="font-black text-[#222] text-sm">{isAr ? 'فتح المتجر للطلبات' : 'Open for Orders'}</p>
@@ -136,60 +136,60 @@ export default function VendorSettings() {
       </div>
 
       {/* معلومات المتجر */}
-      <div className="bg-white rounded-2xl border border-[#E8E4DC] p-5 mb-4">
-        <h2 className="font-black text-[#0F2A47] mb-4 flex items-center gap-2"><Store size={16} />{isAr ? 'معلومات المتجر' : 'Store Information'}</h2>
+      <div className="bg-white rounded-2xl border border-[#D0EDEA] p-5 mb-4">
+        <h2 className="font-black text-[#0D1B4B] mb-4 flex items-center gap-2"><Store size={16} />{isAr ? 'معلومات المتجر' : 'Store Information'}</h2>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-black text-[#666] mb-1.5">{isAr ? 'الاسم (عربي)' : 'Name (Arabic)'}</label>
               <input value={form.name_ar} onChange={e => setForm(f => ({ ...f, name_ar: e.target.value }))}
-                className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#C8A951]" dir="rtl" />
+                className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#00C9A7]" dir="rtl" />
             </div>
             <div>
               <label className="block text-xs font-black text-[#666] mb-1.5">{isAr ? 'الاسم (إنجليزي)' : 'Name (English)'}</label>
               <input value={form.name_en} onChange={e => setForm(f => ({ ...f, name_en: e.target.value }))}
-                className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#C8A951]" />
+                className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#00C9A7]" />
             </div>
           </div>
           <div>
             <label className="block text-xs font-black text-[#666] mb-1.5"><Phone size={11} className="inline ml-1" />{isAr ? 'رقم الهاتف' : 'Phone'}</label>
             <input value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-              className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#C8A951]" />
+              className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#00C9A7]" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-black text-[#666] mb-1.5">{isAr ? 'العنوان (عربي)' : 'Address (Arabic)'}</label>
               <input value={form.address_ar} onChange={e => setForm(f => ({ ...f, address_ar: e.target.value }))}
-                className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#C8A951]" dir="rtl" />
+                className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#00C9A7]" dir="rtl" />
             </div>
             <div>
               <label className="block text-xs font-black text-[#666] mb-1.5">{isAr ? 'العنوان (إنجليزي)' : 'Address (English)'}</label>
               <input value={form.address_en} onChange={e => setForm(f => ({ ...f, address_en: e.target.value }))}
-                className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#C8A951]" />
+                className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#00C9A7]" />
             </div>
           </div>
           <div className="grid grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-black text-[#666] mb-1.5"><DollarSign size={11} className="inline" />{isAr ? 'حد أدنى (ريال)' : 'Min Order (SAR)'}</label>
               <input type="number" value={form.min_order} onChange={e => setForm(f => ({ ...f, min_order: +e.target.value }))}
-                className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#C8A951]" />
+                className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#00C9A7]" />
             </div>
             <div>
               <label className="block text-xs font-black text-[#666] mb-1.5">{isAr ? 'رسوم التوصيل' : 'Delivery Fee'}</label>
               <input type="number" value={form.delivery_fee} onChange={e => setForm(f => ({ ...f, delivery_fee: +e.target.value }))}
-                className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#C8A951]" />
+                className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#00C9A7]" />
             </div>
             <div>
               <label className="block text-xs font-black text-[#666] mb-1.5"><Clock size={11} className="inline" />{isAr ? 'وقت التوصيل' : 'Delivery Time'}</label>
               <input value={form.delivery_time} onChange={e => setForm(f => ({ ...f, delivery_time: e.target.value }))}
-                className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#C8A951]" placeholder="30-45" />
+                className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#00C9A7]" placeholder="30-45" />
             </div>
           </div>
         </div>
       </div>
 
       <button onClick={handleSave} disabled={saving}
-        className="w-full bg-[#0F2A47] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 disabled:opacity-60">
+        className="w-full bg-[#0D1B4B] text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 disabled:opacity-60">
         <Save size={16} />{saving ? (isAr ? 'جاري الحفظ...' : 'Saving...') : (isAr ? 'حفظ الإعدادات' : 'Save Settings')}
       </button>
     </div>

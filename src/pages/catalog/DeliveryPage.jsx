@@ -3,8 +3,16 @@ import { ArrowLeft, ChevronRight, Clock, Package, Zap, Truck, MapPin, Navigation
 import { useLang } from '../../i18n/LangContext'
 import { useNavigate } from 'react-router-dom'
 
+function getL(lang, en, th, lo, vi) {
+  if (lang === 'th') return th || en
+  if (lang === 'lo') return lo || en
+  if (lang === 'vi') return vi || en
+  return en
+}
+
+
 const ff = "'Cairo','Tajawal',sans-serif"
-const navy = '#0F2A47', navyDark = '#0a1e33', gold = '#C8A951'
+const navy = '#0D1B4B', navyDark = '#0a1e33', gold = '#00C9A7'
 
 const SERVICES = [
   {
@@ -14,7 +22,7 @@ const SERVICES = [
     nameEn: 'Express Delivery',
     descAr: 'توصيل خلال 30 دقيقة لأي مكان',
     descEn: 'Delivery within 30 minutes anywhere',
-    gradient: ['#0F2A47', '#1a3a5c'],
+    gradient: ['#0D1B4B', '#0A3D8F'],
     accent: gold,
     eta: '15-30',
     price: 1.5,
@@ -85,7 +93,7 @@ const QUICK = [
 ]
 
 export default function DeliveryPage() {
-  const { isAr } = useLang()
+  const { isAr, lang } = useLang()
   const navigate = useNavigate()
   const T = (ar, en) => isAr ? ar : en
   const dir = isAr ? 'rtl' : 'ltr'
@@ -128,7 +136,7 @@ export default function DeliveryPage() {
   }
 
   const card = { background: '#fff', borderRadius: 20, border: '1px solid #E5E7EB', boxShadow: '0 2px 12px rgba(0,0,0,.06)' }
-  const btn  = (on) => ({ width: '100%', padding: '16px 0', borderRadius: 16, background: on ? `linear-gradient(135deg,${navy},#1a3a5c)` : '#E5E7EB', color: on ? '#fff' : '#9CA3AF', fontWeight: 900, fontSize: 16, fontFamily: ff, border: 'none', cursor: on ? 'pointer' : 'not-allowed', boxShadow: on ? `0 6px 20px rgba(15,42,71,.3)` : 'none', transition: 'all .25s' })
+  const btn  = (on) => ({ width: '100%', padding: '16px 0', borderRadius: 16, background: on ? `linear-gradient(135deg,${navy},#0A3D8F)` : '#E5E7EB', color: on ? '#fff' : '#9CA3AF', fontWeight: 900, fontSize: 16, fontFamily: ff, border: 'none', cursor: on ? 'pointer' : 'not-allowed', boxShadow: on ? `0 6px 20px rgba(15,42,71,.3)` : 'none', transition: 'all .25s' })
 
   /* ══ TRACKING ══ */
   if (step === 'track' && driver) return (
@@ -216,7 +224,7 @@ export default function DeliveryPage() {
     <div style={{ minHeight: '100vh', background: '#F8FAFC', fontFamily: ff, direction: dir, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
       <div style={{ width: 96, height: 96, borderRadius: '50%', background: 'linear-gradient(135deg,#DCFCE7,#BBF7D0)', border: '3px solid #16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 46, marginBottom: 18 }}>✅</div>
       <div style={{ fontWeight: 900, fontSize: 24, color: '#111827', marginBottom: 6, textAlign: 'center' }}>{T('تم التوصيل!', 'Delivered!')}</div>
-      <div style={{ fontSize: 13, color: '#6B7280', marginBottom: 32, textAlign: 'center' }}>{T('شكراً لاستخدامك سمو توصيل', 'Thanks for using SUMU Delivery')}</div>
+      <div style={{ fontSize: 13, color: '#6B7280', marginBottom: 32, textAlign: 'center' }}>{T('شكراً لاستخدامك يوتا توصيل', 'Thanks for using YUTA Delivery')}</div>
       <div style={{ ...card, padding: '20px 28px', marginBottom: 20, width: '100%', maxWidth: 320, textAlign: 'center' }}>
         <div style={{ fontSize: 13, color: '#374151', fontWeight: 700, marginBottom: 6 }}>{T('الإجمالي المدفوع', 'Total Paid')}</div>
         <div style={{ fontWeight: 900, fontSize: 32, color: navy }}>{totalPrice} <span style={{ fontSize: 16, color: '#9CA3AF' }}>BHD</span></div>
@@ -336,7 +344,7 @@ export default function DeliveryPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 6 }}>
           <div style={{ width: 52, height: 52, background: 'rgba(255,255,255,.12)', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, border: `1px solid ${gold}44` }}>📦</div>
           <div>
-            <div style={{ fontWeight: 900, fontSize: 24, color: '#fff' }}>{T('سمو توصيل', 'SUMU Delivery')}</div>
+            <div style={{ fontWeight: 900, fontSize: 24, color: '#fff' }}>{T('يوتا توصيل', 'YUTA Delivery')}</div>
             <div style={{ fontSize: 13, color: 'rgba(255,255,255,.55)', marginTop: 2 }}>{T('سريع · موثوق · آمن', 'Fast · Reliable · Secure')}</div>
           </div>
         </div>

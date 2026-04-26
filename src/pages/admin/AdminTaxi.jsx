@@ -48,15 +48,15 @@ export default function AdminTaxi() {
     <div className="p-6 space-y-5" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#0F2A47]">{t('taxiManagement')}</h1>
+          <h1 className="text-2xl font-black text-[#0D1B4B]">{t('taxiManagement')}</h1>
           <p className="text-sm text-[#666]">{isAr ? '٣٨ رحلة نشطة الآن' : '38 active rides right now'}</p>
         </div>
-        <button className="px-4 py-2.5 bg-[#C8A951] text-[#0F2A47] text-sm font-black rounded-xl">{t('exportReport')}</button>
+        <button className="px-4 py-2.5 bg-[#00C9A7] text-[#0D1B4B] text-sm font-black rounded-xl">{t('exportReport')}</button>
       </div>
 
       <div className="grid grid-cols-4 gap-3">
         {stats.map(s => (
-          <div key={s.labelEn} className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E4DC] text-center">
+          <div key={s.labelEn} className="bg-white rounded-xl p-4 shadow-sm border border-[#D0EDEA] text-center">
             <p className="text-2xl font-black" style={{ color: s.color }}>{s.count}</p>
             <p className="text-xs text-[#666] mt-0.5">{isAr ? s.labelAr : s.labelEn}</p>
           </div>
@@ -64,7 +64,7 @@ export default function AdminTaxi() {
       </div>
 
       <div className="flex gap-3">
-        <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-2.5 gap-2 shadow-sm border border-[#E8E4DC]">
+        <div className="flex-1 flex items-center bg-white rounded-xl px-4 py-2.5 gap-2 shadow-sm border border-[#D0EDEA]">
           <Search size={16} className="text-[#999]" />
           <input value={search} onChange={e => setSearch(e.target.value)}
             placeholder={isAr ? 'ابحث برقم الرحلة أو اسم العميل...' : 'Search by ride ID or customer...'}
@@ -74,18 +74,18 @@ export default function AdminTaxi() {
         {statusFilters.map(s => (
           <button key={s} onClick={() => setStatusFilter(s)}
             className={`px-3 py-2.5 rounded-xl text-xs font-black whitespace-nowrap ${
-              statusFilter === s ? 'bg-[#0F2A47] text-white' : 'bg-white text-[#444] border border-[#E8E4DC]'
+              statusFilter === s ? 'bg-[#0D1B4B] text-white' : 'bg-white text-[#444] border border-[#D0EDEA]'
             }`}>
             {statusLabel[s]}
           </button>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DC] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#D0EDEA] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-[#FBF8F2] border-b border-[#E8E4DC]">
+              <tr className="bg-[#F0F9F8] border-b border-[#D0EDEA]">
                 {headers.map(h => (
                   <th key={h} className="text-start px-4 py-3.5 text-xs font-black text-[#666] uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
@@ -93,8 +93,8 @@ export default function AdminTaxi() {
             </thead>
             <tbody>
               {filtered.map((ride, i) => (
-                <tr key={ride.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#FBF8F2]`}>
-                  <td className="px-4 py-3.5 font-mono text-xs text-[#0F2A47] font-black">{ride.id}</td>
+                <tr key={ride.id} className={`${i < filtered.length - 1 ? 'border-b border-[#F0ECE4]' : ''} hover:bg-[#F0F9F8]`}>
+                  <td className="px-4 py-3.5 font-mono text-xs text-[#0D1B4B] font-black">{ride.id}</td>
                   <td className="px-4 py-3.5 text-sm text-[#444]">{isAr ? ride.customerAr : ride.customerEn}</td>
                   <td className="px-4 py-3.5">
                     <div className="flex items-center gap-1 text-xs text-[#666]">
@@ -109,13 +109,13 @@ export default function AdminTaxi() {
                     {(isAr ? ride.driverAr : ride.driverEn) ? (
                       <span className="text-[#444]">{isAr ? ride.driverAr : ride.driverEn}</span>
                     ) : (
-                      <button className="text-xs text-[#C8A951] border border-[#C8A951]/30 px-2 py-0.5 rounded-full font-black">
+                      <button className="text-xs text-[#00C9A7] border border-[#00C9A7]/30 px-2 py-0.5 rounded-full font-black">
                         {t('assignDriver')}
                       </button>
                     )}
                   </td>
                   <td className="px-4 py-3.5">
-                    <span className="text-xs bg-[#0F2A47]/10 text-[#0F2A47] px-2 py-0.5 rounded-full font-black">
+                    <span className="text-xs bg-[#0D1B4B]/10 text-[#0D1B4B] px-2 py-0.5 rounded-full font-black">
                       {isAr ? ride.typeAr : ride.typeEn}
                     </span>
                   </td>
@@ -128,13 +128,13 @@ export default function AdminTaxi() {
                   <td className="px-4 py-3.5 text-xs text-[#666] whitespace-nowrap">{ride.date}</td>
                   <td className="px-4 py-3.5">
                     <div className="flex items-center gap-1">
-                      <button className="p-1.5 hover:bg-[#FBF8F2] rounded-lg text-[#666] hover:text-[#0F2A47]"><Car size={13} /></button>
+                      <button className="p-1.5 hover:bg-[#F0F9F8] rounded-lg text-[#666] hover:text-[#0D1B4B]"><Car size={13} /></button>
                       {ride.status !== 'completed' && ride.status !== 'cancelled' && (
                         <button className="p-1.5 hover:bg-red-50 rounded-lg text-red-500"><X size={13} /></button>
                       )}
                       {ride.status === 'completed' && ride.rating && (
                         <div className="flex items-center gap-0.5 text-xs">
-                          <Star size={11} className="fill-[#C8A951] text-[#C8A951]" />
+                          <Star size={11} className="fill-[#00C9A7] text-[#00C9A7]" />
                           <span className="text-[#666]">{ride.rating}</span>
                         </div>
                       )}

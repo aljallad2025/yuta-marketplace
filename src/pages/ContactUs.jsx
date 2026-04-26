@@ -9,7 +9,7 @@ export default function ContactUs() {
 
   const submit = e => {
     e.preventDefault()
-    window.location.href = `mailto:info@sumu-app.store?subject=رسالة من ${form.name}&body=${form.message}%0A%0Aالهاتف: ${form.phone}%0Aالبريد: ${form.email}`
+    window.location.href = `mailto:info@yuta-app.store?subject=رسالة من ${form.name}&body=${form.message}%0A%0Aالهاتف: ${form.phone}%0Aالبريد: ${form.email}`
     setSent(true)
   }
 
@@ -24,15 +24,15 @@ export default function ContactUs() {
           <div className="bg-white rounded-2xl shadow p-6 space-y-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">معلومات التواصل</h2>
             <div className="flex items-center gap-3 text-gray-600">
-              <Mail size={20} className="text-[#C8A951]" />
-              <a href="mailto:info@sumu-app.store" className="hover:text-[#C8A951]">info@sumu-app.store</a>
+              <Mail size={20} className="text-[#00C9A7]" />
+              <a href="mailto:info@yuta-app.store" className="hover:text-[#00C9A7]">info@yuta-app.store</a>
             </div>
             <div className="flex items-center gap-3 text-gray-600">
-              <Phone size={20} className="text-[#C8A951]" />
+              <Phone size={20} className="text-[#00C9A7]" />
               <span>+966 5X XXX XXXX</span>
             </div>
             <div className="flex items-center gap-3 text-gray-600">
-              <MapPin size={20} className="text-[#C8A951]" />
+              <MapPin size={20} className="text-[#00C9A7]" />
               <span>المملكة العربية السعودية</span>
             </div>
           </div>
@@ -48,15 +48,15 @@ export default function ContactUs() {
             ) : (
               <form onSubmit={submit} className="space-y-4">
                 <input name="name" value={form.name} onChange={handle} required placeholder="الاسم الكامل"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#C8A951]" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00C9A7]" />
                 <input name="email" type="email" value={form.email} onChange={handle} required placeholder="البريد الإلكتروني"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#C8A951]" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00C9A7]" />
                 <input name="phone" value={form.phone} onChange={handle} placeholder="رقم الهاتف"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#C8A951]" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00C9A7]" />
                 <textarea name="message" value={form.message} onChange={handle} required placeholder="رسالتك" rows={4}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#C8A951] resize-none" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#00C9A7] resize-none" />
                 <button type="submit"
-                  className="w-full bg-[#C8A951] text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-[#b8973f] transition">
+                  className="w-full bg-[#00C9A7] text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-[#b8973f] transition">
                   <Send size={16} /> إرسال
                 </button>
               </form>

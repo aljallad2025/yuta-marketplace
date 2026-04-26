@@ -209,7 +209,7 @@ export function MobileProvider({ children }) {
 
   // ── Apply promo ───────────────────────────────────────────────────
   const applyPromo = useCallback((code) => {
-    const promos = { 'SUMU10': 10, 'SUMU20': 20, 'WELCOME': 15 }
+    const promos = { 'YUTA10': 10, 'YUTA20': 20, 'WELCOME': 15 }
     const discount = promos[code.toUpperCase()]
     if (discount) { setAppliedPromo({ code: code.toUpperCase(), discount }); return true }
     return false

@@ -27,25 +27,25 @@ export default function AdminCategories() {
   return (
     <div className="p-6" dir={isAr ? 'rtl' : 'ltr'}>
       <div className="mb-6">
-        <h1 className="text-xl font-black text-[#0F2A47]">{isAr ? 'إدارة الفئات' : 'Manage Categories'}</h1>
+        <h1 className="text-xl font-black text-[#0D1B4B]">{isAr ? 'إدارة الفئات' : 'Manage Categories'}</h1>
         <p className="text-sm text-gray-400 mt-0.5">{isAr ? 'فعّل أو عطّل الفئات التي تظهر في الموقع والتطبيق' : 'Enable or disable categories shown on the site and app'}</p>
       </div>
 
       <div className="space-y-3 max-w-2xl">
         {categories.map(cat => (
-          <div key={cat.id} className={`bg-white rounded-2xl border-2 transition ${cat.active ? 'border-[#C8A951]/40' : 'border-[#E8E4DC]'} p-4`}>
+          <div key={cat.id} className={`bg-white rounded-2xl border-2 transition ${cat.active ? 'border-[#00C9A7]/40' : 'border-[#D0EDEA]'} p-4`}>
             {editingId === cat.id ? (
               <div className="space-y-3">
                 <div className="grid grid-cols-3 gap-2">
                   <input value={editDraft.emoji} onChange={e => setEditDraft(d => ({ ...d, emoji: e.target.value }))}
-                    className="border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm text-center outline-none" placeholder="emoji" />
+                    className="border border-[#D0EDEA] rounded-xl px-3 py-2 text-sm text-center outline-none" placeholder="emoji" />
                   <input value={editDraft.labelAr} onChange={e => setEditDraft(d => ({ ...d, labelAr: e.target.value }))}
-                    className="border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none" placeholder="الاسم عربي" dir="rtl" />
+                    className="border border-[#D0EDEA] rounded-xl px-3 py-2 text-sm outline-none" placeholder="الاسم عربي" dir="rtl" />
                   <input value={editDraft.labelEn} onChange={e => setEditDraft(d => ({ ...d, labelEn: e.target.value }))}
-                    className="border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none" placeholder="Name EN" />
+                    className="border border-[#D0EDEA] rounded-xl px-3 py-2 text-sm outline-none" placeholder="Name EN" />
                 </div>
                 <input value={editDraft.path} onChange={e => setEditDraft(d => ({ ...d, path: e.target.value }))}
-                  className="w-full border border-[#E8E4DC] rounded-xl px-3 py-2 text-sm outline-none font-mono" placeholder="/web/..." />
+                  className="w-full border border-[#D0EDEA] rounded-xl px-3 py-2 text-sm outline-none font-mono" placeholder="/web/..." />
                 <div className="flex gap-2">
                   <button onClick={saveEdit} className="flex items-center gap-1 bg-green-500 text-white px-4 py-2 rounded-xl text-sm font-black">
                     <Check size={14} /> {isAr ? 'حفظ' : 'Save'}
@@ -60,7 +60,7 @@ export default function AdminCategories() {
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{cat.emoji}</span>
                   <div>
-                    <p className="font-black text-[#0F2A47]">{isAr ? cat.labelAr : cat.labelEn}</p>
+                    <p className="font-black text-[#0D1B4B]">{isAr ? cat.labelAr : cat.labelEn}</p>
                     <p className="text-xs text-gray-400 font-mono">{cat.path}</p>
                   </div>
                 </div>
@@ -68,8 +68,8 @@ export default function AdminCategories() {
                   <span className={`text-xs px-2 py-1 rounded-full font-bold ${cat.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
                     {cat.active ? (isAr ? 'مفعّل' : 'Active') : (isAr ? 'معطّل' : 'Inactive')}
                   </span>
-                  <button onClick={() => startEdit(cat)} className="p-2 bg-[#FBF8F2] rounded-lg hover:bg-[#E8E4DC] transition">
-                    <Edit2 size={14} className="text-[#0F2A47]" />
+                  <button onClick={() => startEdit(cat)} className="p-2 bg-[#F0F9F8] rounded-lg hover:bg-[#D0EDEA] transition">
+                    <Edit2 size={14} className="text-[#0D1B4B]" />
                   </button>
                   <button onClick={() => toggleCategory(cat.id)}>
                     {cat.active
@@ -83,7 +83,7 @@ export default function AdminCategories() {
         ))}
       </div>
 
-      <div className="mt-6 p-4 bg-[#FBF8F2] rounded-2xl max-w-2xl">
+      <div className="mt-6 p-4 bg-[#F0F9F8] rounded-2xl max-w-2xl">
         <p className="text-xs text-gray-400 flex items-center gap-2">
           <span className="text-lg">💡</span>
           {isAr ? 'التغييرات تظهر فوراً في الموقع والتطبيق بدون الحاجة لإعادة تشغيل' : 'Changes appear instantly on the site and app without restart'}

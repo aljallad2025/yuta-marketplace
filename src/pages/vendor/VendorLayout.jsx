@@ -10,7 +10,7 @@ import LangToggle from '../../components/LangToggle'
 import { useApp } from '../../store/appStore'
 import { useStores } from '../../store/storesStore'
 import { useAuth } from '../../store/authStore'
-import SumuLogo from '../../components/SumuLogo'
+import YutaLogo from '../../components/YutaLogo'
 
 export default function VendorLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -39,15 +39,15 @@ export default function VendorLayout() {
   ]
 
   return (
-    <div className="flex h-screen bg-[#FBF8F2] overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
+    <div className="flex h-screen bg-[#F0F9F8] overflow-hidden" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-56' : 'w-14'} bg-[#0F2A47] flex flex-col flex-shrink-0 overflow-hidden transition-all duration-200`}>
+      <aside className={`${sidebarOpen ? 'w-56' : 'w-14'} bg-[#0D1B4B] flex flex-col flex-shrink-0 overflow-hidden transition-all duration-200`}>
         {/* Logo */}
         <div className="flex items-center gap-2 px-3 py-4 border-b border-white/10">
-          <SumuLogo size={28} variant="icon" />
+          <YutaLogo size={28} variant="icon" />
           {sidebarOpen && (
             <div className="min-w-0">
-              <p className="text-[#C8A951] font-black text-xs tracking-widest">سمو SUMU</p>
+              <p className="text-[#00C9A7] font-black text-xs tracking-widest">يوتا YUTA</p>
               <p className="text-white/40 text-[9px]">{isAr ? 'بوابة المورد' : 'Vendor Portal'}</p>
             </div>
           )}
@@ -77,7 +77,7 @@ export default function VendorLayout() {
             return (
               <Link key={item.href} to={item.href}
                 className={`flex items-center gap-3 px-3 py-2.5 mx-2 rounded-xl transition-all ${
-                  isActive ? 'bg-[#C8A951] text-[#0F2A47]' : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  isActive ? 'bg-[#00C9A7] text-[#0D1B4B]' : 'text-white/70 hover:bg-white/10 hover:text-white'
                 }`}>
                 <item.icon size={16} className="flex-shrink-0" />
                 {sidebarOpen && <span className="text-sm font-bold">{isAr ? item.labelAr : item.labelEn}</span>}
@@ -90,7 +90,7 @@ export default function VendorLayout() {
         <div className="border-t border-white/10 p-3">
           {sidebarOpen && (
             <div className="flex items-center gap-2 mb-3 px-1">
-              <div className="w-7 h-7 bg-[#C8A951] rounded-full flex items-center justify-center flex-shrink-0 text-sm font-black text-[#0F2A47]">
+              <div className="w-7 h-7 bg-[#00C9A7] rounded-full flex items-center justify-center flex-shrink-0 text-sm font-black text-[#0D1B4B]">
                 {(isAr ? vendorStore?.ownerAr : vendorStore?.ownerEn)?.[0] || 'م'}
               </div>
               <div className="min-w-0">
@@ -112,41 +112,41 @@ export default function VendorLayout() {
       {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Header */}
-        <header className="bg-white border-b border-[#E8E4DC] px-4 py-3 flex items-center gap-3 flex-shrink-0">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg hover:bg-[#FBF8F2] text-[#666]">
+        <header className="bg-white border-b border-[#D0EDEA] px-4 py-3 flex items-center gap-3 flex-shrink-0">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg hover:bg-[#F0F9F8] text-[#666]">
             <Menu size={17} />
           </button>
 
           {/* Breadcrumb */}
           <div className="flex items-center gap-1.5 text-sm text-[#999]">
-            <Store size={14} className="text-[#C8A951]" />
-            <span className="font-black text-[#0F2A47]">{isAr ? vendorStore?.nameAr : vendorStore?.nameEn}</span>
+            <Store size={14} className="text-[#00C9A7]" />
+            <span className="font-black text-[#0D1B4B]">{isAr ? vendorStore?.nameAr : vendorStore?.nameEn}</span>
           </div>
 
           <div className="ml-auto flex items-center gap-2">
-            <LangToggle className="border-[#E8E4DC]" />
+            <LangToggle className="border-[#D0EDEA]" />
 
             {/* Notifications */}
             <div className="relative">
               <button onClick={() => setNotifOpen(!notifOpen)}
-                className="relative p-2 rounded-lg hover:bg-[#FBF8F2] text-[#666]">
+                className="relative p-2 rounded-lg hover:bg-[#F0F9F8] text-[#666]">
                 <Bell size={17} />
                 {unreadCount > 0 && (
                   <span className="absolute top-1 right-1 w-4 h-4 bg-[#E74C3C] rounded-full text-[9px] text-white font-black flex items-center justify-center">{unreadCount}</span>
                 )}
               </button>
               {notifOpen && (
-                <div className={`absolute top-full mt-1 w-72 bg-white rounded-2xl shadow-2xl border border-[#E8E4DC] z-50 ${isAr ? 'left-0' : 'right-0'}`}>
+                <div className={`absolute top-full mt-1 w-72 bg-white rounded-2xl shadow-2xl border border-[#D0EDEA] z-50 ${isAr ? 'left-0' : 'right-0'}`}>
                   <div className="flex items-center justify-between px-4 py-3 border-b border-[#F0ECE4]">
-                    <p className="font-black text-[#0F2A47] text-sm">{isAr ? 'الإشعارات' : 'Notifications'}</p>
-                    <button onClick={markAllNotificationsRead} className="text-xs text-[#C8A951] font-black">{isAr ? 'قراءة الكل' : 'Mark all read'}</button>
+                    <p className="font-black text-[#0D1B4B] text-sm">{isAr ? 'الإشعارات' : 'Notifications'}</p>
+                    <button onClick={markAllNotificationsRead} className="text-xs text-[#00C9A7] font-black">{isAr ? 'قراءة الكل' : 'Mark all read'}</button>
                   </div>
                   <div className="max-h-64 overflow-y-auto">
                     {vendorNotifs.length === 0 ? (
                       <p className="text-center text-sm text-[#999] py-6">{isAr ? 'لا توجد إشعارات' : 'No notifications'}</p>
                     ) : vendorNotifs.map(n => (
                       <button key={n.id} onClick={() => markNotificationRead(n.id)}
-                        className={`w-full text-start px-4 py-3 hover:bg-[#FBF8F2] border-b border-[#F0ECE4] last:border-0 ${!n.read ? 'bg-blue-50/40' : ''}`}>
+                        className={`w-full text-start px-4 py-3 hover:bg-[#F0F9F8] border-b border-[#F0ECE4] last:border-0 ${!n.read ? 'bg-blue-50/40' : ''}`}>
                         <p className="text-sm font-black text-[#222]">{isAr ? n.titleAr : n.titleEn}</p>
                         <p className="text-xs text-[#666] mt-0.5">{isAr ? n.msgAr : n.msgEn}</p>
                         <p className="text-[10px] text-[#999] mt-1">{new Date(n.time).toLocaleTimeString(isAr ? 'ar-AE' : 'en-US', { hour: '2-digit', minute: '2-digit' })}</p>
@@ -158,7 +158,7 @@ export default function VendorLayout() {
             </div>
 
             {/* Store name display */}
-            <div className="text-xs font-black border border-[#E8E4DC] rounded-xl px-3 py-1.5 bg-[#FBF8F2] text-[#0F2A47]">
+            <div className="text-xs font-black border border-[#D0EDEA] rounded-xl px-3 py-1.5 bg-[#F0F9F8] text-[#0D1B4B]">
               {isAr ? vendorStore?.nameAr : vendorStore?.nameEn}
             </div>
           </div>

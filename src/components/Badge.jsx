@@ -10,8 +10,8 @@ const variants = {
   inactive:   'bg-gray-100 text-gray-600 border-gray-200',
   suspended:  'bg-red-100 text-red-700 border-red-200',
   approved:   'bg-green-100 text-green-700 border-green-200',
-  gold:       'bg-[#C8A951]/15 text-[#a88b3a] border-[#C8A951]/30',
-  blue:       'bg-[#0F2A47]/10 text-[#0F2A47] border-[#0F2A47]/20',
+  gold:       'bg-[#00C9A7]/15 text-[#a88b3a] border-[#00C9A7]/30',
+  blue:       'bg-[#0D1B4B]/10 text-[#0D1B4B] border-[#0D1B4B]/20',
 }
 
 export default function Badge({ status, variant, label, children, className = '' }) {

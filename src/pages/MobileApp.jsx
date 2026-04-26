@@ -49,11 +49,11 @@ function MobileAppInner() {
 
   return (
     <div
-      className="fixed inset-0 bg-[#FBF8F2] flex flex-col overflow-hidden"
+      className="fixed inset-0 bg-[#F0F9F8] flex flex-col overflow-hidden"
       dir={isAr ? 'rtl' : 'ltr'}
     >
       {/* Safe-area top spacer */}
-      <div className="bg-[#0F2A47] flex-shrink-0" style={{ height: 'env(safe-area-inset-top, 0px)' }} />
+      <div className="bg-[#0D1B4B] flex-shrink-0" style={{ height: 'env(safe-area-inset-top, 0px)' }} />
 
       {/* Page content */}
       <div className="flex-1 overflow-y-auto overscroll-contain">
@@ -63,7 +63,7 @@ function MobileAppInner() {
       {/* Bottom Nav — hide during overlay views that go full-screen */}
       {!overlayView && (
         <div
-          className="bg-white border-t border-[#E8E4DC] flex-shrink-0"
+          className="bg-white border-t border-[#D0EDEA] flex-shrink-0"
           style={{ paddingBottom: 'env(safe-area-inset-bottom, 8px)' }}
         >
           <div className="flex items-center justify-around px-1 py-1.5">
@@ -79,15 +79,15 @@ function MobileAppInner() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all min-w-0 relative ${
-                    isActive ? 'text-[#0F2A47]' : 'text-[#bbb]'
+                    isActive ? 'text-[#0D1B4B]' : 'text-[#bbb]'
                   }`}
                 >
                   {badge && (
-                    <span className="absolute top-0 end-1 w-4 h-4 bg-[#C8A951] rounded-full text-[7px] font-black text-[#0F2A47] flex items-center justify-center z-10">
+                    <span className="absolute top-0 end-1 w-4 h-4 bg-[#00C9A7] rounded-full text-[7px] font-black text-[#0D1B4B] flex items-center justify-center z-10">
                       {badge}
                     </span>
                   )}
-                  <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-[#0F2A47]/10' : ''}`}>
+                  <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-[#0D1B4B]/10' : ''}`}>
                     <tab.icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
                   </div>
                   <span className="text-[9px] font-bold truncate">

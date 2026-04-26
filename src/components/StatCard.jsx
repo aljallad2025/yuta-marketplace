@@ -1,6 +1,6 @@
 import { TrendingUp, TrendingDown } from 'lucide-react'
 
-export default function StatCard({ label, value, change, changeType = 'up', icon: Icon, color = '#0F2A47' }) {
+export default function StatCard({ label, value, change, changeType = 'up', icon: Icon, color = '#0D1B4B' }) {
   return (
     <div className="bg-white rounded-xl p-5 shadow-sm border border-[#E8E6E1] hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
