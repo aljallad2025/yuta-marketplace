@@ -9,9 +9,13 @@ router.get('/', (req, res) => {
   const rows = db.prepare('SELECT * FROM categories ORDER BY sort_order').all()
   res.json(rows.map(r => ({
     id: r.id,
+    name_ar: r.name_ar,
+    name_en: r.name_en,
     labelAr: r.name_ar,
     labelEn: r.name_en,
+    slug: r.slug,
     emoji: r.emoji || r.icon,
+    icon: r.emoji || r.icon,
     path: r.path,
     active: r.active === 1,
     sort_order: r.sort_order
